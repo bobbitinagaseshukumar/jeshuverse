@@ -1,0 +1,9 @@
+{
+  "name": "jeshuverse-root",
+  "version": "1.0.0",
+  "description": "Root proxy configuration for automatic Render subfolder deployments",
+  "scripts": {
+    "postinstall": "npm install --prefix backend",
+    "start": "npm start --prefix backend"
+  }
+}

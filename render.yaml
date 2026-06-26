@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: jeshuverse-backend
+    env: node
+    plan: free # Deploys on Render's Free tier
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false # Set this to your Neon PostgreSQL connection string on Render
+      - key: JWT_SECRET
+        generateValue: true # Render will automatically generate a secure random key
+      - key: RAZORPAY_KEY_ID
+        value: rzp_test_placeholder_key_id
+      - key: RAZORPAY_KEY_SECRET
+        value: placeholder_key_secret
+      - key: FRONTEND_URL
+        value: "*" # Set this to your frontend Vercel URL once deployed
+      - key: WHATSAPP_NUMBER
+        value: "+919999999999"
+      - key: CONTACT_PHONE
+        value: "+919999999999"
