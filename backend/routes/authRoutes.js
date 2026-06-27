@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Helper to generate JWT
 const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+  return jwt.sign({ id }, process.env.JWT_SECRET || 'jeshuverse_secret_key_fallback_9988', {
     expiresIn: '30d',
   });
 };
