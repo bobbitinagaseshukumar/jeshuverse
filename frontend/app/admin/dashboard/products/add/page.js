@@ -286,6 +286,7 @@ export default function AddProductPage() {
               className="w-full px-3.5 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
             />
             <button
+              type="button"
               onClick={handleAddColor}
               className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-sm shrink-0"
             >
@@ -301,7 +302,7 @@ export default function AddProductPage() {
                   className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 border border-purple-100 rounded-full text-xs font-bold text-primary"
                 >
                   <span>{col}</span>
-                  <button onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700">
+                  <button type="button" onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700">
                     <FiX size={12} />
                   </button>
                 </span>
@@ -345,6 +346,7 @@ export default function AddProductPage() {
                   className="w-full px-3 py-2 bg-white border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
                 />
                 <button
+                  type="button"
                   onClick={handleAddPastedUrl}
                   className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl shadow-sm shrink-0"
                 >
