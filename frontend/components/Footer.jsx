@@ -1,13 +1,32 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiMail, FiPhone, FiMapPin, FiInstagram, FiFacebook, FiYoutube, FiMessageSquare } from 'react-icons/fi';
+import axios from 'axios';
+import { API_URL } from '../utils/api';
 
 export default function Footer() {
   const pathname = usePathname();
   const currentYear = new Date().getFullYear();
+
+  const [settings, setSettings] = useState({
+    storeAddress: 'Banumukkala, Nandyal',
+    whatsappNumber: '+919999999999',
+  });
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/admin/settings/public`);
+        setSettings(response.data);
+      } catch (err) {
+        console.error('Error loading footer settings:', err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   // Hide on admin pages
   if (pathname && pathname.startsWith('/admin')) {
@@ -112,13 +131,13 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <FiMapPin className="text-gold shrink-0 mt-1" size={16} />
                 <span className="text-purple-300">
-                  JeshuVerse Boutique, MG Road, opposite Central Mall, Bangalore, Karnataka - 560001
+                  {settings.storeAddress || 'Banumukkala, Nandyal'}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <FiPhone className="text-gold shrink-0" size={16} />
-                <a href="tel:+919876543210" className="text-purple-300 hover:text-gold transition-colors">
-                  +91 98765 43210
+                <a href={`tel:${(settings.whatsappNumber || '').replace(/\D/g, '')}`} className="text-purple-300 hover:text-gold transition-colors">
+                  {settings.whatsappNumber || '+91 99999 99999'}
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -130,7 +149,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <FiMessageSquare className="text-gold shrink-0" size={16} />
                 <a 
-                  href="https://wa.me/919876543210" 
+                  href={`https://wa.me/${(settings.whatsappNumber || '').replace(/\D/g, '')}`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-purple-300 hover:text-gold transition-colors font-semibold flex items-center gap-1"

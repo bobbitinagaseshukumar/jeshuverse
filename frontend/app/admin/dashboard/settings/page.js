@@ -15,6 +15,7 @@ export default function AdminSettingsPage() {
   const [upiId, setUpiId] = useState('');
   const [merchantName, setMerchantName] = useState('');
   const [shippingCharges, setShippingCharges] = useState('');
+  const [storeAddress, setStoreAddress] = useState('');
   
   // Security Credentials States
   const [adminUsername, setAdminUsername] = useState('');
@@ -43,6 +44,7 @@ export default function AdminSettingsPage() {
         setMerchantName(data.merchantName || '');
         setShippingCharges(data.shippingCharges || 50);
         setAdminUsername(data.adminUsername || 'admin');
+        setStoreAddress(data.storeAddress || 'Banumukkala, Nandyal');
       } catch (error) {
         console.error('Error fetching admin settings:', error);
       } finally {
@@ -62,7 +64,8 @@ export default function AdminSettingsPage() {
         upiId,
         merchantName,
         shippingCharges: Number(shippingCharges),
-        adminUsername
+        adminUsername,
+        storeAddress,
       };
 
       if (adminPassword && adminPassword !== '') {
@@ -143,6 +146,19 @@ export default function AdminSettingsPage() {
               className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-medium"
             />
             <p className="text-[9px] text-purple-400 mt-1.5">*Must include country code without symbols (e.g. 91 for India followed by mobile number).</p>
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Store Footer Address</label>
+            <input
+              type="text"
+              required
+              value={storeAddress}
+              onChange={(e) => setStoreAddress(e.target.value)}
+              placeholder="e.g. Banumukkala, Nandyal"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-medium"
+            />
+            <p className="text-[9px] text-purple-400 mt-1.5">*This address will be loaded dynamically in the website footer.</p>
           </div>
         </div>
 

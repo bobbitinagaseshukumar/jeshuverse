@@ -229,6 +229,11 @@ const startServer = async () => {
     await sequelize.query(`
       ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "colors" JSONB DEFAULT '[]'::jsonb;
     `).catch(err => console.log('Colors column check notice:', err.message));
+
+    // Programmatically ensure storeAddress column is added to Settings table
+    await sequelize.query(`
+      ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "storeAddress" VARCHAR(255) DEFAULT 'Banumukkala, Nandyal';
+    `).catch(err => console.log('storeAddress column check notice:', err.message));
     
     console.log('Database schemas synchronized.');
 

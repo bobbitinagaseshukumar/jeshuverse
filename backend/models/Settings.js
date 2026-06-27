@@ -32,6 +32,11 @@ const Settings = sequelize.define('Settings', {
     allowNull: true,
     defaultValue: 'admin',
   },
+  storeAddress: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'Banumukkala, Nandyal',
+  },
 });
 
 export default Settings;

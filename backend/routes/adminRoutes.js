@@ -109,6 +109,7 @@ router.get('/settings/public', async (req, res) => {
       upiId: settings.upiId,
       merchantName: settings.merchantName,
       shippingCharges: settings.shippingCharges,
+      storeAddress: settings.storeAddress || 'Banumukkala, Nandyal',
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching public configurations' });
@@ -126,6 +127,7 @@ router.put('/settings', protect, admin, async (req, res) => {
     shippingCharges,
     adminUsername,
     adminPassword,
+    storeAddress,
   } = req.body;
 
   try {
@@ -139,6 +141,7 @@ router.put('/settings', protect, admin, async (req, res) => {
     settings.merchantName = merchantName || settings.merchantName;
     settings.shippingCharges = shippingCharges !== undefined ? shippingCharges : settings.shippingCharges;
     settings.adminUsername = adminUsername || settings.adminUsername;
+    settings.storeAddress = storeAddress !== undefined ? storeAddress : settings.storeAddress;
 
     await settings.save();
 
