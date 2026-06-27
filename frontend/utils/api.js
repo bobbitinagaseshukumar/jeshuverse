@@ -20,8 +20,8 @@ export const getApiUrl = () => {
     // point to your actual deployed backend service on Render.
     return 'https://jeshuverse-1.onrender.com/api';
   }
-  // Fallback for Server-Side Rendering (SSR)
-  return 'http://127.0.0.1:5000/api';
+  // Fallback for Server-Side Rendering (SSR) in production
+  return 'https://jeshuverse-1.onrender.com/api';
 };
 
 export const API_URL = getApiUrl();

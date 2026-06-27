@@ -227,7 +227,7 @@ const startServer = async () => {
     console.log('Database schemas synchronized.');
 
     // 3. Seed starter data if empty
-    await seedDefaultData();
+    // await seedDefaultData();
 
     // 4. Start listening
     app.listen(PORT, () => {
