@@ -9,6 +9,47 @@ import CategoryGrid from '../components/CategoryGrid';
 import ProductCard from '../components/ProductCard';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall, FiStar } from 'react-icons/fi';
 import NextLink from 'next/link';
+// Parallax Showcase Component
+function ParallaxShowcase() {
+  const [offsetY, setOffsetY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (typeof window !== 'undefined') {
+        setOffsetY(window.scrollY);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Translate background slightly slower relative to scroll
+  const translateY = (offsetY * 0.12) % 180;
+
+  return (
+    <section className="parallax-section relative w-full overflow-hidden border-y border-purple-900/10 max-w-7xl mx-auto my-6 sm:rounded-3xl shadow-xl">
+      <div 
+        className="parallax-bg" 
+        style={{ 
+          transform: `translateY(${translateY}px) scale(1.05)`,
+          backgroundImage: "url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1500&q=80')" 
+        }} 
+      />
+      <div className="absolute inset-0 bg-purple-950/80 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
+        <span className="text-gold font-extrabold text-[10px] sm:text-xs tracking-widest uppercase mb-3 block animate-pulse">
+          JESHUVERSE LUXURY STUDIO
+        </span>
+        <h3 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight max-w-3xl">
+          Where Heritage Weaves Meet Contemporary Style
+        </h3>
+        <p className="mt-4 text-purple-200 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
+          Sourced from traditional artisans, our designer sarees, ethnic wear, and luxury sets are crafted to celebrate you.
+        </p>
+        <div className="w-12 h-1 bg-gold mt-6 rounded-full" />
+      </div>
+    </section>
+  );
+}
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -216,6 +257,9 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* Parallax Clothes Showcase Section */}
+      <ParallaxShowcase />
 
       {/* 7. Jewellery Collection Shelf */}
       {jewelleryItems.length > 0 && (

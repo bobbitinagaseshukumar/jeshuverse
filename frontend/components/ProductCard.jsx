@@ -27,7 +27,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm hover:shadow-md hover:border-purple-200 transition-all duration-300 flex flex-col h-full">
+    <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm hover-3d flex flex-col h-full">
       
       {/* Product Image Wrapper */}
       <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-purple-50/50 overflow-hidden">

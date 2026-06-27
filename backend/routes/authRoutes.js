@@ -185,4 +185,101 @@ router.post('/admin-login', async (req, res) => {
   }
 });
 
+// @desc    Request OTP (email or mobile)
+// @route   POST /api/auth/send-otp
+// @access  Public
+router.post('/send-otp', async (req, res) => {
+  const { identifier, phone } = req.body; // Can be email or mobile or phone
+  const target = identifier || phone;
+
+  if (!target) {
+    return res.status(400).json({ message: 'Email or Mobile number is required' });
+  }
+
+  try {
+    const isEmail = target.includes('@');
+    let user;
+
+    if (isEmail) {
+      user = await User.findOne({ where: { email: target } });
+    } else {
+      user = await User.findOne({ where: { mobile: target } });
+    }
+
+    // Auto-create user if they don't exist
+    if (!user) {
+      const defaultName = isEmail 
+        ? `Customer ${target.split('@')[0]}` 
+        : `Customer ${target.slice(-4)}`;
+      const defaultEmail = isEmail 
+        ? target 
+        : `${target}@jeshuverse.com`;
+      const defaultMobile = isEmail 
+        ? '0000000000' 
+        : target;
+
+      user = await User.create({
+        name: defaultName,
+        email: defaultEmail,
+        password: 'otp_user_fallback_pass_123',
+        mobile: defaultMobile,
+        address: '',
+        isAdmin: false
+      });
+    }
+
+    // Return dummy success message stating OTP sent to their email/mobile
+    res.json({ 
+      message: `OTP sent successfully to ${target}`,
+      phone: target,
+      otp: '123456' // For developer/user testing verification
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @desc    Verify OTP and login
+// @route   POST /api/auth/verify-otp
+// @access  Public
+router.post('/verify-otp', async (req, res) => {
+  const { identifier, phone, otp } = req.body;
+  const target = identifier || phone;
+
+  if (!target || !otp) {
+    return res.status(400).json({ message: 'Identifier and OTP are required' });
+  }
+
+  if (otp !== '123456') {
+    return res.status(400).json({ message: 'Invalid OTP. Please enter 123456.' });
+  }
+
+  try {
+    const isEmail = target.includes('@');
+    let user;
+
+    if (isEmail) {
+      user = await User.findOne({ where: { email: target } });
+    } else {
+      user = await User.findOne({ where: { mobile: target } });
+    }
+
+    if (!user) {
+      return res.status(404).json({ message: 'User record not found' });
+    }
+
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile,
+      address: user.address,
+      isAdmin: user.isAdmin,
+      token: generateToken(user.id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

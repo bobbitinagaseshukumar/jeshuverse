@@ -19,9 +19,16 @@ router.post('/', protect, async (req, res) => {
   const t = await sequelize.transaction();
 
   try {
+    let finalAddress = shippingAddress;
+    if (shippingAddress && typeof shippingAddress === 'object') {
+      const { street, city, state, zipCode, country } = shippingAddress;
+      const parts = [street, city, state, zipCode, country].filter(Boolean);
+      finalAddress = parts.length > 0 ? parts.join(', ') : JSON.stringify(shippingAddress);
+    }
+
     const order = await Order.create({
       userId: req.user.id,
-      shippingAddress,
+      shippingAddress: typeof finalAddress === 'string' ? finalAddress : String(finalAddress || ''),
       totalPrice: Number(totalPrice),
       paymentResult, // Razorpay details
       isPaid: paymentResult && paymentResult.id ? true : false,
