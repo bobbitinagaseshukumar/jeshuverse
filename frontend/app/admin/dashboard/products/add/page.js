@@ -1,0 +1,408 @@
+'use client';
+import { API_URL } from '../../../../../utils/api';
+
+
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useAuth } from '@/context/AuthContext';
+import { FiSave, FiUploadCloud, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
+
+export default function AddProductPage() {
+  const { token } = useAuth();
+  const router = useRouter();
+
+  // Form States
+  const [name, setName] = useState('');
+  const [category, setCategory] = useState("Women's Wear");
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [discountPrice, setDiscountPrice] = useState('');
+  const [stockQuantity, setStockQuantity] = useState('');
+  const [sku, setSku] = useState('');
+  const [featured, setFeatured] = useState(false);
+
+  // Size specifications
+  const availableSizesList = ['S', 'M', 'L', 'XL', 'XXL', 'Free Size', 'Adjustable'];
+  const [selectedSizes, setSelectedSizes] = useState([]);
+
+  // Color specifications
+  const [colorInput, setColorInput] = useState('');
+  const [colorsList, setColorsList] = useState([]);
+
+  // Image upload lists
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
+  const [uploading, setUploading] = useState(false);
+  const [pastedUrl, setPastedUrl] = useState('');
+
+  
+
+  // Generate a mock SKU on name load if empty
+  useEffect(() => {
+    if (name && !sku) {
+      const initials = name.slice(0, 3).toUpperCase().replace(/[^A-Z]/g, 'PRD');
+      const randomPart = Math.floor(1000 + Math.random() * 9000);
+      setSku(`${initials}-${randomPart}`);
+    }
+  }, [name, sku]);
+
+  // Handle Size Toggle
+  const handleSizeToggle = (size) => {
+    if (selectedSizes.includes(size)) {
+      setSelectedSizes(selectedSizes.filter((s) => s !== size));
+    } else {
+      setSelectedSizes([...selectedSizes, size]);
+    }
+  };
+
+  // Handle Color Add
+  const handleAddColor = (e) => {
+    e.preventDefault();
+    if (colorInput.trim() && !colorsList.includes(colorInput.trim())) {
+      setColorsList([...colorsList, colorInput.trim()]);
+      setColorInput('');
+    }
+  };
+
+  const handleRemoveColor = (idx) => {
+    setColorsList(colorsList.filter((_, i) => i !== idx));
+  };
+
+  // Handle direct file uploads to backend Multer directory
+  const handleImageFileChange = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    const formData = new FormData();
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
+
+    try {
+      const response = await axios.post(`${API_URL}/products/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
+        }
+      });
+      // Merge upload links with existing image list
+      setImageUrls([...imageUrls, ...response.data.urls]);
+    } catch (error) {
+      alert(error.response?.data?.message || 'File upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Handle pasting direct URLs (flexible option)
+  const handleAddPastedUrl = (e) => {
+    e.preventDefault();
+    if (pastedUrl.trim() && !imageUrls.includes(pastedUrl.trim())) {
+      setImageUrls([...imageUrls, pastedUrl.trim()]);
+      setPastedUrl('');
+    }
+  };
+
+  const handleRemoveImageUrl = (idx) => {
+    setImageUrls(imageUrls.filter((_, i) => i !== idx));
+  };
+
+  // Form Submit Add Product
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    if (imageUrls.length === 0) {
+      alert('Please upload at least one product image');
+      return;
+    }
+
+    try {
+      const payload = {
+        name,
+        category,
+        description,
+        price: Number(price),
+        discountPrice: discountPrice ? Number(discountPrice) : 0,
+        stockQuantity: Number(stockQuantity),
+        sku,
+        featured,
+        sizes: selectedSizes,
+        colors: colorsList,
+        images: imageUrls
+      };
+
+      await axios.post(`${API_URL}/products`, payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      alert('Product created successfully');
+      router.push('/admin/dashboard/products');
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to save product');
+    }
+  };
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      <div>
+        <h1 className="font-display font-extrabold text-2xl text-purple-950">Upload Product</h1>
+        <p className="text-xs text-purple-400 font-semibold mt-1">Upload premium sarees, ethnic kurtas, jewellery or kids apparel</p>
+      </div>
+
+      <form onSubmit={handleFormSubmit} className="bg-white p-6 sm:p-8 rounded-3xl border border-purple-100/75 shadow-sm space-y-6">
+        
+        {/* Core fields info */}
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-6">
+          
+          <div className="sm:col-span-8">
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Product Name</label>
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Traditional Royal Kundan Choker Saree Set"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+            />
+          </div>
+
+          <div className="sm:col-span-4">
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Category</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 cursor-pointer"
+            >
+              <option value="Women's Wear">Women's Wear</option>
+              <option value="Men's Wear">Men's Wear</option>
+              <option value="Kids Wear">Kids Wear</option>
+              <option value="Jewellery">Jewellery</option>
+            </select>
+          </div>
+
+        </div>
+
+        <div>
+          <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Description</label>
+          <textarea
+            required
+            rows={4}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Write detailing details about fabric material, handloom weaves, plated layers, sizing guides, etc."
+            className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+          />
+        </div>
+
+        {/* Pricing, stock, sku row */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div>
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Original Price (₹)</label>
+            <input
+              type="number"
+              required
+              min={0}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="e.g. 2999"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Discount Price (₹)</label>
+            <input
+              type="number"
+              min={0}
+              value={discountPrice}
+              onChange={(e) => setDiscountPrice(e.target.value)}
+              placeholder="e.g. 1999"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Stock Quantity</label>
+            <input
+              type="number"
+              required
+              min={0}
+              value={stockQuantity}
+              onChange={(e) => setStockQuantity(e.target.value)}
+              placeholder="e.g. 50"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+            />
+          </div>
+
+          <div>
+            <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Product SKU</label>
+            <input
+              type="text"
+              required
+              value={sku}
+              onChange={(e) => setSku(e.target.value.toUpperCase())}
+              placeholder="e.g. JSV-SLK-101"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-mono"
+            />
+          </div>
+        </div>
+
+        {/* Sizes checkboxes */}
+        <div className="space-y-3 pt-4 border-t border-purple-50">
+          <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Available Sizes</span>
+          <div className="flex flex-wrap gap-2.5">
+            {availableSizesList.map((sz) => {
+              const checked = selectedSizes.includes(sz);
+              return (
+                <button
+                  type="button"
+                  key={sz}
+                  onClick={() => handleSizeToggle(sz)}
+                  className={`px-4 py-2 border rounded-xl text-xs font-semibold transition-all ${
+                    checked
+                      ? 'border-primary bg-primary text-white shadow-sm'
+                      : 'border-purple-100 bg-purple-50/10 text-purple-950 hover:border-purple-300'
+                  }`}
+                >
+                  {sz}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Colors selector lists */}
+        <div className="space-y-3 pt-4 border-t border-purple-50">
+          <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Available Colors</span>
+          
+          <div className="flex items-center gap-2 max-w-sm">
+            <input
+              type="text"
+              placeholder="e.g. Royal Blue"
+              value={colorInput}
+              onChange={(e) => setColorInput(e.target.value)}
+              className="w-full px-3.5 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
+            />
+            <button
+              onClick={handleAddColor}
+              className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-sm shrink-0"
+            >
+              <FiPlus /> Add
+            </button>
+          </div>
+
+          {colorsList.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-1.5">
+              {colorsList.map((col, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 border border-purple-100 rounded-full text-xs font-bold text-primary"
+                >
+                  <span>{col}</span>
+                  <button onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700">
+                    <FiX size={12} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Dynamic Image upload manager */}
+        <div className="space-y-4 pt-4 border-t border-purple-50">
+          <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Product Gallery Images (Upload up to 5)</span>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            {/* File upload drag field */}
+            <div className="relative border-2 border-dashed border-purple-100 rounded-3xl p-6 text-center hover:border-primary/50 transition-colors flex flex-col items-center justify-center bg-purple-50/10">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageFileChange}
+                disabled={uploading}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <FiUploadCloud size={32} className="text-purple-400 mb-2" />
+              <p className="text-xs font-bold text-purple-950">
+                {uploading ? 'Uploading assets...' : 'Choose files to upload'}
+              </p>
+              <p className="text-[10px] text-purple-300 mt-1">PNG, JPG, JPEG, WEBP up to 5MB</p>
+            </div>
+
+            {/* Paste URL field */}
+            <div className="p-5 border border-purple-100 rounded-3xl flex flex-col justify-center gap-3 bg-purple-50/10">
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wider">Or Paste Image URL</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="https://example.com/saree-img.jpg"
+                  value={pastedUrl}
+                  onChange={(e) => setPastedUrl(e.target.value)}
+                  className="w-full px-3 py-2 bg-white border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
+                />
+                <button
+                  onClick={handleAddPastedUrl}
+                  className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl shadow-sm shrink-0"
+                >
+                  Link
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Render preview list of currently added image links */}
+          {imageUrls.length > 0 && (
+            <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 pt-3">
+              {imageUrls.map((url, idx) => (
+                <div key={idx} className="relative aspect-[4/5] rounded-xl overflow-hidden border border-purple-100 group shadow-sm bg-purple-50">
+                  <img src={url} alt="" className="w-full h-full object-cover object-top" />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImageUrl(idx)}
+                    className="absolute inset-0 bg-red-600/75 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-xl text-white"
+                  >
+                    <FiTrash2 size={16} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Featured toggle */}
+        <div className="pt-6 border-t border-purple-50 flex items-center justify-between">
+          <div className="space-y-0.5">
+            <span className="text-xs font-bold text-purple-950 uppercase tracking-wide block">Featured Product Spotlight</span>
+            <p className="text-[10px] text-purple-400 font-semibold">Flag this product to appear in weekly showcase lists on homepage</p>
+          </div>
+          
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={featured}
+              onChange={(e) => setFeatured(e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-purple-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-purple-300 after:border after:rounded-full after:height-5 after:width-5 after:h-5 after:w-5 after:transition-all peer-checked:bg-primary" />
+          </label>
+        </div>
+
+        {/* Save button */}
+        <div className="pt-6 border-t border-purple-50 flex justify-end">
+          <button
+            type="submit"
+            className="flex items-center justify-center gap-1.5 px-6 py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-2xl shadow-md transition-colors"
+          >
+            <FiSave size={18} />
+            <span>Upload to Catalog</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  );
+}

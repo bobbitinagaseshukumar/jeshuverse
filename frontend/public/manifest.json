@@ -1,0 +1,24 @@
+{
+  "name": "JeshuVerse Store",
+  "short_name": "JeshuVerse",
+  "description": "JeshuVerse - Premium Clothing & Jewellery Boutique",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf8fd",
+  "theme_color": "#581C87",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -157,4 +157,32 @@ router.get('/users', protect, admin, async (req, res) => {
   }
 });
 
+// @desc    Admin login
+// @route   POST /api/auth/admin-login
+// @access  Public
+router.post('/admin-login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await User.findOne({ where: { email: username } });
+
+    if (user && user.isAdmin && (await user.matchPassword(password))) {
+      res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        address: user.address,
+        isAdmin: user.isAdmin,
+        role: 'admin',
+        token: generateToken(user.id),
+      });
+    } else {
+      res.status(401).json({ message: 'Invalid admin credentials' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;

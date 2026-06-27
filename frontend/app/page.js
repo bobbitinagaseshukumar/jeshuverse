@@ -1,0 +1,316 @@
+'use client';
+import { API_URL } from '../utils/api';
+
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import HeroBanner from '../components/HeroBanner';
+import CategoryGrid from '../components/CategoryGrid';
+import ProductCard from '../components/ProductCard';
+import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall, FiStar } from 'react-icons/fi';
+import NextLink from 'next/link';
+
+export default function Home() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/products`);
+        setProducts(response.data);
+      } catch (error) {
+        console.error('Error fetching home page products:', error);
+        // Load fallback sample items if backend fails
+        setProducts([
+          {
+            _id: "sample-1",
+            name: "Elegant Golden Silk Saree",
+            images: ["https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=500&q=80"],
+            category: "Women's Wear",
+            description: "Premium Kanchipuram style silk saree.",
+            sizes: ["Free Size"],
+            colors: ["Gold"],
+            price: 4500,
+            discountPrice: 2999,
+            stockQuantity: 15,
+            sku: "WD-SLK-001",
+            featured: true
+          },
+          {
+            _id: "sample-2",
+            name: "Premium Linen Nehru Jacket Set",
+            images: ["https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=500&q=80"],
+            category: "Men's Wear",
+            description: "Nehru jacket set.",
+            sizes: ["M", "L"],
+            colors: ["Ivory White"],
+            price: 3500,
+            discountPrice: 1999,
+            stockQuantity: 25,
+            sku: "MD-KRT-002",
+            featured: true
+          },
+          {
+            _id: "sample-4",
+            name: "24K Gold Plated Royal Necklace Set",
+            images: ["https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=500&q=80"],
+            category: "Jewellery",
+            description: "Traditional royal Kundan choker set.",
+            sizes: ["Adjustable"],
+            colors: ["Gold-White"],
+            price: 6000,
+            discountPrice: 3499,
+            stockQuantity: 8,
+            sku: "JW-KND-004",
+            featured: true
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [API_URL]);
+
+  // Product Filters
+  const featuredProducts = products.filter(p => p.featured).slice(0, 4);
+  const newArrivals = products.slice(0, 4);
+  const jewelleryItems = products.filter(p => p.category === 'Jewellery').slice(0, 4);
+  const kidsItems = products.filter(p => p.category === "Kids Wear").slice(0, 4);
+  const womenItems = products.filter(p => p.category === "Women's Wear").slice(0, 4);
+  const menItems = products.filter(p => p.category === "Men's Wear").slice(0, 4);
+
+  const customerReviews = [
+    {
+      name: "Aishwarya R.",
+      rating: 5,
+      comment: "The silk saree is beautiful. Stunned by the gold embroidery details and heavy border. Got delivered in just 3 days to Bangalore. Worth every rupee!",
+      date: "2 days ago"
+    },
+    {
+      name: "Rohit K.",
+      rating: 5,
+      comment: "Ordered the linen Nehru jacket set. Fabric quality is amazing and fits perfectly. The WhatsApp order button made checkout so simple.",
+      date: "1 week ago"
+    },
+    {
+      name: "Preeti M.",
+      rating: 5,
+      comment: "Purchased the 24K gold plated royal choker. It looks so real! Perfect match for my wedding outfit. Very happy with JeshuVerse.",
+      date: "2 weeks ago"
+    }
+  ];
+
+  return (
+    <div className="space-y-12">
+      
+      {/* 1. Hero banner */}
+      <HeroBanner />
+
+      {/* 2. Category grid */}
+      <CategoryGrid />
+
+      {/* 3. Promo Banner */}
+      <section className="bg-purple-900 py-8 text-white grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl shadow-md border-b-4 border-gold">
+        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
+          <FiTruck className="text-gold" size={32} />
+          <div>
+            <h4 className="font-bold text-sm sm:text-base">Free Delivery</h4>
+            <p className="text-xs text-purple-200">On all orders above ₹499</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
+          <FiShield className="text-gold" size={32} />
+          <div>
+            <h4 className="font-bold text-sm sm:text-base">Secure UPI Payments</h4>
+            <p className="text-xs text-purple-200">Direct PhonePe QR code</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
+          <FiRefreshCw className="text-gold" size={32} />
+          <div>
+            <h4 className="font-bold text-sm sm:text-base">Easy Exchange</h4>
+            <p className="text-xs text-purple-200">7-day hassle free returns</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
+          <FiPhoneCall className="text-gold" size={32} />
+          <div>
+            <h4 className="font-bold text-sm sm:text-base">24/7 Support</h4>
+            <p className="text-xs text-purple-200">Direct WhatsApp assistance</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Trending / Featured Products */}
+      {featuredProducts.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+            <div>
+              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Weekly Spotlight</span>
+              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Trending Products</h2>
+            </div>
+            <NextLink href="/category/all?sort=latest" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+              <span>View All</span>
+              <FiArrowRight size={14} />
+            </NextLink>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {featuredProducts.map(product => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 5. New Arrivals */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+          <div>
+            <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Just Added</span>
+            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">New Arrivals</h2>
+          </div>
+          <NextLink href="/category/all?sort=latest" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+            <span>View All</span>
+            <FiArrowRight size={14} />
+          </NextLink>
+        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(n => (
+              <div key={n} className="bg-purple-100/50 rounded-2xl h-80 animate-pulse-slow" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {newArrivals.map(product => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* 6. Women's Fashion Shelf */}
+      {womenItems.length > 0 && (
+        <section className="bg-purple-50/30 py-12 border-y border-purple-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+              <div>
+                <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Sarees & Ethnic Wear</span>
+                <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Women's Fashion</h2>
+              </div>
+              <NextLink href="/category/women-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+                <span>View All</span>
+                <FiArrowRight size={14} />
+              </NextLink>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {womenItems.map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 7. Jewellery Collection Shelf */}
+      {jewelleryItems.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+            <div>
+              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Royal Necklaces & Earrings</span>
+              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Jewellery Collection</h2>
+            </div>
+            <NextLink href="/category/jewellery" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+              <span>View All</span>
+              <FiArrowRight size={14} />
+            </NextLink>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {jewelleryItems.map(product => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 8. Men's Fashion Shelf */}
+      {menItems.length > 0 && (
+        <section className="bg-purple-50/30 py-12 border-y border-purple-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+              <div>
+                <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Kurtas, Blazers & Jackets</span>
+                <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Men's Fashion</h2>
+              </div>
+              <NextLink href="/category/men-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+                <span>View All</span>
+                <FiArrowRight size={14} />
+              </NextLink>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {menItems.map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 9. Kids Fashion Shelf */}
+      {kidsItems.length > 0 && (
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
+            <div>
+              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Cute & Stylish Frocks</span>
+              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Kids Fashion</h2>
+            </div>
+            <NextLink href="/category/kids-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
+              <span>View All</span>
+              <FiArrowRight size={14} />
+            </NextLink>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {kidsItems.map(product => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 10. Customer Reviews */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="text-center max-w-2xl mx-auto mb-10">
+          <span className="text-amber-600 font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block">Testimonials</span>
+          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Loved By Our Customers</h2>
+          <div className="w-12 h-0.5 bg-gold mx-auto mt-3 rounded-full" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {customerReviews.map((review, i) => (
+            <div key={i} className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-1 mb-3">
+                  {[...Array(review.rating)].map((_, idx) => (
+                    <FiStar key={idx} className="text-gold fill-gold" size={16} />
+                  ))}
+                </div>
+                <p className="text-purple-900 text-sm leading-relaxed italic mb-4">
+                  "{review.comment}"
+                </p>
+              </div>
+              <div className="flex items-center justify-between border-t border-purple-50 pt-3 text-xs text-purple-400">
+                <span className="font-bold text-purple-950">{review.name}</span>
+                <span>{review.date}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+  );
+}
