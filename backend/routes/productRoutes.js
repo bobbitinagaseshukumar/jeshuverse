@@ -205,18 +205,23 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, stock, description } = req.body;
+  const { name, category, price, images, sizes, stock, stockQuantity, description } = req.body;
 
   try {
     let categoryId = category;
     const isUUID = category.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
     if (!isUUID) {
-      const categoryObj = await Category.findOne({ where: { name: category } });
-      if (categoryObj) {
-        categoryId = categoryObj.id;
-      } else {
-        return res.status(400).json({ message: 'Invalid or non-existent category' });
+      // Try to find existing category by name, or auto-create it
+      let categoryObj = await Category.findOne({ where: { name: category } });
+      if (!categoryObj) {
+        const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        categoryObj = await Category.create({
+          name: category,
+          slug,
+          image: '/placeholder-category.png',
+        });
       }
+      categoryId = categoryObj.id;
     }
 
     const product = await Product.create({
@@ -225,7 +230,7 @@ router.post('/', protect, admin, async (req, res) => {
       price: Number(price),
       images,
       sizes,
-      stock: Number(stock),
+      stock: Number(stock || stockQuantity || 0),
       description,
     });
 
@@ -251,12 +256,16 @@ router.put('/:id', protect, admin, async (req, res) => {
         let categoryId = category;
         const isUUID = category.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
         if (!isUUID) {
-          const categoryObj = await Category.findOne({ where: { name: category } });
-          if (categoryObj) {
-            categoryId = categoryObj.id;
-          } else {
-            return res.status(400).json({ message: 'Invalid or non-existent category' });
+          let categoryObj = await Category.findOne({ where: { name: category } });
+          if (!categoryObj) {
+            const slug = category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            categoryObj = await Category.create({
+              name: category,
+              slug,
+              image: '/placeholder-category.png',
+            });
           }
+          categoryId = categoryObj.id;
         }
         product.categoryId = categoryId;
       }
