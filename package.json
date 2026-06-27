@@ -4,6 +4,7 @@
   "description": "Root proxy configuration for automatic Render subfolder deployments",
   "scripts": {
     "postinstall": "npm install --prefix backend",
-    "start": "npm start --prefix backend"
+    "start": "npm start --prefix backend",
+    "build": "echo 'No build step required'"
   }
 }
