@@ -16,13 +16,21 @@ const sequelize = new Sequelize(dbUrl, {
   logging: false,
 });
 
-const connectDB = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('PostgreSQL Connected via Sequelize.');
-  } catch (error) {
-    console.error('Sequelize connection error:', error);
-    process.exit(1);
+const connectDB = async (retries = 8, delay = 3000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      await sequelize.authenticate();
+      console.log('PostgreSQL Connected via Sequelize successfully.');
+      return;
+    } catch (error) {
+      console.error(`Database connection attempt ${i + 1} failed:`, error.message || error);
+      if (i === retries - 1) {
+        console.error('All database connection retries failed. Exiting...');
+        process.exit(1);
+      }
+      console.log(`Waiting ${delay / 1000} seconds before next retry...`);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
   }
 };
 
