@@ -9,6 +9,7 @@ import { connectDB, sequelize } from './config/db.js';
 // Route Imports
 import authRoutes from './routes/authRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
+import subCategoryRoutes from './routes/subCategoryRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
@@ -194,6 +195,7 @@ const seedDefaultData = async () => {
 // Bind APIs
 app.use('/api/auth', authRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/subcategories', subCategoryRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
@@ -237,6 +239,10 @@ const startServer = async () => {
     await sequelize.query(`
       ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "cost" DOUBLE PRECISION;
     `).catch(err => console.log('Cost column check notice:', err.message));
+
+    await sequelize.query(`
+      ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "subCategoryId" UUID;
+    `).catch(err => console.log('subCategoryId column check notice:', err.message));
 
     // Programmatically ensure storeAddress column is added to Settings table
     await sequelize.query(`

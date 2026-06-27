@@ -7,7 +7,7 @@ import axios from 'axios';
 import HeroBanner from '../components/HeroBanner';
 import CategoryGrid from '../components/CategoryGrid';
 import ProductCard from '../components/ProductCard';
-import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall, FiStar } from 'react-icons/fi';
+import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall } from 'react-icons/fi';
 import NextLink from 'next/link';
 // Parallax Showcase Component
 function ParallaxShowcase() {
@@ -125,26 +125,7 @@ export default function Home() {
   const womenItems = products.filter(p => p.category === "Women's Wear").slice(0, 4);
   const menItems = products.filter(p => p.category === "Men's Wear").slice(0, 4);
 
-  const customerReviews = [
-    {
-      name: "Aishwarya R.",
-      rating: 5,
-      comment: "The silk saree is beautiful. Stunned by the gold embroidery details and heavy border. Got delivered in just 3 days to Bangalore. Worth every rupee!",
-      date: "2 days ago"
-    },
-    {
-      name: "Rohit K.",
-      rating: 5,
-      comment: "Ordered the linen Nehru jacket set. Fabric quality is amazing and fits perfectly. The WhatsApp order button made checkout so simple.",
-      date: "1 week ago"
-    },
-    {
-      name: "Preeti M.",
-      rating: 5,
-      comment: "Purchased the 24K gold plated royal choker. It looks so real! Perfect match for my wedding outfit. Very happy with JeshuVerse.",
-      date: "2 weeks ago"
-    }
-  ];
+
 
   return (
     <div className="space-y-12">
@@ -326,34 +307,7 @@ export default function Home() {
         </section>
       )}
 
-      {/* 10. Customer Reviews */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-amber-600 font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block">Testimonials</span>
-          <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Loved By Our Customers</h2>
-          <div className="w-12 h-0.5 bg-gold mx-auto mt-3 rounded-full" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {customerReviews.map((review, i) => (
-            <div key={i} className="bg-white p-6 rounded-2xl border border-purple-100 shadow-sm flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-1 mb-3">
-                  {[...Array(review.rating)].map((_, idx) => (
-                    <FiStar key={idx} className="text-gold fill-gold" size={16} />
-                  ))}
-                </div>
-                <p className="text-purple-900 text-sm leading-relaxed italic mb-4">
-                  "{review.comment}"
-                </p>
-              </div>
-              <div className="flex items-center justify-between border-t border-purple-50 pt-3 text-xs text-purple-400">
-                <span className="font-bold text-purple-950">{review.name}</span>
-                <span>{review.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
     </div>
   );

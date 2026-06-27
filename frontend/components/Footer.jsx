@@ -71,6 +71,16 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
+                <NextLink href="/category/all" className="hover:text-gold transition-colors block">
+                  All Products
+                </NextLink>
+              </li>
+              <li>
+                <NextLink href="/category/all?sort=latest" className="hover:text-gold transition-colors block">
+                  New Arrivals
+                </NextLink>
+              </li>
+              <li>
                 <NextLink href="/category/women-wear" className="hover:text-gold transition-colors block">
                   Women's Fashion
                 </NextLink>

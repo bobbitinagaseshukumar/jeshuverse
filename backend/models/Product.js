@@ -61,6 +61,10 @@ const Product = sequelize.define('Product', {
     type: DataTypes.DOUBLE,
     allowNull: true,
   },
+  subCategoryId: {
+    type: DataTypes.UUID,
+    allowNull: true,
+  },
 }, {
   hooks: {
     beforeValidate: (product) => {

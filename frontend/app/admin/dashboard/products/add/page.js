@@ -16,6 +16,8 @@ export default function AddProductPage() {
   const [name, setName] = useState('');
   const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
+  const [subCategory, setSubCategory] = useState('');
+  const [subCategories, setSubCategories] = useState([]);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [discountPrice, setDiscountPrice] = useState('');
@@ -43,6 +45,24 @@ export default function AddProductPage() {
     fetchCats();
   }, []);
 
+  // Fetch subcategories when category changes
+  useEffect(() => {
+    const fetchSubCats = async () => {
+      if (!category) { setSubCategories([]); return; }
+      try {
+        const cat = categories.find(c => c.name === category);
+        if (cat) {
+          const res = await axios.get(`${API_URL}/subcategories?categoryId=${cat.id || cat._id}`);
+          setSubCategories(res.data);
+          setSubCategory('');
+        }
+      } catch (err) {
+        console.error('Failed to load subcategories:', err);
+      }
+    };
+    fetchSubCats();
+  }, [category, categories]);
+
   // Size specifications
   const availableSizesList = ['S', 'M', 'L', 'XL', 'XXL', 'Free Size', 'Adjustable'];
   const [selectedSizes, setSelectedSizes] = useState([]);
@@ -50,6 +70,8 @@ export default function AddProductPage() {
   // Color specifications
   const [colorInput, setColorInput] = useState('');
   const [colorsList, setColorsList] = useState([]);
+  const [colorImageUrl, setColorImageUrl] = useState('');
+  const [colorImageUploading, setColorImageUploading] = useState(false);
 
   // Image upload lists
   const [imageFiles, setImageFiles] = useState([]);
@@ -79,10 +101,37 @@ export default function AddProductPage() {
 
   // Handle Color Add
   const handleAddColor = (e) => {
-    e.preventDefault();
-    if (colorInput.trim() && !colorsList.includes(colorInput.trim())) {
-      setColorsList([...colorsList, colorInput.trim()]);
-      setColorInput('');
+    if (e) e.preventDefault();
+    if (colorInput.trim() && colorImageUrl.trim()) {
+      const exists = colorsList.some(c => c.name === colorInput.trim());
+      if (!exists) {
+        setColorsList([...colorsList, { name: colorInput.trim(), image: colorImageUrl.trim() }]);
+        setColorInput('');
+        setColorImageUrl('');
+      }
+    } else if (colorInput.trim() && !colorImageUrl.trim()) {
+      alert('Please upload or paste an image URL for this color');
+    }
+  };
+
+  const handleColorImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    setColorImageUploading(true);
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file));
+    try {
+      const response = await axios.post(`${API_URL}/products/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${token}` }
+      });
+      if (response.data.urls && response.data.urls.length > 0) {
+        setColorImageUrl(response.data.urls[0]);
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || 'Color image upload failed');
+    } finally {
+      setColorImageUploading(false);
+      e.target.value = '';
     }
   };
 
@@ -143,6 +192,7 @@ export default function AddProductPage() {
       const payload = {
         name,
         category,
+        subCategory: subCategory || null,
         description,
         price: Number(price),
         discountPrice: discountPrice ? Number(discountPrice) : 0,
@@ -203,6 +253,22 @@ export default function AddProductPage() {
               ))}
             </select>
           </div>
+
+          {subCategories.length > 0 && (
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Subcategory</label>
+              <select
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 cursor-pointer font-semibold"
+              >
+                <option value="">Select Subcategory</option>
+                {subCategories.map((sc) => (
+                  <option key={sc._id || sc.id} value={sc.name}>{sc.name}</option>
+                ))}
+              </select>
+            </div>
+          )}
 
         </div>
 
@@ -328,39 +394,74 @@ export default function AddProductPage() {
           </div>
         </div>
 
-        {/* Colors selector lists */}
+        {/* Colors selector with image upload */}
         <div className="space-y-3 pt-4 border-t border-purple-50">
-          <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Available Colors</span>
+          <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Available Colors (with Product Image)</span>
           
-          <div className="flex items-center gap-2 max-w-sm">
-            <input
-              type="text"
-              placeholder="e.g. Royal Blue"
-              value={colorInput}
-              onChange={(e) => setColorInput(e.target.value)}
-              className="w-full px-3.5 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
-            />
+          <div className="space-y-3 max-w-lg">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                placeholder="e.g. Royal Blue"
+                value={colorInput}
+                onChange={(e) => setColorInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddColor(); } }}
+                className="flex-1 px-3.5 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
+              />
+            </div>
+            
+            {/* Color image upload/paste */}
+            <div className="flex items-center gap-2">
+              <div className="relative flex-1">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleColorImageUpload}
+                  disabled={colorImageUploading}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="px-3.5 py-2 bg-purple-50/50 border border-dashed border-purple-200 rounded-xl text-xs text-purple-400 font-semibold text-center">
+                  {colorImageUploading ? 'Uploading...' : colorImageUrl ? '✓ Image ready' : 'Upload color image'}
+                </div>
+              </div>
+              <span className="text-purple-300 text-xs">or</span>
+              <input
+                type="text"
+                placeholder="Paste image URL"
+                value={colorImageUrl}
+                onChange={(e) => setColorImageUrl(e.target.value)}
+                className="flex-1 px-3 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
+              />
+            </div>
+
+            {colorImageUrl && (
+              <div className="w-16 h-20 rounded-lg overflow-hidden border border-purple-100 shadow-sm">
+                <img src={colorImageUrl} alt="Color preview" className="w-full h-full object-cover object-top" />
+              </div>
+            )}
+
             <button
               type="button"
               onClick={handleAddColor}
-              className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-sm shrink-0"
+              className="px-4 py-2 bg-purple-950 hover:bg-purple-900 text-white text-xs font-bold rounded-xl flex items-center gap-1 shadow-sm"
             >
-              <FiPlus /> Add
+              <FiPlus /> Add Color
             </button>
           </div>
 
           {colorsList.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-1.5">
+            <div className="flex flex-wrap gap-3 pt-2">
               {colorsList.map((col, idx) => (
-                <span
+                <div
                   key={idx}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 bg-purple-50 border border-purple-100 rounded-full text-xs font-bold text-primary"
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 border border-purple-100 rounded-xl text-xs font-bold text-primary"
                 >
-                  <span>{col}</span>
-                  <button type="button" onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700">
+                  <img src={col.image} alt={col.name} className="w-8 h-10 object-cover rounded-lg border border-purple-100" />
+                  <span>{col.name}</span>
+                  <button type="button" onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700 ml-1">
                     <FiX size={12} />
                   </button>
-                </span>
+                </div>
               ))}
             </div>
           )}

@@ -4,7 +4,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { Product, Category, Review, Order, OrderItem } from '../models/index.js';
+import { Product, Category, Review, Order, OrderItem, SubCategory } from '../models/index.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -77,7 +77,7 @@ router.post('/upload', protect, admin, upload.array('images', 5), (req, res) => 
 // @access  Public
 router.get('/', async (req, res) => {
   try {
-    const { category, size, priceMin, priceMax, search } = req.query;
+    const { category, subCategory, size, priceMin, priceMax, search } = req.query;
     let query = {};
 
     // 1. Search filter
@@ -86,7 +86,7 @@ router.get('/', async (req, res) => {
     }
 
     // 2. Category slug / id filter
-    if (category) {
+    if (category && category.toLowerCase() !== 'all') {
       let categoryObj;
       const isUUID = category.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
       if (isUUID) {
@@ -109,13 +109,36 @@ router.get('/', async (req, res) => {
       }
     }
 
-    // 3. Size filter
+    // 3. SubCategory filter
+    if (subCategory) {
+      let subCategoryObj;
+      const isSubUUID = subCategory.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
+      if (isSubUUID) {
+        subCategoryObj = await SubCategory.findByPk(subCategory);
+      } else {
+        subCategoryObj = await SubCategory.findOne({
+          where: {
+            [Op.or]: [
+              { slug: subCategory },
+              { name: subCategory }
+            ]
+          }
+        });
+      }
+      if (subCategoryObj) {
+        query.subCategoryId = subCategoryObj.id;
+      } else {
+        return res.json([]);
+      }
+    }
+
+    // 4. Size filter
     if (size) {
       // In Postgres JSONB containment:
       query.sizes = { [Op.contains]: [size] };
     }
 
-    // 4. Price range filter
+    // 5. Price range filter
     if (priceMin || priceMax) {
       query.price = {};
       if (priceMin) query.price[Op.gte] = Number(priceMin);
@@ -124,7 +147,10 @@ router.get('/', async (req, res) => {
 
     const products = await Product.findAll({
       where: query,
-      include: [{ model: Category, as: 'category', attributes: ['name', 'slug'] }],
+      include: [
+        { model: Category, as: 'category', attributes: ['name', 'slug'] },
+        { model: SubCategory, as: 'subCategory', attributes: ['name', 'slug'] },
+      ],
       order: [['createdAt', 'DESC']],
     });
 
@@ -136,6 +162,7 @@ router.get('/', async (req, res) => {
         p.category._id = p.category.id;
         p.category = p.category.name; // Keep frontend compatibility with category string value
       }
+      if (p.subCategory) { p.subCategory = p.subCategory.name; }
       return p;
     });
 
@@ -189,6 +216,7 @@ router.get('/:id', async (req, res) => {
     const product = await Product.findByPk(req.params.id, {
       include: [
         { model: Category, as: 'category', attributes: ['name', 'slug'] },
+        { model: SubCategory, as: 'subCategory', attributes: ['name', 'slug'] },
         { model: Review, as: 'reviews' },
       ],
     });
@@ -201,6 +229,7 @@ router.get('/:id', async (req, res) => {
         p.category._id = p.category.id;
         p.category = p.category.name;
       }
+      if (p.subCategory) { p.subCategory = p.subCategory.name; }
       if (p.reviews) {
         p.reviews = p.reviews.map((r) => {
           r._id = r.id;
@@ -220,7 +249,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
+  const { name, category, subCategory, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
 
   try {
     let categoryId = category;
@@ -239,9 +268,24 @@ router.post('/', protect, admin, async (req, res) => {
       categoryId = categoryObj.id;
     }
 
+    // Resolve subCategoryId if subCategory is provided
+    let subCategoryId = null;
+    if (subCategory) {
+      const isSubUUID = subCategory.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
+      if (isSubUUID) {
+        subCategoryId = subCategory;
+      } else {
+        const subCatObj = await SubCategory.findOne({ where: { name: subCategory, categoryId } });
+        if (subCatObj) {
+          subCategoryId = subCatObj.id;
+        }
+      }
+    }
+
     const product = await Product.create({
       name,
       categoryId,
+      subCategoryId,
       price: Number(price),
       images,
       sizes,
@@ -265,7 +309,7 @@ router.post('/', protect, admin, async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 router.put('/:id', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
+  const { name, category, subCategory, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
 
   try {
     const product = await Product.findByPk(req.params.id);
@@ -287,6 +331,23 @@ router.put('/:id', protect, admin, async (req, res) => {
           categoryId = categoryObj.id;
         }
         product.categoryId = categoryId;
+      }
+
+      // Resolve subCategoryId if subCategory is provided
+      if (subCategory !== undefined) {
+        if (subCategory) {
+          const isSubUUID = subCategory.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
+          if (isSubUUID) {
+            product.subCategoryId = subCategory;
+          } else {
+            const subCatObj = await SubCategory.findOne({ where: { name: subCategory, categoryId: product.categoryId } });
+            if (subCatObj) {
+              product.subCategoryId = subCatObj.id;
+            }
+          }
+        } else {
+          product.subCategoryId = null;
+        }
       }
 
       product.name = name || product.name;

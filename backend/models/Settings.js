@@ -10,7 +10,7 @@ const Settings = sequelize.define('Settings', {
   whatsappNumber: {
     type: DataTypes.STRING,
     allowNull: true,
-    defaultValue: '+919999999999',
+    defaultValue: '+919440593110',
   },
   upiId: {
     type: DataTypes.STRING,

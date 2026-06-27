@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { FiLock, FiUser } from 'react-icons/fi';
+import { FiLock, FiUser, FiEye, FiEyeOff } from 'react-icons/fi';
 import { useAuth } from '../../../context/AuthContext';
 import { API_URL } from '../../../utils/api';
 
@@ -12,6 +12,7 @@ export default function AdminLoginPage() {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -91,14 +92,21 @@ export default function AdminLoginPage() {
             <label className="text-[10px] font-bold text-gold uppercase tracking-wide block mb-1.5">Password</label>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 placeholder="Password"
-                className="w-full pl-9 pr-3 py-2.5 bg-purple-900/40 border border-purple-800/60 focus:outline-none focus:ring-1 focus:ring-gold rounded-xl text-sm placeholder-purple-400 text-white transition-all"
+                className="w-full pl-9 pr-10 py-2.5 bg-purple-900/40 border border-purple-800/60 focus:outline-none focus:ring-1 focus:ring-gold rounded-xl text-sm placeholder-purple-400 text-white transition-all"
               />
               <FiLock className="absolute left-3.5 top-3.5 text-purple-400" size={14} />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-purple-400 hover:text-gold transition-colors"
+              >
+                {showPassword ? <FiEyeOff size={16} /> : <FiEye size={16} />}
+              </button>
             </div>
           </div>
 

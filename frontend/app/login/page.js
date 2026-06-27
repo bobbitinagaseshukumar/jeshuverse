@@ -5,6 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { FiMail, FiLock, FiInfo, FiChevronRight, FiStar } from 'react-icons/fi';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+// Heavy 3D scene loaded client-side only (Three.js / React Three Fiber)
+const Login3DScene = dynamic(() => import('../../components/Login3DScene'), {
+  ssr: false,
+});
 
 function LoginContent() {
   const { user, sendOtp, verifyOtp } = useAuth();
@@ -121,6 +127,11 @@ function LoginContent() {
   return (
     <div className="relative min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-purple-950">
       
+      {/* Heavy WebGL 3D Scene Background (morphing orb, gold ring, crystals, stars) */}
+      <div className="absolute inset-0 z-0">
+        <Login3DScene />
+      </div>
+
       {/* 3D Floating Neon Background Blurs */}
       <motion.div
         animate={{
@@ -159,7 +170,7 @@ function LoginContent() {
           style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
           onMouseMove={handleMouse}
           onMouseLeave={handleMouseLeave}
-          className="bg-white/95 backdrop-blur-xl border border-purple-100/40 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col space-y-6"
+          className="bg-white/85 backdrop-blur-xl border border-purple-100/40 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col space-y-6"
         >
           {/* Header */}
           <div style={{ transform: "translateZ(50px)" }} className="text-center">

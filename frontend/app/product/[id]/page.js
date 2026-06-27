@@ -59,7 +59,10 @@ export default function ProductDetailPage() {
         setProduct(prodData);
         setSelectedImage(prodData.images[0]);
         if (prodData.sizes && prodData.sizes.length > 0) setSelectedSize(prodData.sizes[0]);
-        if (prodData.colors && prodData.colors.length > 0) setSelectedColor(prodData.colors[0]);
+        if (prodData.colors && prodData.colors.length > 0) {
+          const firstColor = prodData.colors[0];
+          setSelectedColor(typeof firstColor === 'string' ? firstColor : firstColor.name);
+        }
 
         // Fetch Related Products
         const relResponse = await axios.get(`${API_URL}/products/related/${encodeURIComponent(prodData.category)}?exclude=${id}`);
@@ -395,24 +398,35 @@ Please confirm my order.`;
             <div className="space-y-3">
               <span className="text-purple-950 text-xs font-bold uppercase tracking-wider block">Select Color</span>
               <div className="flex flex-wrap gap-2">
-                {product.colors.map((col, idx) => (
-                  <button
-                    key={col}
-                    onClick={() => {
-                      setSelectedColor(col);
-                      if (product.images && product.images[idx]) {
-                        setMainImage(product.images[idx]);
-                      }
-                    }}
-                    className={`px-4 py-2 border rounded-xl text-sm font-semibold transition-all ${
-                      selectedColor === col
-                        ? 'border-primary bg-purple-900 text-white shadow-sm'
-                        : 'border-purple-200 text-purple-900 bg-white hover:border-purple-400'
-                    }`}
-                  >
-                    {col}
-                  </button>
-                ))}
+                {product.colors.map((col, idx) => {
+                  // Support both old format (string) and new format ({name, image})
+                  const colorName = typeof col === 'string' ? col : col.name;
+                  const colorImage = typeof col === 'object' && col.image ? col.image : null;
+                  const isSelected = selectedColor === colorName;
+                  return (
+                    <button
+                      key={colorName}
+                      onClick={() => {
+                        setSelectedColor(colorName);
+                        if (colorImage) {
+                          setSelectedImage(colorImage);
+                        } else if (product.images && product.images[idx]) {
+                          setSelectedImage(product.images[idx]);
+                        }
+                      }}
+                      className={`px-4 py-2 border rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${
+                        isSelected
+                          ? 'border-primary bg-purple-900 text-white shadow-sm'
+                          : 'border-purple-200 text-purple-900 bg-white hover:border-purple-400'
+                      }`}
+                    >
+                      {colorImage && (
+                        <img src={colorImage} alt={colorName} className="w-6 h-8 object-cover rounded-md border border-purple-100" />
+                      )}
+                      {colorName}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}

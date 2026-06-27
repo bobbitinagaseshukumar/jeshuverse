@@ -6,6 +6,8 @@ import { WishlistProvider } from "../context/WishlistContext";
 import Header from "../components/Header";
 import BottomNavigation from "../components/BottomNavigation";
 import Footer from "../components/Footer";
+import ScrollToTop from '../components/ScrollToTop';
+import Background3D from "../components/Background3D";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -59,10 +61,12 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
-      <body className="min-h-screen bg-purple-50/20 text-purple-950 flex flex-col font-sans">
+      <body className="min-h-screen bg-transparent text-purple-950 flex flex-col font-sans">
+        <Background3D />
         <AuthProvider>
           <CartProvider>
             <WishlistProvider>
+              <ScrollToTop />
               <Header />
               <main className="flex-grow pb-16 md:pb-0">
                 {children}

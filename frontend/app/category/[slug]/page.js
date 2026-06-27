@@ -23,6 +23,8 @@ function CategoryContent() {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
   const [sortOption, setSortOption] = useState('latest');
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState('');
 
   
 
@@ -40,6 +42,33 @@ function CategoryContent() {
 
   const categoryName = slugToCategoryName(slug);
 
+  useEffect(() => {
+    const sort = searchParams.get('sort');
+    if (sort) {
+      setSortOption(sort);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      try {
+        // First get the category to find its ID
+        if (slug === 'all') { setSubCategories([]); return; }
+        const catRes = await axios.get(`${API_URL}/categories`);
+        const cats = catRes.data;
+        // Match slug to category
+        const matchedCat = cats.find(c => c.slug === slug || c.name === categoryName);
+        if (matchedCat) {
+          const subRes = await axios.get(`${API_URL}/subcategories?categoryId=${matchedCat._id || matchedCat.id}`);
+          setSubCategories(subRes.data);
+        }
+      } catch (err) {
+        console.error('Error fetching subcategories:', err);
+      }
+    };
+    fetchSubCategories();
+  }, [slug, categoryName]);
+
   // Fetching products based on Category, Filters, and Sorting
   const fetchProducts = async () => {
     setLoading(true);
@@ -53,6 +82,7 @@ function CategoryContent() {
       if (maxPrice) params.maxPrice = maxPrice;
       if (selectedSize) params.size = selectedSize;
       if (selectedColor) params.color = selectedColor;
+      if (selectedSubCategory) params.subCategory = selectedSubCategory;
 
       const response = await axios.get(`${API_URL}/products`, { params });
       setProducts(response.data);
@@ -65,7 +95,7 @@ function CategoryContent() {
 
   useEffect(() => {
     fetchProducts();
-  }, [slug, sortOption, selectedSize, selectedColor]); // Re-fetch on filter change
+  }, [slug, sortOption, selectedSize, selectedColor, selectedSubCategory]); // Re-fetch on filter change
 
   const handleApplyPriceFilter = (e) => {
     e.preventDefault();
@@ -78,6 +108,7 @@ function CategoryContent() {
     setSelectedSize('');
     setSelectedColor('');
     setSortOption('latest');
+    setSelectedSubCategory('');
     // We cannot immediately state-update and fetch because state updates are async.
     // Triggering direct fetch with blank params.
     setTimeout(fetchProducts, 0);
@@ -122,6 +153,35 @@ function CategoryContent() {
           </select>
         </div>
       </div>
+
+      {/* Subcategory Filter Tabs */}
+      {subCategories.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          <button
+            onClick={() => setSelectedSubCategory('')}
+            className={`px-4 py-2 border rounded-xl text-xs font-semibold transition-all ${
+              selectedSubCategory === ''
+                ? 'border-primary bg-primary text-white shadow-sm'
+                : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+            }`}
+          >
+            All
+          </button>
+          {subCategories.map((sc) => (
+            <button
+              key={sc._id || sc.id}
+              onClick={() => setSelectedSubCategory(sc.name)}
+              className={`px-4 py-2 border rounded-xl text-xs font-semibold transition-all ${
+                selectedSubCategory === sc.name
+                  ? 'border-primary bg-primary text-white shadow-sm'
+                  : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+              }`}
+            >
+              {sc.name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Main page layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

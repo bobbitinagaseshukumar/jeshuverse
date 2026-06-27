@@ -33,6 +33,8 @@ export default function Header() {
   };
 
   const categories = [
+    { name: "All Products", path: '/category/all' },
+    { name: "New Arrivals", path: '/category/all?sort=latest' },
     { name: "Women's Wear", path: '/category/women-wear' },
     { name: "Men's Wear", path: '/category/men-wear' },
     { name: "Kids Wear", path: '/category/kids-wear' },

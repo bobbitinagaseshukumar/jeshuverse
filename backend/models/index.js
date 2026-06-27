@@ -5,6 +5,7 @@ import Review from './Review.js';
 import Order from './Order.js';
 import OrderItem from './OrderItem.js';
 import Settings from './Settings.js';
+import SubCategory from './SubCategory.js';
 
 // 1. Category <-> Product (1 to Many)
 Category.hasMany(Product, {
@@ -72,6 +73,28 @@ OrderItem.belongsTo(Product, {
   as: 'product',
 });
 
+// 7. Category <-> SubCategory (1 to Many)
+Category.hasMany(SubCategory, {
+  foreignKey: 'categoryId',
+  as: 'subCategories',
+  onDelete: 'CASCADE',
+});
+SubCategory.belongsTo(Category, {
+  foreignKey: 'categoryId',
+  as: 'category',
+});
+
+// 8. SubCategory <-> Product (1 to Many)
+SubCategory.hasMany(Product, {
+  foreignKey: 'subCategoryId',
+  as: 'products',
+  onDelete: 'SET NULL',
+});
+Product.belongsTo(SubCategory, {
+  foreignKey: 'subCategoryId',
+  as: 'subCategory',
+});
+
 export {
   User,
   Product,
@@ -80,4 +103,5 @@ export {
   Order,
   OrderItem,
   Settings,
+  SubCategory,
 };
