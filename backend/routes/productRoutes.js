@@ -3,7 +3,8 @@ import { Op } from 'sequelize';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { Product, Category, Review } from '../models/index.js';
+import { fileURLToPath } from 'url';
+import { Product, Category, Review, Order, OrderItem } from '../models/index.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -11,7 +12,9 @@ const router = express.Router();
 // Configure Multer Storage for local product image uploads
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    const dir = 'uploads/';
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    const dir = path.join(__dirname, '../uploads');
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
@@ -334,6 +337,23 @@ router.post('/:id/reviews', protect, async (req, res) => {
     const product = await Product.findByPk(req.params.id);
 
     if (product) {
+      // 1. Check if user has ordered the product
+      const hasOrdered = await Order.findOne({
+        where: { userId: req.user.id },
+        include: [
+          {
+            model: OrderItem,
+            as: 'orderItems',
+            where: { productId: product.id }
+          }
+        ]
+      });
+
+      if (!hasOrdered) {
+        return res.status(400).json({ message: 'You can only review products you have actually ordered!' });
+      }
+
+      // 2. Check if already reviewed
       const alreadyReviewed = await Review.findOne({
         where: {
           productId: product.id,
@@ -342,7 +362,7 @@ router.post('/:id/reviews', protect, async (req, res) => {
       });
 
       if (alreadyReviewed) {
-        return res.status(400).json({ message: 'Product already reviewed' });
+        return res.status(400).json({ message: 'Product already reviewed by you' });
       }
 
       await Review.create({
