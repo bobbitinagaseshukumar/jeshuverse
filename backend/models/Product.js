@@ -29,6 +29,11 @@ const Product = sequelize.define('Product', {
     type: DataTypes.JSONB, // Stores array of size strings
     allowNull: false,
   },
+  colors: {
+    type: DataTypes.JSONB, // Stores array of color strings
+    allowNull: true,
+    defaultValue: [],
+  },
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,

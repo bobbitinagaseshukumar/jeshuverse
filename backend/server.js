@@ -224,6 +224,12 @@ const startServer = async () => {
     // 2. Synchronize Schemas (creates tables if they do not exist)
     console.log('Synchronizing database schemas...');
     await sequelize.sync();
+    
+    // Programmatically ensure colors column is added to the database table (safe migration)
+    await sequelize.query(`
+      ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "colors" JSONB DEFAULT '[]'::jsonb;
+    `).catch(err => console.log('Colors column check notice:', err.message));
+    
     console.log('Database schemas synchronized.');
 
     // 3. Seed starter data if empty

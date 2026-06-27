@@ -217,7 +217,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, stock, stockQuantity, description } = req.body;
+  const { name, category, price, images, sizes, colors, stock, stockQuantity, description } = req.body;
 
   try {
     let categoryId = category;
@@ -242,6 +242,7 @@ router.post('/', protect, admin, async (req, res) => {
       price: Number(price),
       images,
       sizes,
+      colors: colors || [],
       stock: Number(stock || stockQuantity || 0),
       description,
     });
@@ -259,7 +260,7 @@ router.post('/', protect, admin, async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 router.put('/:id', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, stock, stockQuantity, description } = req.body;
+  const { name, category, price, images, sizes, colors, stock, stockQuantity, description } = req.body;
 
   try {
     const product = await Product.findByPk(req.params.id);
@@ -287,6 +288,7 @@ router.put('/:id', protect, admin, async (req, res) => {
       product.price = price !== undefined ? Number(price) : product.price;
       product.images = images || product.images;
       product.sizes = sizes || product.sizes;
+      product.colors = colors || product.colors;
       product.stock = stock !== undefined ? Number(stock) : (stockQuantity !== undefined ? Number(stockQuantity) : product.stock);
       product.description = description || product.description;
 

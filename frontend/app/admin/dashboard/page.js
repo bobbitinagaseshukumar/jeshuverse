@@ -64,7 +64,7 @@ export default function AdminDashboardPage() {
   const statCards = [
     {
       label: 'Total Revenue',
-      value: `Rs. ${totalRevenue.toLocaleString('en-IN')}`,
+      value: `₹${totalRevenue.toLocaleString('en-IN')}`,
       icon: FiDollarSign,
       color: 'bg-emerald-50 text-emerald-600 border border-emerald-100',
     },
@@ -143,7 +143,7 @@ export default function AdminDashboardPage() {
                         <p className="font-bold text-purple-950">{ord.user?.name || 'Customer'}</p>
                         <p className="text-[10px] text-purple-400 font-semibold">{ord.user?.phone ? `+${ord.user.phone}` : 'No phone'}</p>
                       </td>
-                      <td className="py-3.5 font-display font-extrabold text-sm text-purple-900">Rs. {Number(ord.totalAmount || 0).toLocaleString('en-IN')}</td>
+                      <td className="py-3.5 font-display font-extrabold text-sm text-purple-900">₹{Number(ord.totalAmount || 0).toLocaleString('en-IN')}</td>
                       <td className="py-3.5">
                         <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold ${
                           ord.paymentStatus === 'Paid' ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-red-50 text-red-600 border border-red-100'

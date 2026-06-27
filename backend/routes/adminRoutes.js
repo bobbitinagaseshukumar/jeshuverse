@@ -95,6 +95,26 @@ router.get('/settings', protect, admin, async (req, res) => {
   }
 });
 
+// @desc    Get store public settings (no auth required)
+// @route   GET /api/admin/settings/public
+// @access  Public
+router.get('/settings/public', async (req, res) => {
+  try {
+    let settings = await Settings.findOne();
+    if (!settings) {
+      settings = await Settings.create({});
+    }
+    res.status(200).json({
+      whatsappNumber: settings.whatsappNumber,
+      upiId: settings.upiId,
+      merchantName: settings.merchantName,
+      shippingCharges: settings.shippingCharges,
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching public configurations' });
+  }
+});
+
 // @desc    Update store settings
 // @route   PUT /api/admin/settings
 // @access  Private/Admin
