@@ -6,61 +6,39 @@ import axios from 'axios';
 import { API_URL } from '../utils/api';
 
 export default function CategoryGrid() {
-  const [images, setImages] = useState({
-    womenCategoryPic: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80",
-    menCategoryPic: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=500&q=80",
-    kidsCategoryPic: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80",
-    jewelleryCategoryPic: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80",
-  });
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchPublicSettings = async () => {
+    const fetchCategories = async () => {
       try {
-        const res = await axios.get(`${API_URL}/admin/settings/public`);
-        setImages({
-          womenCategoryPic: res.data.womenCategoryPic || "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80",
-          menCategoryPic: res.data.menCategoryPic || "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=500&q=80",
-          kidsCategoryPic: res.data.kidsCategoryPic || "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80",
-          jewelleryCategoryPic: res.data.jewelleryCategoryPic || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80",
-        });
+        const res = await axios.get(`${API_URL}/categories`);
+        setCategories(res.data);
       } catch (err) {
-        console.error('Error fetching category grid public settings:', err);
+        console.error('Error fetching dynamic categories:', err);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchPublicSettings();
+    fetchCategories();
   }, []);
 
-  const categories = [
-    {
-      name: "Women's Wear",
-      slug: "women-wear",
-      count: "Sarees, Kurtas & Salwars",
-      image: images.womenCategoryPic
-    },
-    {
-      name: "Men's Wear",
-      slug: "men-wear",
-      count: "Kurtas, Blazers & Jackets",
-      image: images.menCategoryPic
-    },
-    {
-      name: "Kids Wear",
-      slug: "kids-wear",
-      count: "Frocks, Gowns & Shirts",
-      image: images.kidsCategoryPic
-    },
-    {
-      name: "Jewellery",
-      slug: "jewellery",
-      count: "Kundan, Choker & Rings",
-      image: images.jewelleryCategoryPic
-    }
-  ];
+  if (loading) {
+    return (
+      <div className="py-12 flex justify-center items-center">
+        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (categories.length === 0) {
+    return null;
+  }
 
   return (
     <div className="py-12 sm:py-16">
       <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 px-4">
-        <span className="text-amber-600 font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block">
+        <span className="text-amber-600 font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block animate-pulse">
           Shop By Department
         </span>
         <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-purple-950 tracking-tight">
@@ -72,14 +50,14 @@ export default function CategoryGrid() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {categories.map((cat) => (
           <NextLink
-            key={cat.slug}
+            key={cat._id || cat.id}
             href={`/category/${cat.slug}`}
-            className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-purple-100 hover:border-purple-200 transition-all duration-300 block"
+            className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-purple-100 hover:border-purple-200 transition-all duration-300 block hover-3d"
           >
             {/* Background Image */}
             <div className="absolute inset-0 w-full h-full zoom-container">
               <img
-                src={cat.image}
+                src={cat.image || '/placeholder-category.png'}
                 alt={cat.name}
                 className="w-full h-full object-cover object-top"
               />
@@ -90,7 +68,7 @@ export default function CategoryGrid() {
             {/* Content Overlay */}
             <div className="absolute inset-0 p-6 flex flex-col justify-end">
               <span className="text-gold-light text-xs font-bold uppercase tracking-wider mb-1 block">
-                {cat.count}
+                Featured Department
               </span>
               <h3 className="font-display font-extrabold text-xl sm:text-2xl text-white tracking-tight">
                 {cat.name}

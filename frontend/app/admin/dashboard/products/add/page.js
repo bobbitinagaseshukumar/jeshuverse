@@ -14,13 +14,34 @@ export default function AddProductPage() {
 
   // Form States
   const [name, setName] = useState('');
-  const [category, setCategory] = useState("Women's Wear");
+  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [discountPrice, setDiscountPrice] = useState('');
   const [stockQuantity, setStockQuantity] = useState('');
   const [sku, setSku] = useState('');
   const [featured, setFeatured] = useState(false);
+
+  // Jewellery specific specs
+  const [grams, setGrams] = useState('');
+  const [cost, setCost] = useState('');
+
+  // Fetch dynamic categories
+  useEffect(() => {
+    const fetchCats = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/categories`);
+        setCategories(res.data);
+        if (res.data.length > 0) {
+          setCategory(res.data[0].name);
+        }
+      } catch (err) {
+        console.error('Failed to load categories:', err);
+      }
+    };
+    fetchCats();
+  }, []);
 
   // Size specifications
   const availableSizesList = ['S', 'M', 'L', 'XL', 'XXL', 'Free Size', 'Adjustable'];
@@ -130,7 +151,9 @@ export default function AddProductPage() {
         featured,
         sizes: selectedSizes,
         colors: colorsList,
-        images: imageUrls
+        images: imageUrls,
+        grams: category.toLowerCase() === 'jewellery' ? grams : null,
+        cost: category.toLowerCase() === 'jewellery' && cost ? Number(cost) : null,
       };
 
       await axios.post(`${API_URL}/products`, payload, {
@@ -173,16 +196,48 @@ export default function AddProductPage() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 cursor-pointer"
+              className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 cursor-pointer font-semibold"
             >
-              <option value="Women's Wear">Women's Wear</option>
-              <option value="Men's Wear">Men's Wear</option>
-              <option value="Kids Wear">Kids Wear</option>
-              <option value="Jewellery">Jewellery</option>
+              {categories.map((cat) => (
+                <option key={cat.id || cat._id} value={cat.name}>{cat.name}</option>
+              ))}
             </select>
           </div>
 
         </div>
+
+        {/* Jewellery Specific Fields Section */}
+        {category.toLowerCase() === 'jewellery' && (
+          <div className="bg-amber-50/40 p-5 rounded-2xl border border-amber-100 space-y-4 animate-float-slow">
+            <div className="flex items-center gap-2 text-xs font-extrabold text-amber-800 uppercase tracking-wider">
+              <span>✨ Jewellery Specifications Section</span>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Weight in Grams</label>
+                <input
+                  type="text"
+                  value={grams}
+                  onChange={(e) => setGrams(e.target.value)}
+                  placeholder="e.g. 15.6g"
+                  className="w-full px-3.5 py-2.5 bg-white border border-amber-200 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-semibold"
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Making Cost / Additional Charge (₹)</label>
+                <input
+                  type="number"
+                  value={cost}
+                  onChange={(e) => setCost(e.target.value)}
+                  placeholder="e.g. 1200"
+                  className="w-full px-3.5 py-2.5 bg-white border border-amber-200 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-semibold"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         <div>
           <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Description</label>

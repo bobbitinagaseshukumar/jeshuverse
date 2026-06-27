@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import NextLink from 'next/link';
-import { FiHome, FiFolder, FiPlusCircle, FiShoppingBag, FiSettings, FiMenu, FiX, FiLogOut, FiArrowLeft } from 'react-icons/fi';
+import { FiHome, FiFolder, FiPlusCircle, FiShoppingBag, FiSettings, FiMenu, FiX, FiLogOut, FiArrowLeft, FiLayers } from 'react-icons/fi';
 import axios from 'axios';
 import { API_URL } from '../../../utils/api';
 
@@ -122,6 +122,7 @@ export default function AdminDashboardLayout({ children }) {
     { label: 'Overview Stats', path: '/admin/dashboard', icon: FiHome },
     { label: 'Products Manager', path: '/admin/dashboard/products', icon: FiFolder },
     { label: 'Upload Product', path: '/admin/dashboard/products/add', icon: FiPlusCircle },
+    { label: 'Categories Manager', path: '/admin/dashboard/categories', icon: FiLayers },
     { label: 'Orders Manager', path: '/admin/dashboard/orders', icon: FiShoppingBag },
     { label: 'Store Settings', path: '/admin/dashboard/settings', icon: FiSettings }
   ];

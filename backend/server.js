@@ -225,10 +225,18 @@ const startServer = async () => {
     console.log('Synchronizing database schemas...');
     await sequelize.sync();
     
-    // Programmatically ensure colors column is added to the database table (safe migration)
+    // Programmatically ensure colors, grams, and cost columns are added to the database table (safe migration)
     await sequelize.query(`
       ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "colors" JSONB DEFAULT '[]'::jsonb;
     `).catch(err => console.log('Colors column check notice:', err.message));
+
+    await sequelize.query(`
+      ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "grams" VARCHAR(50);
+    `).catch(err => console.log('Grams column check notice:', err.message));
+
+    await sequelize.query(`
+      ALTER TABLE "Products" ADD COLUMN IF NOT EXISTS "cost" DOUBLE PRECISION;
+    `).catch(err => console.log('Cost column check notice:', err.message));
 
     // Programmatically ensure storeAddress column is added to Settings table
     await sequelize.query(`

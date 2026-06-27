@@ -53,6 +53,14 @@ const Product = sequelize.define('Product', {
     allowNull: false,
     defaultValue: 0,
   },
+  grams: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  cost: {
+    type: DataTypes.DOUBLE,
+    allowNull: true,
+  },
 }, {
   hooks: {
     beforeValidate: (product) => {

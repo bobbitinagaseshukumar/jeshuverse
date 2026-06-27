@@ -345,6 +345,27 @@ Please confirm my order.`;
             <p className="text-[10px] text-purple-400 mt-1.5">*Inclusive of all taxes. Free shipping on orders over ₹499.</p>
           </div>
 
+          {/* Jewellery Specifications */}
+          {product.category?.toLowerCase() === 'jewellery' && (product.grams || product.cost) && (
+            <div className="p-4 bg-amber-50/40 rounded-2xl border border-amber-100/50 space-y-2.5">
+              <span className="text-amber-800 text-[10px] font-extrabold uppercase tracking-wider block">✨ Jewellery Specifications</span>
+              <div className="grid grid-cols-2 gap-4 text-xs font-semibold text-purple-950">
+                {product.grams && (
+                  <div className="bg-white/60 p-2.5 rounded-xl border border-amber-100">
+                    <span className="text-purple-400 text-[9px] block uppercase tracking-wide">Weight</span>
+                    <span className="text-amber-900 font-bold text-sm">{product.grams}</span>
+                  </div>
+                )}
+                {product.cost && (
+                  <div className="bg-white/60 p-2.5 rounded-xl border border-amber-100">
+                    <span className="text-purple-400 text-[9px] block uppercase tracking-wide">Making Cost</span>
+                    <span className="text-amber-900 font-bold text-sm">₹{Number(product.cost).toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Specs: Sizes selection */}
           {product.sizes && product.sizes.length > 0 && (
             <div className="space-y-3">

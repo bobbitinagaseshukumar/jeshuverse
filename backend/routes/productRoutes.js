@@ -220,7 +220,7 @@ router.get('/:id', async (req, res) => {
 // @route   POST /api/products
 // @access  Private/Admin
 router.post('/', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, colors, stock, stockQuantity, description } = req.body;
+  const { name, category, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
 
   try {
     let categoryId = category;
@@ -248,6 +248,8 @@ router.post('/', protect, admin, async (req, res) => {
       colors: colors || [],
       stock: Number(stock || stockQuantity || 0),
       description,
+      grams: grams || null,
+      cost: cost ? Number(cost) : null,
     });
 
     const val = product.toJSON();
@@ -263,7 +265,7 @@ router.post('/', protect, admin, async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 router.put('/:id', protect, admin, async (req, res) => {
-  const { name, category, price, images, sizes, colors, stock, stockQuantity, description } = req.body;
+  const { name, category, price, images, sizes, colors, stock, stockQuantity, description, grams, cost } = req.body;
 
   try {
     const product = await Product.findByPk(req.params.id);
@@ -294,6 +296,8 @@ router.put('/:id', protect, admin, async (req, res) => {
       product.colors = colors || product.colors;
       product.stock = stock !== undefined ? Number(stock) : (stockQuantity !== undefined ? Number(stockQuantity) : product.stock);
       product.description = description || product.description;
+      product.grams = grams !== undefined ? grams : product.grams;
+      product.cost = cost !== undefined ? (cost ? Number(cost) : null) : product.cost;
 
       await product.save();
       
