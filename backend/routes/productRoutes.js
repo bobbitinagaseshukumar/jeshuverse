@@ -369,7 +369,7 @@ router.post('/:id/reviews', protect, async (req, res) => {
         return res.status(400).json({ message: 'Product already reviewed by you' });
       }
 
-      await Review.create({
+      const review = await Review.create({
         name: req.user.name,
         rating: Number(rating),
         comment,
@@ -388,7 +388,14 @@ router.post('/:id/reviews', protect, async (req, res) => {
         allReviews.length;
 
       await product.save();
-      res.status(201).json({ message: 'Review added' });
+
+      const val = review.toJSON();
+      val._id = val.id;
+
+      res.status(201).json({
+        message: 'Review added',
+        review: val
+      });
     } else {
       res.status(404).json({ message: 'Product not found' });
     }

@@ -1,6 +1,6 @@
 import express from 'express';
 import { sequelize } from '../config/db.js';
-import { Order, OrderItem, Product, User } from '../models/index.js';
+import { Order, OrderItem, Product, User, Settings } from '../models/index.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -9,10 +9,17 @@ const router = express.Router();
 // @route   POST /api/orders
 // @access  Private
 router.post('/', protect, async (req, res) => {
-  const { orderItems, shippingAddress, totalPrice, paymentResult } = req.body;
+  const { orderItems, items, shippingAddress, totalPrice, paymentResult } = req.body;
+  const targetItems = orderItems || items;
 
-  if (orderItems && orderItems.length === 0) {
+  if (!targetItems || targetItems.length === 0) {
     return res.status(400).json({ message: 'No order items' });
+  }
+
+  // Auto calculate total price on server if not supplied
+  let calculatedTotal = totalPrice;
+  if (calculatedTotal === undefined || calculatedTotal === null) {
+    calculatedTotal = targetItems.reduce((acc, item) => acc + Number(item.price) * Number(item.qty || item.quantity || 1), 0);
   }
 
   // Use a SQL Transaction to ensure atomicity
@@ -29,25 +36,26 @@ router.post('/', protect, async (req, res) => {
     const order = await Order.create({
       userId: req.user.id,
       shippingAddress: typeof finalAddress === 'string' ? finalAddress : String(finalAddress || ''),
-      totalPrice: Number(totalPrice),
-      paymentResult, // Razorpay details
+      totalPrice: Number(calculatedTotal),
+      paymentResult, // PhonePe / Razorpay details
       isPaid: paymentResult && paymentResult.id ? true : false,
       paidAt: paymentResult && paymentResult.id ? new Date() : null,
     }, { transaction: t });
 
     // Save order items and decrement product stocks
-    for (const item of orderItems) {
+    for (const item of targetItems) {
       // Validate product id
-      const productId = item.product || item._id; // fallback
+      const productId = item.product || item._id || item.productId;
+      const itemQty = Number(item.qty || item.quantity || 1);
       
       await OrderItem.create({
         orderId: order.id,
         productId,
         name: item.name,
-        qty: Number(item.qty),
+        qty: itemQty,
         image: item.image,
         price: Number(item.price),
-        size: item.size,
+        size: item.size || 'N/A',
       }, { transaction: t });
 
       // Decrement stock
@@ -62,7 +70,6 @@ router.post('/', protect, async (req, res) => {
     await t.commit();
 
     // Trigger admin red notification dot
-    const { Settings } = await import('../models/index.js');
     const settings = await Settings.findOne();
     if (settings) {
       settings.hasNewOrders = true;
@@ -71,7 +78,8 @@ router.post('/', protect, async (req, res) => {
 
     const result = order.toJSON();
     result._id = result.id;
-    result.orderItems = orderItems;
+    result.orderId = result.id;
+    result.orderItems = targetItems;
 
     res.status(201).json(result);
   } catch (error) {
@@ -121,7 +129,6 @@ router.post('/whatsapp', async (req, res) => {
     }
 
     // Trigger admin red notification dot
-    const { Settings } = await import('../models/index.js');
     const settings = await Settings.findOne();
     if (settings) {
       settings.hasNewOrders = true;

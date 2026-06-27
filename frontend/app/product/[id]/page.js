@@ -135,8 +135,7 @@ export default function ProductDetailPage() {
       return;
     }
     try {
-      const response = await axios.post(`${API_URL}/reviews`, {
-        productId: id,
+      const response = await axios.post(`${API_URL}/products/${id}/reviews`, {
         rating,
         comment
       }, {

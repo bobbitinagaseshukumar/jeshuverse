@@ -129,7 +129,7 @@ function CheckoutContent() {
       if (paymentMethod === 'PhonePe') {
         // Create PhonePe Dynamic QR Session
         const payResponse = await axios.post(`${API_URL}/payments/create-session`, {
-          orderId: orderData.orderId
+          orderId: orderData.orderId || orderData.id || orderData._id
         }, {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -137,7 +137,7 @@ function CheckoutContent() {
       } else {
         // COD / WhatsApp Checkout directly forwards to success screen
         if (!isBuyNow) clearCart();
-        router.push(`/order-success?orderId=${orderData.orderId}`);
+        router.push(`/order-success?orderId=${orderData.orderId || orderData.id || orderData._id}`);
       }
 
     } catch (error) {
@@ -163,9 +163,9 @@ function CheckoutContent() {
       if (!isBuyNow) clearCart();
 
       if (status === 'Success') {
-        router.push(`/order-success?orderId=${placedOrder.orderId}`);
+        router.push(`/order-success?orderId=${placedOrder.orderId || placedOrder.id || placedOrder._id}`);
       } else {
-        router.push(`/payment-failure?orderId=${placedOrder.orderId}`);
+        router.push(`/payment-failure?orderId=${placedOrder.orderId || placedOrder.id || placedOrder._id}`);
       }
     } catch (error) {
       console.error(error);

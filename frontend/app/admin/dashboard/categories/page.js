@@ -187,7 +187,7 @@ export default function AdminCategoriesPage() {
               </thead>
               <tbody className="divide-y divide-purple-50 font-medium">
                 {categories.map((cat) => (
-                  <tr key={cat.id} className="hover:bg-purple-50/20">
+                  <tr key={cat.id || cat._id} className="hover:bg-purple-50/20">
                     <td className="py-2.5 pl-2">
                       <img
                         src={cat.image || '/placeholder-category.png'}
@@ -199,7 +199,7 @@ export default function AdminCategoriesPage() {
                     <td className="py-2.5 font-mono text-[10px] text-purple-500">{cat.slug}</td>
                     <td className="py-2.5 text-right pr-2">
                       <button
-                        onClick={() => handleDeleteCategory(cat.id)}
+                        onClick={() => handleDeleteCategory(cat.id || cat._id)}
                         className="p-1.5 hover:bg-red-50 text-red-500 hover:text-red-700 rounded-lg transition-colors"
                         title="Delete Category"
                       >
