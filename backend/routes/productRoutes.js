@@ -90,7 +90,7 @@ router.get('/', async (req, res) => {
       if (categoryObj) {
         query.categoryId = categoryObj.id;
       } else {
-        return res.json({ products: [] });
+        return res.json([]);
       }
     }
 
@@ -118,11 +118,12 @@ router.get('/', async (req, res) => {
       p._id = p.id;
       if (p.category) {
         p.category._id = p.category.id;
+        p.category = p.category.name; // Keep frontend compatibility with category string value
       }
       return p;
     });
 
-    res.json({ products: responseData });
+    res.json(responseData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
