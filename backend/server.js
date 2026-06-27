@@ -221,9 +221,9 @@ const startServer = async () => {
     // 1. Authenticate Database
     await connectDB();
 
-    // 2. Synchronize Schemas (alters existing tables to match changes without drops)
+    // 2. Synchronize Schemas (creates tables if they do not exist)
     console.log('Synchronizing database schemas...');
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('Database schemas synchronized.');
 
     // 3. Seed starter data if empty
