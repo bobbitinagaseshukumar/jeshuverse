@@ -1,9 +1,68 @@
 import express from 'express';
 import { Op } from 'sequelize';
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 import { Product, Category, Review } from '../models/index.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
+
+// Configure Multer Storage for local product image uploads
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    const dir = 'uploads/';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    cb(null, dir);
+  },
+  filename(req, file, cb) {
+    cb(
+      null,
+      `product-${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`
+    );
+  }
+});
+
+function checkFileType(file, cb) {
+  const filetypes = /jpg|jpeg|png|webp/;
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = filetypes.test(file.mimetype);
+
+  if (extname && mimetype) {
+    return cb(null, true);
+  } else {
+    cb(new Error('Only JPG, JPEG, PNG, and WEBP image formats are allowed!'));
+  }
+}
+
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
+  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
+});
+
+// @desc    Upload product images (up to 5)
+// @route   POST /api/products/upload
+// @access  Private/Admin
+router.post('/upload', protect, admin, upload.array('images', 5), (req, res) => {
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: 'No image files uploaded' });
+    }
+
+    const filePaths = req.files.map(file => `/uploads/${file.filename}`);
+    res.status(200).json({
+      message: 'Images uploaded successfully',
+      urls: filePaths
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'File upload failed' });
+  }
+});
 
 // @desc    Get all products with filters & search
 // @route   GET /api/products

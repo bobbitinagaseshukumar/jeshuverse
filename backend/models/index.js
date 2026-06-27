@@ -4,6 +4,7 @@ import Category from './Category.js';
 import Review from './Review.js';
 import Order from './Order.js';
 import OrderItem from './OrderItem.js';
+import Settings from './Settings.js';
 
 // 1. Category <-> Product (1 to Many)
 Category.hasMany(Product, {
@@ -78,4 +79,5 @@ export {
   Review,
   Order,
   OrderItem,
+  Settings,
 };
