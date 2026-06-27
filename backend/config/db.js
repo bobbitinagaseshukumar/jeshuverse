@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 
 // Load env variables prior to Sequelize initialization
 dotenv.config();
-console.log('Backend starting up. Available Environment Keys:', Object.keys(process.env).filter(k => !k.includes('SECRET') && !k.includes('PASSWORD') && !k.includes('KEY')));
 
 const dbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/jeshuverse';
 const sequelize = new Sequelize(dbUrl, {

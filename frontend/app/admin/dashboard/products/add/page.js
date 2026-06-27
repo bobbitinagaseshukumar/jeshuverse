@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { FiSave, FiUploadCloud, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
-import ImageCropper from '@/components/ImageCropper';
 
 export default function AddProductPage() {
   const { token } = useAuth();
@@ -36,10 +35,6 @@ export default function AddProductPage() {
   const [imageUrls, setImageUrls] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [pastedUrl, setPastedUrl] = useState('');
-  
-  // Cropping states
-  const [cropperSrc, setCropperSrc] = useState(null);
-  const [pendingFiles, setPendingFiles] = useState([]);
 
   
 
@@ -74,27 +69,16 @@ export default function AddProductPage() {
     setColorsList(colorsList.filter((_, i) => i !== idx));
   };
 
-  // Handle direct file uploads to backend Multer directory with cropping
-  const handleImageFileChange = (e) => {
+  // Handle direct file uploads to backend
+  const handleImageFileChange = async (e) => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    setPendingFiles(files);
-    
-    // Read the first file and open the cropper
-    const reader = new FileReader();
-    reader.onload = () => {
-      setCropperSrc(reader.result);
-    };
-    reader.readAsDataURL(files[0]);
-    // Reset file input value so same files can be re-selected
-    e.target.value = '';
-  };
-
-  const handleCropComplete = async (croppedFile) => {
     setUploading(true);
     const formData = new FormData();
-    formData.append('images', croppedFile);
+    files.forEach((file) => {
+      formData.append('images', file);
+    });
 
     try {
       const response = await axios.post(`${API_URL}/products/upload`, formData, {
@@ -109,20 +93,7 @@ export default function AddProductPage() {
       alert(error.response?.data?.message || 'File upload failed');
     } finally {
       setUploading(false);
-      
-      // Process next file if any
-      const nextPending = pendingFiles.slice(1);
-      setPendingFiles(nextPending);
-      
-      if (nextPending.length > 0) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          setCropperSrc(reader.result);
-        };
-        reader.readAsDataURL(nextPending[0]);
-      } else {
-        setCropperSrc(null);
-      }
+      e.target.value = '';
     }
   };
 
@@ -434,16 +405,7 @@ export default function AddProductPage() {
 
       </form>
 
-      {cropperSrc && (
-        <ImageCropper
-          imageSrc={cropperSrc}
-          onCropComplete={handleCropComplete}
-          onCancel={() => {
-            setCropperSrc(null);
-            setPendingFiles([]);
-          }}
-        />
-      )}
+
     </div>
   );
 }

@@ -54,7 +54,12 @@ router.post('/upload', protect, admin, upload.array('images', 5), (req, res) => 
       return res.status(400).json({ message: 'No image files uploaded' });
     }
 
-    const filePaths = req.files.map(file => `/uploads/${file.filename}`);
+    // Build full URL so images work on all devices (phone, laptop, etc.)
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+    const host = req.headers['x-forwarded-host'] || req.get('host');
+    const baseUrl = `${protocol}://${host}`;
+
+    const filePaths = req.files.map(file => `${baseUrl}/uploads/${file.filename}`);
     res.status(200).json({
       message: 'Images uploaded successfully',
       urls: filePaths
