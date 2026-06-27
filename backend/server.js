@@ -152,19 +152,26 @@ const seedDefaultData = async () => {
     }
 
     // Seed Admin Accounts automatically
-    const adminEmails = ['nagaseshukumarbobbiti@gmail.com', 'bobbitinagaseshukumar@gmail.com'];
-    for (const email of adminEmails) {
-      const adminExists = await User.findOne({ where: { email } });
+    const adminAccounts = [
+      { email: 'haribabug08@gmail.com', name: 'Haribabu', password: 'jeshvith-a' },
+      { email: 'nagaseshukumarbobbiti@gmail.com', name: 'Naga Seshu Kumar', password: 'seshu@2409' },
+      { email: 'bobbitinagaseshukumar@gmail.com', name: 'Seshu Kumar', password: 'seshu@2409' }
+    ];
+    for (const account of adminAccounts) {
+      const adminExists = await User.findOne({ where: { email: account.email } });
       if (!adminExists) {
-        console.log(`Seeding admin account: ${email}`);
+        console.log(`Seeding admin account: ${account.email}`);
         await User.create({
-          name: email === 'nagaseshukumarbobbiti@gmail.com' ? 'Naga Seshu Kumar' : 'Seshu Kumar',
-          email: email,
-          password: 'seshu@2409',
+          name: account.name,
+          email: account.email,
+          password: account.password,
           mobile: '+919999999999',
           address: 'JeshuVerse Head Office, Mumbai, India',
           isAdmin: true
         });
+      } else {
+        adminExists.password = account.password;
+        await adminExists.save();
       }
     }
   } catch (error) {

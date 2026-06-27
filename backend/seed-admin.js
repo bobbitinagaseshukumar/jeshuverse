@@ -5,8 +5,8 @@ const seedAdmin = async () => {
   try {
     await sequelize.authenticate();
     
-    const email = 'bobbitinagaseshukumar@gmail.com';
-    const password = 'seshu@2409';
+    const email = 'haribabug08@gmail.com';
+    const password = 'jeshvith-a';
     
     const userExists = await User.findOne({ where: { email } });
     if (userExists) {
@@ -16,7 +16,7 @@ const seedAdmin = async () => {
       console.log(`Admin account updated successfully: ${email}`);
     } else {
       await User.create({
-        name: 'Seshu Kumar',
+        name: 'Haribabu',
         email,
         password,
         mobile: '+919999999999',
