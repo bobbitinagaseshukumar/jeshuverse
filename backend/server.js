@@ -11,7 +11,7 @@ import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 
 // Model Imports (for seeding)
-import { Category, Product, Review } from './models/index.js';
+import { Category, Product, Review, User } from './models/index.js';
 
 // Load Env
 dotenv.config();
@@ -150,8 +150,25 @@ const seedDefaultData = async () => {
         console.log('Product reviews seeded successfully.');
       }
     }
+
+    // Seed Admin Accounts automatically
+    const adminEmails = ['nagaseshukumarbobbiti@gmail.com', 'bobbitinagaseshukumar@gmail.com'];
+    for (const email of adminEmails) {
+      const adminExists = await User.findOne({ where: { email } });
+      if (!adminExists) {
+        console.log(`Seeding admin account: ${email}`);
+        await User.create({
+          name: email === 'nagaseshukumarbobbiti@gmail.com' ? 'Naga Seshu Kumar' : 'Seshu Kumar',
+          email: email,
+          password: 'seshu@2409',
+          mobile: '+919999999999',
+          address: 'JeshuVerse Head Office, Mumbai, India',
+          isAdmin: true
+        });
+      }
+    }
   } catch (error) {
-    console.error('Error seeding initial categories/products:', error.message);
+    console.error('Error seeding initial categories/products/admins:', error.message);
   }
 };
 

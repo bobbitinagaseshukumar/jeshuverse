@@ -25,3 +25,10 @@ yarn-error.log*
 # System Files
 .DS_Store
 Thumbs.db
+
+# Next.js build output
+.next/
+.next
+.vercel/
+.vercel
+

@@ -4,15 +4,16 @@ import dotenv from 'dotenv';
 // Load env variables prior to Sequelize initialization
 dotenv.config();
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const dbUrl = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/jeshuverse';
+const sequelize = new Sequelize(dbUrl, {
   dialect: 'postgres',
-  dialectOptions: {
+  dialectOptions: process.env.DATABASE_URL ? {
     ssl: {
       require: true,
-      rejectUnauthorized: false, // Essential for Neon PG connection
+      rejectUnauthorized: false,
     },
-  },
-  logging: false, // Disable query logging in console for cleaner server outputs
+  } : {},
+  logging: false,
 });
 
 const connectDB = async () => {
