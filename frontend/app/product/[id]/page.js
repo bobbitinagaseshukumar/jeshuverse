@@ -91,8 +91,22 @@ export default function ProductDetailPage() {
       setWhatsappName(user.name || '');
       setWhatsappPhone(user.phone || '');
       if (user.address) {
-        const addr = `${user.address.street || ''}, ${user.address.city || ''}, ${user.address.state || ''} - ${user.address.zipCode || ''}`;
-        setWhatsappAddress(addr.replace(/^,\s*|,\s*$/g, ''));
+        if (typeof user.address === 'string') {
+          try {
+            const parsed = JSON.parse(user.address);
+            if (parsed && typeof parsed === 'object') {
+              const addr = `${parsed.street || ''}, ${parsed.city || ''}, ${parsed.state || ''} - ${parsed.zipCode || ''}`;
+              setWhatsappAddress(addr.replace(/^,\s*|,\s*$/g, '').replace(/^[,\s-]+|[,\s-]+$/g, ''));
+            } else {
+              setWhatsappAddress(user.address);
+            }
+          } catch (e) {
+            setWhatsappAddress(user.address);
+          }
+        } else if (typeof user.address === 'object') {
+          const addr = `${user.address.street || ''}, ${user.address.city || ''}, ${user.address.state || ''} - ${user.address.zipCode || ''}`;
+          setWhatsappAddress(addr.replace(/^,\s*|,\s*$/g, '').replace(/^[,\s-]+|[,\s-]+$/g, ''));
+        }
       }
     }
   }, [user, whatsappModalOpen]);
@@ -138,15 +152,32 @@ export default function ProductDetailPage() {
   };
 
   // Trigger WhatsApp order redirection
-  const handleWhatsappSend = () => {
-    if (!whatsappName || !whatsappPhone || !whatsappAddress) {
-      alert('Please fill in all details to proceed.');
+  const handleWhatsappSend = async () => {
+    if (!whatsappAddress || !whatsappAddress.trim()) {
+      alert('Please enter your delivery address to proceed.');
       return;
     }
 
     const price = product.discountPrice > 0 ? product.discountPrice : product.price;
     const totalItemPrice = price * quantity;
     const cleanPhone = whatsappSettings.whatsappNumber.replace(/\D/g, ''); // Ensure no plus sign or spaces
+
+    // Log the order inquiry to the database
+    try {
+      await axios.post(`${API_URL}/orders/whatsapp`, {
+        productId: product._id,
+        name: product.name,
+        qty: quantity,
+        image: product.images[0],
+        price,
+        size: selectedSize || 'N/A',
+        color: selectedColor || 'N/A',
+        shippingAddress: whatsappAddress,
+        userPhone: user ? user.mobile : ''
+      });
+    } catch (err) {
+      console.error('Error logging WhatsApp order inquiry in database:', err);
+    }
 
     const whatsappMessage = `Hello JeshuVerse,
 I want to order:
@@ -156,10 +187,9 @@ Size: ${selectedSize || 'N/A'}
 Color: ${selectedColor || 'N/A'}
 Quantity: ${quantity}
 Price: ₹${totalItemPrice.toLocaleString('en-IN')}
+Product Image: ${product.images[0]}
 
-My Name: ${whatsappName}
-My Mobile Number: ${whatsappPhone}
-My Address: ${whatsappAddress}
+Delivery Address: ${whatsappAddress}
 
 Please confirm my order.`;
 
@@ -345,10 +375,15 @@ Please confirm my order.`;
             <div className="space-y-3">
               <span className="text-purple-950 text-xs font-bold uppercase tracking-wider block">Select Color</span>
               <div className="flex flex-wrap gap-2">
-                {product.colors.map((col) => (
+                {product.colors.map((col, idx) => (
                   <button
                     key={col}
-                    onClick={() => setSelectedColor(col)}
+                    onClick={() => {
+                      setSelectedColor(col);
+                      if (product.images && product.images[idx]) {
+                        setMainImage(product.images[idx]);
+                      }
+                    }}
                     className={`px-4 py-2 border rounded-xl text-sm font-semibold transition-all ${
                       selectedColor === col
                         ? 'border-primary bg-purple-900 text-white shadow-sm'
@@ -598,38 +633,14 @@ Please confirm my order.`;
 
             <div className="space-y-4">
               <div>
-                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Full Name</label>
-                <input
-                  type="text"
-                  required
-                  value={whatsappName}
-                  onChange={(e) => setWhatsappName(e.target.value)}
-                  placeholder="e.g. Priyanika Sharma"
-                  className="w-full pl-3 pr-3 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 placeholder-purple-400"
-                />
-              </div>
-
-              <div>
-                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Mobile Number</label>
-                <input
-                  type="tel"
-                  required
-                  value={whatsappPhone}
-                  onChange={(e) => setWhatsappPhone(e.target.value)}
-                  placeholder="e.g. 9876543210"
-                  className="w-full pl-3 pr-3 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 placeholder-purple-400"
-                />
-              </div>
-
-              <div>
                 <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Shipping Address</label>
                 <textarea
                   required
-                  rows={3}
+                  rows={4}
                   value={whatsappAddress}
                   onChange={(e) => setWhatsappAddress(e.target.value)}
-                  placeholder="House No, Street, Landmark, City, State - Zip Code"
-                  className="w-full pl-3 pr-3 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 placeholder-purple-400"
+                  placeholder="Enter your delivery address: House No, Street, Landmark, City, State - Zip Code"
+                  className="w-full pl-3 pr-3 py-3.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 placeholder-purple-300 font-semibold"
                 />
               </div>
 

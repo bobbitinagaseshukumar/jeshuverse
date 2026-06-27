@@ -16,6 +16,13 @@ export default function AdminSettingsPage() {
   const [merchantName, setMerchantName] = useState('');
   const [shippingCharges, setShippingCharges] = useState('');
   const [storeAddress, setStoreAddress] = useState('');
+  const [womenCategoryPic, setWomenCategoryPic] = useState('');
+  const [menCategoryPic, setMenCategoryPic] = useState('');
+  const [kidsCategoryPic, setKidsCategoryPic] = useState('');
+  const [jewelleryCategoryPic, setJewelleryCategoryPic] = useState('');
+  const [slide1Image, setSlide1Image] = useState('');
+  const [slide2Image, setSlide2Image] = useState('');
+  const [slide3Image, setSlide3Image] = useState('');
   
   // Security Credentials States
   const [adminUsername, setAdminUsername] = useState('');
@@ -28,8 +35,6 @@ export default function AdminSettingsPage() {
   
   const [loading, setLoading] = useState(true);
   const [saveSuccess, setSaveSuccess] = useState(false);
-
-  
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -45,6 +50,13 @@ export default function AdminSettingsPage() {
         setShippingCharges(data.shippingCharges || 50);
         setAdminUsername(data.adminUsername || 'admin');
         setStoreAddress(data.storeAddress || 'Banumukkala, Nandyal');
+        setWomenCategoryPic(data.womenCategoryPic || '');
+        setMenCategoryPic(data.menCategoryPic || '');
+        setKidsCategoryPic(data.kidsCategoryPic || '');
+        setJewelleryCategoryPic(data.jewelleryCategoryPic || '');
+        setSlide1Image(data.slide1Image || '');
+        setSlide2Image(data.slide2Image || '');
+        setSlide3Image(data.slide3Image || '');
       } catch (error) {
         console.error('Error fetching admin settings:', error);
       } finally {
@@ -66,6 +78,13 @@ export default function AdminSettingsPage() {
         shippingCharges: Number(shippingCharges),
         adminUsername,
         storeAddress,
+        womenCategoryPic,
+        menCategoryPic,
+        kidsCategoryPic,
+        jewelleryCategoryPic,
+        slide1Image,
+        slide2Image,
+        slide3Image,
       };
 
       if (adminPassword && adminPassword !== '') {
@@ -159,6 +178,94 @@ export default function AdminSettingsPage() {
               className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 font-medium"
             />
             <p className="text-[9px] text-purple-400 mt-1.5">*This address will be loaded dynamically in the website footer.</p>
+          </div>
+        </div>
+        {/* Section 1.5: Homepage Banner Slider and Category Pics Settings */}
+        <div className="space-y-4 pt-4 border-t border-purple-50">
+          <div className="flex items-center gap-2 text-sm font-bold text-purple-950 uppercase tracking-wide border-b border-purple-50 pb-2">
+            <FiSettings className="text-primary" />
+            <span>Store Photos & Slider Banners</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Women's Category Image URL</label>
+              <input
+                type="text"
+                value={womenCategoryPic}
+                onChange={(e) => setWomenCategoryPic(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Men's Category Image URL</label>
+              <input
+                type="text"
+                value={menCategoryPic}
+                onChange={(e) => setMenCategoryPic(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Kids' Category Image URL</label>
+              <input
+                type="text"
+                value={kidsCategoryPic}
+                onChange={(e) => setKidsCategoryPic(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Jewellery Category Image URL</label>
+              <input
+                type="text"
+                value={jewelleryCategoryPic}
+                onChange={(e) => setJewelleryCategoryPic(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-2">
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 1 (Jewellery Banner)</label>
+              <input
+                type="text"
+                value={slide1Image}
+                onChange={(e) => setSlide1Image(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 2 (Women's Wear Banner)</label>
+              <input
+                type="text"
+                value={slide2Image}
+                onChange={(e) => setSlide2Image(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 3 (Men's Wear Banner)</label>
+              <input
+                type="text"
+                value={slide3Image}
+                onChange={(e) => setSlide3Image(e.target.value)}
+                placeholder="Image URL"
+                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+              />
+            </div>
           </div>
         </div>
 

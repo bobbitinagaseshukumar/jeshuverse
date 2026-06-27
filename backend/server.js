@@ -234,6 +234,21 @@ const startServer = async () => {
     await sequelize.query(`
       ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "storeAddress" VARCHAR(255) DEFAULT 'Banumukkala, Nandyal';
     `).catch(err => console.log('storeAddress column check notice:', err.message));
+
+    // Programmatically ensure category and slider columns are added to Settings
+    const addCols = [
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "womenCategoryPic" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "menCategoryPic" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "kidsCategoryPic" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "jewelleryCategoryPic" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "slide1Image" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "slide2Image" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "slide3Image" TEXT;',
+      'ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "hasNewOrders" BOOLEAN DEFAULT false;'
+    ];
+    for (const q of addCols) {
+      await sequelize.query(q).catch(err => console.log('Col migration check notice:', err.message));
+    }
     
     console.log('Database schemas synchronized.');
 

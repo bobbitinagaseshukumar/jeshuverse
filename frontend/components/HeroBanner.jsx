@@ -4,16 +4,39 @@ import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiArrowRight, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import axios from 'axios';
+import { API_URL } from '../utils/api';
 
 export default function HeroBanner() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [slideImages, setSlideImages] = useState({
+    slide1: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=80",
+    slide2: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80",
+    slide3: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1400&q=80",
+  });
+
+  useEffect(() => {
+    const fetchPublicSettings = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/admin/settings/public`);
+        setSlideImages({
+          slide1: res.data.slide1Image || "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=80",
+          slide2: res.data.slide2Image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80",
+          slide3: res.data.slide3Image || "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1400&q=80",
+        });
+      } catch (err) {
+        console.error('Error fetching hero banner settings:', err);
+      }
+    };
+    fetchPublicSettings();
+  }, []);
 
   const slides = [
     {
       title: "Royal Jewellery Collection",
       subtitle: "EXQUISITE HANDCRAFTED DESIGNS",
       tagline: "Unveil royalty with our 24K Gold Plated Kundan, German silver, and temple choker sets.",
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=80",
+      image: slideImages.slide1,
       ctaText: "Shop Jewellery",
       ctaLink: "/category/jewellery",
       align: "left"
@@ -22,7 +45,7 @@ export default function HeroBanner() {
       title: "Festive Women's Wardrobe",
       subtitle: "ELEGANT SAREES & SALWARS",
       tagline: "Stunning silk sarees, designer lehengas, and daily wear cotton salwar kameez sets.",
-      image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80",
+      image: slideImages.slide2,
       ctaText: "Explore Sarees",
       ctaLink: "/category/women-wear",
       align: "right"
@@ -31,7 +54,7 @@ export default function HeroBanner() {
       title: "Men's Premium Ethnic Wear",
       subtitle: "ROYAL KURTA SETS & BLAZERS",
       tagline: "Classic linen Nehru jacket kurtas and premium blazers custom-crafted for special occasions.",
-      image: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1400&q=80",
+      image: slideImages.slide3,
       ctaText: "Shop Men's Wear",
       ctaLink: "/category/men-wear",
       align: "left"

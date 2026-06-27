@@ -5,12 +5,15 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../../../context/AuthContext';
 import NextLink from 'next/link';
 import { FiHome, FiFolder, FiPlusCircle, FiShoppingBag, FiSettings, FiMenu, FiX, FiLogOut, FiArrowLeft } from 'react-icons/fi';
+import axios from 'axios';
+import { API_URL } from '../../../utils/api';
 
 export default function AdminDashboardLayout({ children }) {
   const { user, token, logout, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [hasNewOrders, setHasNewOrders] = useState(false);
   const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
@@ -28,10 +31,83 @@ export default function AdminDashboardLayout({ children }) {
     }
   }, [user, token, loading, router]);
 
+  // Check for order notifications
+  useEffect(() => {
+    if (!token) return;
+    const checkNotifications = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/admin/settings/public`);
+        setHasNewOrders(res.data.hasNewOrders);
+      } catch (err) {
+        console.error('Error checking notifications:', err);
+      }
+    };
+    checkNotifications();
+    const interval = setInterval(checkNotifications, 15000); // Check every 15s
+    return () => clearInterval(interval);
+  }, [token]);
+
+  const handleMenuClick = async (path) => {
+    setSidebarOpen(false);
+    if (path === '/admin/dashboard/orders') {
+      setHasNewOrders(false);
+      try {
+        await axios.post(`${API_URL}/admin/settings/clear-notifications`, {}, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      } catch (err) {
+        console.error('Failed to clear notifications:', err);
+      }
+    }
+  };
+
   const handleLogout = () => {
     logout();
     router.replace('/admin/login');
   };
+
+  // Admin Inactivity Auto-Logout (2 Days = 172,800,000 ms)
+  useEffect(() => {
+    if (!token || !isAdmin) return;
+
+    const INACTIVITY_LIMIT = 2 * 24 * 60 * 60 * 1000; // 2 days
+
+    const checkInactivity = () => {
+      const lastActive = localStorage.getItem('jv_admin_last_active');
+      if (lastActive) {
+        const timeElapsed = Date.now() - parseInt(lastActive, 10);
+        if (timeElapsed > INACTIVITY_LIMIT) {
+          alert('Session expired due to 2 days of inactivity. Logging out...');
+          handleLogout();
+        }
+      } else {
+        localStorage.setItem('jv_admin_last_active', Date.now().toString());
+      }
+    };
+
+    const updateActivity = () => {
+      localStorage.setItem('jv_admin_last_active', Date.now().toString());
+    };
+
+    // Check immediately on mount
+    checkInactivity();
+
+    // Check periodically every 5 minutes
+    const interval = setInterval(checkInactivity, 5 * 60 * 1000);
+
+    // Listen to user interaction events to update activity timestamp
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach((evt) => {
+      window.addEventListener(evt, updateActivity, { passive: true });
+    });
+
+    return () => {
+      clearInterval(interval);
+      events.forEach((evt) => {
+        window.removeEventListener(evt, updateActivity);
+      });
+    };
+  }, [token, isAdmin]);
 
   if (loading || !token || !isAdmin) {
     return (
@@ -94,7 +170,7 @@ export default function AdminDashboardLayout({ children }) {
                 <NextLink
                   key={item.label}
                   href={item.path}
-                  onClick={() => setSidebarOpen(false)}
+                  onClick={() => handleMenuClick(item.path)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                     active
                       ? 'bg-gold text-primary-dark shadow-md font-bold'
@@ -103,6 +179,12 @@ export default function AdminDashboardLayout({ children }) {
                 >
                   <IconComp size={18} className={active ? 'stroke-[2.5px]' : ''} />
                   <span>{item.label}</span>
+                  {item.path === '/admin/dashboard/orders' && hasNewOrders && (
+                    <span className="relative flex h-2.5 w-2.5 ml-auto">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 shadow-lg shadow-red-500/50"></span>
+                    </span>
+                  )}
                 </NextLink>
               );
             })}

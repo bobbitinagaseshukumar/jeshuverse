@@ -61,6 +61,14 @@ router.post('/', protect, async (req, res) => {
     // Commit Transaction
     await t.commit();
 
+    // Trigger admin red notification dot
+    const { Settings } = await import('../models/index.js');
+    const settings = await Settings.findOne();
+    if (settings) {
+      settings.hasNewOrders = true;
+      await settings.save();
+    }
+
     const result = order.toJSON();
     result._id = result.id;
     result.orderItems = orderItems;
@@ -69,6 +77,60 @@ router.post('/', protect, async (req, res) => {
   } catch (error) {
     // Rollback if any operations fail
     await t.rollback();
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @desc    Create a WhatsApp order inquiry entry in DB
+// @route   POST /api/orders/whatsapp
+// @access  Public
+router.post('/whatsapp', async (req, res) => {
+  const { productId, name, qty, image, price, size, color, shippingAddress, userPhone } = req.body;
+
+  try {
+    let matchedUser = null;
+    if (userPhone) {
+      matchedUser = await User.findOne({ where: { mobile: userPhone } });
+    }
+
+    const order = await Order.create({
+      userId: matchedUser ? matchedUser.id : null,
+      shippingAddress: shippingAddress || 'WhatsApp Checkout',
+      totalPrice: Number(price) * Number(qty),
+      isPaid: false,
+      paymentResult: { id: 'whatsapp-' + Date.now(), status: 'WhatsApp Pending' },
+      orderStatus: 'Processing',
+    });
+
+    await OrderItem.create({
+      orderId: order.id,
+      productId,
+      name,
+      qty: Number(qty),
+      image,
+      price: Number(price),
+      size: size || 'N/A',
+      color: color || 'N/A',
+    });
+
+    // Decrement product stock
+    const product = await Product.findByPk(productId);
+    if (product) {
+      product.stock = Math.max(0, product.stock - Number(qty));
+      await product.save();
+    }
+
+    // Trigger admin red notification dot
+    const { Settings } = await import('../models/index.js');
+    const settings = await Settings.findOne();
+    if (settings) {
+      settings.hasNewOrders = true;
+      await settings.save();
+    }
+
+    res.status(201).json({ success: true, orderId: order.id });
+  } catch (error) {
+    console.error('Error logging WhatsApp order:', error);
     res.status(500).json({ message: error.message });
   }
 });

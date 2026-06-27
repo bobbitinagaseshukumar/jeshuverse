@@ -110,6 +110,14 @@ router.get('/settings/public', async (req, res) => {
       merchantName: settings.merchantName,
       shippingCharges: settings.shippingCharges,
       storeAddress: settings.storeAddress || 'Banumukkala, Nandyal',
+      womenCategoryPic: settings.womenCategoryPic,
+      menCategoryPic: settings.menCategoryPic,
+      kidsCategoryPic: settings.kidsCategoryPic,
+      jewelleryCategoryPic: settings.jewelleryCategoryPic,
+      slide1Image: settings.slide1Image,
+      slide2Image: settings.slide2Image,
+      slide3Image: settings.slide3Image,
+      hasNewOrders: settings.hasNewOrders,
     });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching public configurations' });
@@ -128,6 +136,14 @@ router.put('/settings', protect, admin, async (req, res) => {
     adminUsername,
     adminPassword,
     storeAddress,
+    womenCategoryPic,
+    menCategoryPic,
+    kidsCategoryPic,
+    jewelleryCategoryPic,
+    slide1Image,
+    slide2Image,
+    slide3Image,
+    hasNewOrders,
   } = req.body;
 
   try {
@@ -142,6 +158,14 @@ router.put('/settings', protect, admin, async (req, res) => {
     settings.shippingCharges = shippingCharges !== undefined ? shippingCharges : settings.shippingCharges;
     settings.adminUsername = adminUsername || settings.adminUsername;
     settings.storeAddress = storeAddress !== undefined ? storeAddress : settings.storeAddress;
+    settings.womenCategoryPic = womenCategoryPic !== undefined ? womenCategoryPic : settings.womenCategoryPic;
+    settings.menCategoryPic = menCategoryPic !== undefined ? menCategoryPic : settings.menCategoryPic;
+    settings.kidsCategoryPic = kidsCategoryPic !== undefined ? kidsCategoryPic : settings.kidsCategoryPic;
+    settings.jewelleryCategoryPic = jewelleryCategoryPic !== undefined ? jewelleryCategoryPic : settings.jewelleryCategoryPic;
+    settings.slide1Image = slide1Image !== undefined ? slide1Image : settings.slide1Image;
+    settings.slide2Image = slide2Image !== undefined ? slide2Image : settings.slide2Image;
+    settings.slide3Image = slide3Image !== undefined ? slide3Image : settings.slide3Image;
+    settings.hasNewOrders = hasNewOrders !== undefined ? hasNewOrders : settings.hasNewOrders;
 
     await settings.save();
 
@@ -158,9 +182,26 @@ router.put('/settings', protect, admin, async (req, res) => {
       message: 'Store settings updated successfully',
       settings,
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Error updating store configurations' });
+  }
+});
+
+// @desc    Clear new orders notification indicator
+// @route   POST /api/admin/settings/clear-notifications
+// @access  Private/Admin
+router.post('/settings/clear-notifications', protect, admin, async (req, res) => {
+  try {
+    const settings = await Settings.findOne();
+    if (settings) {
+      settings.hasNewOrders = false;
+      await settings.save();
+    }
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 

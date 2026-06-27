@@ -1,33 +1,59 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
+import axios from 'axios';
+import { API_URL } from '../utils/api';
 
 export default function CategoryGrid() {
+  const [images, setImages] = useState({
+    womenCategoryPic: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80",
+    menCategoryPic: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=500&q=80",
+    kidsCategoryPic: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80",
+    jewelleryCategoryPic: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80",
+  });
+
+  useEffect(() => {
+    const fetchPublicSettings = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/admin/settings/public`);
+        setImages({
+          womenCategoryPic: res.data.womenCategoryPic || "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80",
+          menCategoryPic: res.data.menCategoryPic || "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=500&q=80",
+          kidsCategoryPic: res.data.kidsCategoryPic || "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80",
+          jewelleryCategoryPic: res.data.jewelleryCategoryPic || "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80",
+        });
+      } catch (err) {
+        console.error('Error fetching category grid public settings:', err);
+      }
+    };
+    fetchPublicSettings();
+  }, []);
+
   const categories = [
     {
       name: "Women's Wear",
       slug: "women-wear",
       count: "Sarees, Kurtas & Salwars",
-      image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=500&q=80"
+      image: images.womenCategoryPic
     },
     {
       name: "Men's Wear",
       slug: "men-wear",
       count: "Kurtas, Blazers & Jackets",
-      image: "https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?auto=format&fit=crop&w=500&q=80"
+      image: images.menCategoryPic
     },
     {
       name: "Kids Wear",
       slug: "kids-wear",
       count: "Frocks, Gowns & Shirts",
-      image: "https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=500&q=80"
+      image: images.kidsCategoryPic
     },
     {
       name: "Jewellery",
       slug: "jewellery",
       count: "Kundan, Choker & Rings",
-      image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=500&q=80"
+      image: images.jewelleryCategoryPic
     }
   ];
 

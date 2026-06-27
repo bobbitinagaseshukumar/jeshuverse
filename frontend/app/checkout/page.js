@@ -51,10 +51,26 @@ function CheckoutContent() {
       setName(user.name || '');
       setPhone(user.phone || '');
       if (user.address) {
-        setStreet(user.address.street || '');
-        setCity(user.address.city || '');
-        setState(user.address.state || '');
-        setZipCode(user.address.zipCode || '');
+        if (typeof user.address === 'string') {
+          try {
+            const parsed = JSON.parse(user.address);
+            if (parsed && typeof parsed === 'object') {
+              setStreet(parsed.street || '');
+              setCity(parsed.city || '');
+              setState(parsed.state || '');
+              setZipCode(parsed.zipCode || '');
+            } else {
+              setStreet(user.address);
+            }
+          } catch (e) {
+            setStreet(user.address);
+          }
+        } else if (typeof user.address === 'object') {
+          setStreet(user.address.street || '');
+          setCity(user.address.city || '');
+          setState(user.address.state || '');
+          setZipCode(user.address.zipCode || '');
+        }
       }
     }
 
