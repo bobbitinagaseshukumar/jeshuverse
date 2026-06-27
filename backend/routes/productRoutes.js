@@ -89,7 +89,14 @@ router.get('/', async (req, res) => {
       if (isUUID) {
         categoryObj = await Category.findByPk(category);
       } else {
-        categoryObj = await Category.findOne({ where: { slug: category } });
+        categoryObj = await Category.findOne({
+          where: {
+            [Op.or]: [
+              { slug: category },
+              { name: category }
+            ]
+          }
+        });
       }
 
       if (categoryObj) {
@@ -121,6 +128,7 @@ router.get('/', async (req, res) => {
     const responseData = products.map((prod) => {
       const p = prod.toJSON();
       p._id = p.id;
+      p.stockQuantity = p.stock;
       if (p.category) {
         p.category._id = p.category.id;
         p.category = p.category.name; // Keep frontend compatibility with category string value
@@ -150,8 +158,10 @@ router.get('/slug/:slug', async (req, res) => {
     if (product) {
       const p = product.toJSON();
       p._id = p.id;
+      p.stockQuantity = p.stock;
       if (p.category) {
         p.category._id = p.category.id;
+        p.category = p.category.name;
       }
       if (p.reviews) {
         p.reviews = p.reviews.map((r) => {
@@ -183,8 +193,10 @@ router.get('/:id', async (req, res) => {
     if (product) {
       const p = product.toJSON();
       p._id = p.id;
+      p.stockQuantity = p.stock;
       if (p.category) {
         p.category._id = p.category.id;
+        p.category = p.category.name;
       }
       if (p.reviews) {
         p.reviews = p.reviews.map((r) => {
@@ -236,6 +248,7 @@ router.post('/', protect, admin, async (req, res) => {
 
     const val = product.toJSON();
     val._id = val.id;
+    val.stockQuantity = val.stock;
     res.status(201).json(val);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -281,6 +294,7 @@ router.put('/:id', protect, admin, async (req, res) => {
       
       const val = product.toJSON();
       val._id = val.id;
+      val.stockQuantity = val.stock;
       res.json(val);
     } else {
       res.status(404).json({ message: 'Product not found' });

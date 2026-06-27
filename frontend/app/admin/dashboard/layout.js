@@ -130,7 +130,7 @@ export default function AdminDashboardLayout({ children }) {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-6 sm:p-10 max-h-screen overflow-y-auto">
+      <main className="flex-1 p-6 sm:p-10">
         {children}
       </main>
 
