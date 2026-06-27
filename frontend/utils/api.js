@@ -1,9 +1,6 @@
 // Shared utility to dynamically resolve backend API URL
 export const getApiUrl = () => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  // If running in browser, dynamically construct API URL using the current host
+  // If running in browser, check the hostname
   if (typeof window !== 'undefined') {
     const hostname = window.location.hostname;
     // Check if accessing via localhost or local network IPs
@@ -14,14 +11,17 @@ export const getApiUrl = () => {
       hostname.startsWith('172.') ||
       hostname.startsWith('10.')
     ) {
-      return `http://${hostname}:5000/api`;
+      // Local development environment: use local URL or fallback
+      return process.env.NEXT_PUBLIC_API_URL || `http://${hostname}:5000/api`;
     }
-    // Fallback: If accessing a public deployment (like Vercel) but NEXT_PUBLIC_API_URL is not set,
-    // point to your actual deployed backend service on Render.
+    
+    // Public production environment (e.g., Vercel)
+    // Always use the deployed backend URL on Render to avoid local address issues
     return 'https://jeshuverse-1.onrender.com/api';
   }
+  
   // Fallback for Server-Side Rendering (SSR) in production
-  return 'https://jeshuverse-1.onrender.com/api';
+  return process.env.NEXT_PUBLIC_API_URL || 'https://jeshuverse-1.onrender.com/api';
 };
 
 export const API_URL = getApiUrl();
