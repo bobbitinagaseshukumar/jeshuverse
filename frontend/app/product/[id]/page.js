@@ -162,7 +162,10 @@ export default function ProductDetailPage() {
 
     const price = product.discountPrice > 0 ? product.discountPrice : product.price;
     const totalItemPrice = price * quantity;
-    const cleanPhone = whatsappSettings.whatsappNumber.replace(/\D/g, ''); // Ensure no plus sign or spaces
+    let cleanPhone = (whatsappSettings.whatsappNumber || '').replace(/\D/g, ''); // Ensure no plus sign or spaces
+    if (cleanPhone.length === 10) {
+      cleanPhone = '91' + cleanPhone;
+    }
 
     // Log the order inquiry to the database
     try {

@@ -159,7 +159,11 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <FiMessageSquare className="text-gold shrink-0" size={16} />
                 <a 
-                  href={`https://wa.me/${(settings.whatsappNumber || '').replace(/\D/g, '')}`} 
+                  href={`https://wa.me/${(() => {
+                    let num = (settings.whatsappNumber || '').replace(/\D/g, '');
+                    if (num.length === 10) num = '91' + num;
+                    return num;
+                  })()}`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-purple-300 hover:text-gold transition-colors font-semibold flex items-center gap-1"
