@@ -28,8 +28,8 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <Tilt3D max={9} scale={1.03} className="h-full rounded-2xl">
-      <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm glow-hover flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
+    <Tilt3D max={9} scale={1.03} className="h-full rounded-2xl animate-card-float card-reflection">
+      <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm glow-hover neon-gold-border flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
       
       {/* Product Image Wrapper */}
       <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-purple-50/50 overflow-hidden">
@@ -105,7 +105,7 @@ export default function ProductCard({ product }) {
         <div className="mt-4 pt-1 hidden group-hover:block transition-all duration-300">
           <NextLink
             href={`/product/${product._id}`}
-            className="w-full text-center block bg-purple-50 hover:bg-primary text-primary hover:text-white border border-purple-200 hover:border-transparent py-2 rounded-xl text-xs font-bold transition-all duration-300"
+            className="w-full text-center block bg-purple-50 hover:bg-primary text-primary hover:text-white border border-purple-200 hover:border-transparent py-2 rounded-xl text-xs font-bold transition-all duration-300 btn-premium btn-ripple"
           >
             View Details
           </NextLink>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
+import { motion } from 'framer-motion';
 import axios from 'axios';
 import { API_URL } from '../utils/api';
 
@@ -38,21 +39,21 @@ export default function CategoryGrid() {
   return (
     <div className="py-12 sm:py-16">
       <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 px-4">
-        <span className="text-amber-600 font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block animate-pulse">
+        <span className="text-shine font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block">
           Shop By Department
         </span>
         <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-purple-950 tracking-tight">
           Curated Fashion Collections
         </h2>
-        <div className="w-16 h-1 bg-gold mx-auto mt-4 rounded-full" />
+        <div className="luxury-divider" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 stagger-children">
         {categories.map((cat) => (
           <NextLink
             key={cat._id || cat.id}
             href={`/category/${cat.slug}`}
-            className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-md border border-purple-100 hover:border-purple-200 transition-all duration-300 block hover-3d"
+            className="group relative h-72 sm:h-80 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg neon-gold-border transition-all duration-500 block hover-3d"
           >
             {/* Background Image */}
             <div className="absolute inset-0 w-full h-full zoom-container">

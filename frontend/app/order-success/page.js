@@ -35,8 +35,8 @@ function OrderSuccessContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center">
-      <div className="bg-white border border-purple-100 rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-lg text-center space-y-6">
-        <div className="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+      <div className="glass-premium rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-2xl text-center space-y-6 neon-gold-border">
+        <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-float-slow" style={{ boxShadow: '0 0 30px rgba(16,185,129,0.3)' }}>
           <FiCheckCircle size={36} className="stroke-[2.5px]" />
         </div>
 
@@ -61,13 +61,13 @@ function OrderSuccessContent() {
         <div className="grid grid-cols-2 gap-3 pt-4 border-t border-purple-50">
           <NextLink
             href="/profile?tab=orders"
-            className="py-3 bg-purple-50 hover:bg-purple-100 text-primary font-bold text-xs rounded-xl transition-colors block text-center"
+            className="py-3 bg-purple-50 hover:bg-purple-100 text-primary font-bold text-xs rounded-xl transition-all duration-300 block text-center btn-premium"
           >
             Track Order
           </NextLink>
           <NextLink
             href="/"
-            className="py-3 bg-primary hover:bg-primary-light text-white font-bold text-xs rounded-xl shadow transition-colors block text-center"
+            className="py-3 bg-primary hover:bg-primary-light text-white font-bold text-xs rounded-xl shadow-lg shadow-primary/30 transition-all duration-300 block text-center btn-premium btn-ripple"
           >
             Continue Shopping
           </NextLink>

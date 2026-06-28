@@ -78,7 +78,7 @@ export default function HeroBanner() {
   };
 
   return (
-    <section className="relative w-full h-[52vh] sm:h-[65vh] md:h-[80vh] bg-purple-950 overflow-hidden">
+    <section className="relative w-full h-[55vh] sm:h-[70vh] md:h-[85vh] bg-purple-950 overflow-hidden">
       
       {/* Floating cinematic particles overlay */}
       <div className="absolute inset-0 z-10 pointer-events-none">
@@ -112,6 +112,13 @@ export default function HeroBanner() {
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slides[currentSlide].image})` }}>
             {/* Elegant dark purple and gold gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-transparent md:bg-gradient-to-r md:from-primary-dark/90 md:via-primary-dark/65 md:to-transparent" />
+            {/* Animated light beam sweep */}
+            <motion.div 
+              className="absolute inset-0 opacity-20" 
+              style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(234,179,8,0.3) 50%, transparent 60%)' }}
+              animate={{ x: ['-100%', '200%'] }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
+            />
           </div>
 
           {/* Caption Container */}
@@ -154,7 +161,7 @@ export default function HeroBanner() {
               >
                 <NextLink
                   href={slides[currentSlide].ctaLink}
-                  className="btn-premium inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg hover:shadow-xl transition-all cursor-interactive"
+                  className="btn-premium btn-ripple inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-3.5 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/50 transition-all cursor-interactive"
                 >
                   <span>{slides[currentSlide].ctaText}</span>
                   <FiArrowRight size={14} />
@@ -181,14 +188,12 @@ export default function HeroBanner() {
       </button>
 
       {/* Bullet Indicators */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2.5 z-20">
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-3 z-20">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3.5 h-3.5 rounded-full transition-all ${
-              currentSlide === index ? 'bg-gold w-8' : 'bg-white/30'
-            }`}
+            className={`rounded-full transition-all duration-500 ${currentSlide === index ? 'bg-gold w-10 h-3 shadow-md shadow-gold/50' : 'bg-white/30 w-3 h-3 hover:bg-white/50'}`}
           />
         ))}
       </div>

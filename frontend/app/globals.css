@@ -259,10 +259,160 @@
   100% { transform: translate3d(-3%, 3%, 0) scale(1.05); }
 }
 
+/* ---- Floating Particle Rise Animation ---- */
+@keyframes particleRise {
+  0% {
+    transform: translateY(0) translateX(0) scale(0.5);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px) scale(1.2);
+    opacity: 0;
+  }
+}
+.animate-particle-rise {
+  animation: particleRise linear infinite;
+}
+
+/* ---- Premium Ripple Effect for Buttons ---- */
+.btn-ripple {
+  position: relative;
+  overflow: hidden;
+}
+.btn-ripple::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--ripple-x, 50%) var(--ripple-y, 50%), rgba(255,255,255,0.4) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.btn-ripple:active::after {
+  opacity: 1;
+}
+
+/* ---- Neon Gold Border Glow ---- */
+.neon-gold-border {
+  border: 1px solid rgba(234, 179, 8, 0.2);
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.neon-gold-border:hover {
+  border-color: rgba(234, 179, 8, 0.6);
+  box-shadow: 0 0 15px rgba(234, 179, 8, 0.2), inset 0 0 15px rgba(234, 179, 8, 0.05);
+}
+
+/* ---- Card Floating Bob Animation ---- */
+@keyframes cardFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.animate-card-float {
+  animation: cardFloat 4s ease-in-out infinite;
+}
+
+/* ---- Card Reflection Effect ---- */
+.card-reflection::after {
+  content: '';
+  position: absolute;
+  bottom: -40%;
+  left: 5%;
+  right: 5%;
+  height: 40%;
+  background: linear-gradient(to bottom, rgba(88,28,135,0.08), transparent);
+  filter: blur(8px);
+  transform: scaleY(-1);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.card-reflection:hover::after {
+  opacity: 1;
+}
+
+/* ---- Luxury Section Divider ---- */
+.luxury-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(234,179,8,0.4), rgba(126,34,206,0.3), transparent);
+  border: none;
+  margin: 2rem auto;
+  max-width: 80%;
+}
+
+/* ---- Premium Form Focus Effects ---- */
+.form-premium input:focus,
+.form-premium select:focus,
+.form-premium textarea:focus {
+  box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.15), 0 0 20px rgba(234, 179, 8, 0.15);
+  border-color: rgba(126, 34, 206, 0.4);
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+/* ---- Image Reveal Animation ---- */
+@keyframes imageReveal {
+  from {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+.img-reveal {
+  animation: imageReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+/* ---- Gradient Text Shine ---- */
+.text-shine {
+  background: linear-gradient(120deg, #EAB308 0%, #FDE047 25%, #EAB308 50%, #FDE047 75%, #EAB308 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: textShine 3s linear infinite;
+}
+@keyframes textShine {
+  to { background-position: 200% center; }
+}
+
+/* ---- Stagger Children Animation Helper ---- */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: staggerIn 0.5s ease forwards;
+}
+.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
+@keyframes staggerIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- Premium Scrollbar Enhancement ---- */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #7E22CE, #EAB308);
+  border-radius: 4px;
+}
+
 /* ---- Reduced motion safety ---- */
 @media (prefers-reduced-motion: reduce) {
   .btn-premium, .glow-hover, .animate-float-slow, .animate-float-med,
-  .text-aurora, .aurora-bg::before, .img-shimmer {
+  .text-aurora, .aurora-bg::before, .img-shimmer, .animate-particle-rise,
+  .animate-card-float, .img-reveal, .text-shine, .stagger-children > * {
     animation: none !important;
     transition: none !important;
   }

@@ -52,7 +52,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 glass-premium border-b border-purple-100/60 transition-all duration-500 ${scrolled ? 'shadow-lg shadow-purple-900/5' : ''}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'glass-premium shadow-lg shadow-purple-900/10 border-b border-purple-100/40' : 'bg-white/80 backdrop-blur-sm border-b border-purple-100/20'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between gap-4 transition-all duration-500 ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           
@@ -86,7 +86,7 @@ export default function Header() {
                 placeholder="Search premium styles, sarees, jewellery..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-4 pr-10 py-2.5 rounded-full bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-purple-400 text-purple-950 transition-all"
+                className="w-full pl-4 pr-10 py-2.5 rounded-full bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-purple-400 text-purple-950 transition-all input-glow"
               />
               <button type="submit" className="absolute right-3.5 top-3 text-purple-500 hover:text-primary transition-colors">
                 <FiSearch size={18} />
@@ -139,7 +139,7 @@ export default function Header() {
                   <FiUser size={20} />
                   <span className="text-xs font-semibold max-w-[80px] truncate">{user.name || 'Profile'}</span>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-purple-100 rounded-xl shadow-lg opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                <div className="absolute right-0 mt-2 w-48 glass-premium rounded-xl shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-50 translate-y-1 group-hover:translate-y-0">
                   <div className="px-4 py-2.5 border-b border-purple-50">
                     <p className="text-xs text-purple-400">Signed in as</p>
                     <p className="text-sm font-bold text-purple-950 truncate">{user.name || user.phone}</p>
