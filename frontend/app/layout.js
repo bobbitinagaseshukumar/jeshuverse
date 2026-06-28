@@ -9,6 +9,7 @@ import Footer from "../components/Footer";
 import ScrollToTop from '../components/ScrollToTop';
 import SmoothScroll from "../components/SmoothScroll";
 import LoadingScreen from "../components/LoadingScreen";
+import VideoBackground from "../components/VideoBackground";
 import FloatingParticles from "../components/FloatingParticles";
 
 const geistSans = Geist({
@@ -70,6 +71,8 @@ export default function RootLayout({ children }) {
         <LoadingScreen />
         {/* Cinematic smooth/inertia scrolling */}
         <SmoothScroll />
+        {/* Parallax video backdrop that drifts on scroll */}
+        <VideoBackground />
 
         {/* Soft, modern ambient blur blobs for premium styling (no WebGL overhead!) */}
         <div className="absolute top-10 left-[-10%] w-[35rem] h-[35rem] rounded-full bg-purple-200/20 blur-[130px] pointer-events-none -z-20" />
