@@ -78,7 +78,7 @@ export default function HeroBanner() {
   };
 
   return (
-    <section className="relative w-full h-[70vh] sm:h-[85vh] bg-purple-950 overflow-hidden">
+    <section className="relative w-full h-[52vh] sm:h-[65vh] md:h-[80vh] bg-purple-950 overflow-hidden">
       
       {/* Slide Carousel */}
       <AnimatePresence mode="wait">
@@ -93,7 +93,7 @@ export default function HeroBanner() {
           {/* Background Image */}
           <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slides[currentSlide].image})` }}>
             {/* Elegant dark purple and gold gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-transparent md:bg-gradient-to-r md:from-primary-dark/90 md:via-primary-dark/65 md:to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-transparent md:bg-gradient-to-r md:from-primary-dark/90 md:via-primary-dark/65 md:to-transparent" />
           </div>
 
           {/* Caption Container */}
@@ -104,7 +104,7 @@ export default function HeroBanner() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-gold font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-3 block"
+                className="text-gold font-extrabold text-[10px] sm:text-sm tracking-widest uppercase mb-1.5 sm:mb-3 block"
               >
                 {slides[currentSlide].subtitle}
               </motion.span>
@@ -113,7 +113,7 @@ export default function HeroBanner() {
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
-                className="font-display font-extrabold text-3xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight"
+                className="font-display font-extrabold text-2xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight"
               >
                 {slides[currentSlide].title}
               </motion.h1>
@@ -122,7 +122,7 @@ export default function HeroBanner() {
                 initial={{ y: 25, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="mt-4 text-purple-200 text-sm sm:text-base lg:text-lg font-medium leading-relaxed"
+                className="mt-2 sm:mt-4 text-purple-200 text-xs sm:text-base lg:text-lg font-medium leading-relaxed"
               >
                 {slides[currentSlide].tagline}
               </motion.p>
@@ -132,14 +132,14 @@ export default function HeroBanner() {
                 initial={{ y: 30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
-                className="mt-8 flex items-center gap-4"
+                className="mt-5 sm:mt-8 flex items-center gap-4"
               >
                 <NextLink
                   href={slides[currentSlide].ctaLink}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-sm sm:text-base rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
                 >
                   <span>{slides[currentSlide].ctaText}</span>
-                  <FiArrowRight size={16} />
+                  <FiArrowRight size={14} />
                 </NextLink>
               </motion.div>
 
