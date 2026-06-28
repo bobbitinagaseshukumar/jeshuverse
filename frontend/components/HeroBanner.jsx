@@ -108,8 +108,27 @@ export default function HeroBanner() {
           transition={{ duration: 0.8 }}
           className="absolute inset-0 w-full h-full"
         >
-          {/* Background Image */}
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${slides[currentSlide].image})` }}>
+          {/* Background Media */}
+          <div className="absolute inset-0 bg-cover bg-center">
+            {slides[currentSlide].image && (
+              slides[currentSlide].image.toLowerCase().endsWith('.mp4') || 
+              slides[currentSlide].image.toLowerCase().endsWith('.webm') || 
+              slides[currentSlide].image.toLowerCase().endsWith('.mov')
+            ) ? (
+              <video
+                src={slides[currentSlide].image}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <div 
+                className="absolute inset-0 bg-cover bg-center w-full h-full" 
+                style={{ backgroundImage: `url(${slides[currentSlide].image})` }} 
+              />
+            )}
             {/* Elegant dark purple and gold gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-transparent md:bg-gradient-to-r md:from-primary-dark/90 md:via-primary-dark/65 md:to-transparent" />
             {/* Animated light beam sweep */}
