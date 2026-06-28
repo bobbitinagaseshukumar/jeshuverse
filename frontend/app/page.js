@@ -15,13 +15,18 @@ import NextLink from 'next/link';
 function SectionHead({ label, title, href }) {
   return (
     <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
-      <div>
-        <span className="text-gold font-extrabold text-xs tracking-widest uppercase block mb-1">{label}</span>
-        <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white drop-shadow-lg">{title}</h2>
+      <div className="flex items-start gap-3">
+        <div className="bg-gold/15 border border-gold/30 rounded-xl w-10 h-10 flex items-center justify-center text-gold text-lg shrink-0 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
+          🎟️
+        </div>
+        <div>
+          <span className="text-gold font-extrabold text-[10px] tracking-widest uppercase block mb-0.5">{label}</span>
+          <h2 className="font-display font-black text-xl sm:text-2xl text-white tracking-tight leading-tight">{title}</h2>
+        </div>
       </div>
       {href && (
-        <NextLink href={href} className="text-gold hover:text-white font-bold text-sm flex items-center gap-1.5 transition-colors">
-          <span>View All</span>
+        <NextLink href={href} className="text-gold hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors">
+          <span>Explore All</span>
           <FiArrowRight size={14} />
         </NextLink>
       )}
@@ -177,7 +182,7 @@ export default function Home() {
         {/* 4. Trending / Featured Products */}
         {featuredProducts.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <Reveal><SectionHead label="Weekly Spotlight" title="Trending Products" href="/category/all?sort=latest" /></Reveal>
+            <Reveal><SectionHead label="Now Showing • Top Billing" title="Trending Box Office" href="/category/all?sort=latest" /></Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {featuredProducts.map((product, i) => (
                 <Reveal key={product._id} direction="up" delay={i * 0.06}>
@@ -190,7 +195,7 @@ export default function Home() {
 
         {/* 5. New Arrivals */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Reveal><SectionHead label="Just Added" title="New Arrivals" href="/category/all?sort=latest" /></Reveal>
+          <Reveal><SectionHead label="Premier Releases • Just Opened" title="New Arrivals Showcase" href="/category/all?sort=latest" /></Reveal>
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map(n => (
@@ -210,9 +215,9 @@ export default function Home() {
 
         {/* 6. Women's Fashion Shelf */}
         {womenItems.length > 0 && (
-          <section className="bg-black/30 backdrop-blur-xl py-12 border-y border-white/10">
+          <section className="bg-black/35 backdrop-blur-xl py-12 border-y border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <Reveal><SectionHead label="Sarees & Ethnic Wear" title="Women's Fashion" href="/category/women-wear" /></Reveal>
+              <Reveal><SectionHead label="Hall 1 • Exclusive Showings" title="Women's Heritage Silk" href="/category/women-wear" /></Reveal>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {womenItems.map((product, i) => (
                   <Reveal key={product._id} direction="up" delay={i * 0.06}>
@@ -230,7 +235,7 @@ export default function Home() {
         {/* 7. Jewellery Collection Shelf */}
         {jewelleryItems.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <Reveal><SectionHead label="Royal Necklaces & Earrings" title="Jewellery Collection" href="/category/jewellery" /></Reveal>
+            <Reveal><SectionHead label="Hall 3 • Royal Collection" title="Exquisite Jewellery Release" href="/category/jewellery" /></Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {jewelleryItems.map((product, i) => (
                 <Reveal key={product._id} direction="up" delay={i * 0.06}>
@@ -243,9 +248,9 @@ export default function Home() {
 
         {/* 8. Men's Fashion Shelf */}
         {menItems.length > 0 && (
-          <section className="bg-black/30 backdrop-blur-xl py-12 border-y border-white/10">
+          <section className="bg-black/35 backdrop-blur-xl py-12 border-y border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <Reveal><SectionHead label="Kurtas, Blazers & Jackets" title="Men's Fashion" href="/category/men-wear" /></Reveal>
+              <Reveal><SectionHead label="Hall 2 • Designer Showtimes" title="Men's Premium Kurtas" href="/category/men-wear" /></Reveal>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {menItems.map((product, i) => (
                   <Reveal key={product._id} direction="up" delay={i * 0.06}>
@@ -260,7 +265,7 @@ export default function Home() {
         {/* 9. Kids Fashion Shelf */}
         {kidsItems.length > 0 && (
           <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <Reveal><SectionHead label="Cute & Stylish Frocks" title="Kids Fashion" href="/category/kids-wear" /></Reveal>
+            <Reveal><SectionHead label="Hall 4 • Playtime Matinees" title="Kids Trendy Fashions" href="/category/kids-wear" /></Reveal>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
               {kidsItems.map((product, i) => (
                 <Reveal key={product._id} direction="up" delay={i * 0.06}>
