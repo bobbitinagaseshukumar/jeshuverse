@@ -12,7 +12,15 @@ const particles = Array.from({ length: 22 }, (_, i) => ({
 
 export default function FloatingParticles() {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 hidden md:block" aria-hidden="true">
+    <div 
+      className="fixed inset-0 overflow-hidden pointer-events-none z-0 hidden md:block" 
+      aria-hidden="true"
+      style={{
+        transform: 'translateY(calc(var(--scroll-y, 0px) * -0.22))',
+        height: '140vh',
+        willChange: 'transform'
+      }}
+    >
       {particles.map(p => (
         <span
           key={p.id}
