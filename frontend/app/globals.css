@@ -18,10 +18,10 @@
 
 @layer base {
   :root {
-    --background: #faf8fd; /* Soft purple tint white */
-    --foreground: #110c1a; /* Very dark purple/black */
-    --card: #ffffff;
-    --card-foreground: #110c1a;
+    --background: #020106; /* Pitch Black */
+    --foreground: #f4f3f6; /* Very light silver/white */
+    --card: #0c0813;
+    --card-foreground: #f4f3f6;
   }
 
   body {
@@ -33,7 +33,7 @@
   }
 
   html {
-    background-color: var(--background);
+    background-color: #020106;
     overflow-x: hidden;
     width: 100%;
     max-width: 100%;

@@ -146,7 +146,7 @@ export default function HeroBanner() {
             <div className={`max-w-xl text-left ${slides[currentSlide].align === 'right' ? 'md:ml-auto' : ''}`}>
               
               <motion.span
-                initial={{ y: 20, opacity: 0 }}
+                initial={{ y: -30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="text-gold font-extrabold text-[10px] sm:text-sm tracking-widest uppercase mb-1.5 sm:mb-3 block"
@@ -155,7 +155,7 @@ export default function HeroBanner() {
               </motion.span>
 
               <motion.h1
-                initial={{ y: 30, opacity: 0 }}
+                initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="font-display font-extrabold text-2xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight"
@@ -164,7 +164,7 @@ export default function HeroBanner() {
               </motion.h1>
 
               <motion.p
-                initial={{ y: 25, opacity: 0 }}
+                initial={{ y: -40, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="mt-2 sm:mt-4 text-purple-200 text-xs sm:text-base lg:text-lg font-medium leading-relaxed"
@@ -174,7 +174,7 @@ export default function HeroBanner() {
 
               {/* Call to action */}
               <motion.div
-                initial={{ y: 30, opacity: 0 }}
+                initial={{ y: -30, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
                 className="mt-5 sm:mt-8 flex items-center gap-4"

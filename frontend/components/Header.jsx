@@ -1,39 +1,46 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useRouter, usePathname } from 'next/navigation';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { 
+  FiSearch, 
+  FiShoppingCart, 
+  FiUser, 
+  FiHeart, 
+  FiMenu, 
+  FiX, 
+  FiLogOut 
+} from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
-import { FiSearch, FiHeart, FiShoppingCart, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import Magnetic from './Magnetic';
 
-// In Next.js, importing from 'next/link' is correct
-import NextLink from 'next/link';
-
 export default function Header() {
-  const pathname = usePathname();
-  const { user, logout } = useAuth();
-  const { cartCount } = useCart();
-  const { wishlistItems } = useWishlist();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
+  const { user, logout } = useAuth();
+  const { cart } = useCart();
+  const { wishlist } = useWishlist();
+  
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Shrink + intensify glass on scroll
+  const cartCount = cart ? cart.reduce((acc, item) => acc + item.quantity, 0) : 0;
+  const wishlistItems = wishlist ? wishlist : [];
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => {
+      if (window.scrollY > 20) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  // Hide header on admin pages
-  if (pathname && pathname.startsWith('/admin')) {
-    return null;
-  }
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -52,7 +59,7 @@ export default function Header() {
   ];
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'glass-premium shadow-lg shadow-purple-900/10 border-b border-purple-100/40' : 'bg-white/80 backdrop-blur-sm border-b border-purple-100/20'}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? 'glass-dark-premium shadow-lg shadow-black/30 border-b border-white/5' : 'bg-black/40 backdrop-blur-sm border-b border-white/5'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className={`flex items-center justify-between gap-4 transition-all duration-500 ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           
@@ -60,7 +67,7 @@ export default function Header() {
           <div className="flex items-center md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="text-purple-900 hover:text-amber-500 p-2 focus:outline-none"
+              className="text-white hover:text-gold p-2 focus:outline-none"
             >
               {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
@@ -69,10 +76,10 @@ export default function Header() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <NextLink href="/" className="flex flex-col">
-              <span className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight text-primary">
+              <span className="font-display font-extrabold text-2xl sm:text-3xl tracking-tight text-white">
                 Jeshu<span className="text-gold">Verse</span>
               </span>
-              <span className="text-[10px] text-center tracking-widest font-medium uppercase text-purple-700 -mt-1 block">
+              <span className="text-[10px] text-center tracking-widest font-medium uppercase text-purple-300 -mt-1 block">
                 Fashion For Everyone
               </span>
             </NextLink>
@@ -86,9 +93,9 @@ export default function Header() {
                 placeholder="Search premium styles, sarees, jewellery..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-4 pr-10 py-2.5 rounded-full bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-purple-400 text-purple-950 transition-all input-glow"
+                className="w-full pl-4 pr-10 py-2.5 rounded-full bg-white/5 border border-white/10 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm placeholder-purple-300 text-white transition-all input-glow"
               />
-              <button type="submit" className="absolute right-3.5 top-3 text-purple-500 hover:text-primary transition-colors">
+              <button type="submit" className="absolute right-3.5 top-3 text-purple-300 hover:text-white transition-colors">
                 <FiSearch size={18} />
               </button>
             </div>
@@ -103,30 +110,30 @@ export default function Header() {
                 <Magnetic key={cat.name} strength={0.5}>
                   <NextLink
                     href={cat.path}
-                    className="group relative text-sm font-semibold text-purple-950 hover:text-amber-500 transition-colors cursor-interactive"
+                    className="group relative text-sm font-semibold text-purple-200 hover:text-gold transition-colors cursor-interactive"
                   >
                     {cat.name}
-                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-primary to-gold group-hover:w-full transition-all duration-300 rounded-full" />
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-purple-400 to-gold group-hover:w-full transition-all duration-300 rounded-full" />
                   </NextLink>
                 </Magnetic>
               ))}
             </nav>
 
             {/* Wishlist */}
-            <NextLink href="/profile?tab=wishlist" className="relative p-2.5 text-purple-900 hover:text-amber-500 hover:bg-purple-50 rounded-full transition-all">
+            <NextLink href="/profile?tab=wishlist" className="relative p-2.5 text-purple-200 hover:text-gold hover:bg-white/10 rounded-full transition-all">
               <FiHeart size={20} />
               {wishlistItems.length > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-amber-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-white animate-bounce-slow">
+                <span className="absolute -top-0.5 -right-0.5 bg-amber-500 text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-black/40 animate-bounce-slow">
                   {wishlistItems.length}
                 </span>
               )}
             </NextLink>
 
             {/* Cart */}
-            <NextLink href="/cart" className="relative p-2.5 text-purple-900 hover:text-amber-500 hover:bg-purple-50 rounded-full transition-all">
+            <NextLink href="/cart" className="relative p-2.5 text-purple-200 hover:text-gold hover:bg-white/10 rounded-full transition-all">
               <FiShoppingCart size={20} />
               {cartCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 bg-primary-light text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-white">
+                <span className="absolute -top-0.5 -right-0.5 bg-primary-light text-white font-bold text-[10px] w-5 h-5 rounded-full flex items-center justify-center border border-black/40">
                   {cartCount}
                 </span>
               )}
@@ -135,22 +142,22 @@ export default function Header() {
             {/* User Access */}
             {user ? (
               <div className="relative group hidden md:block">
-                <button className="flex items-center gap-1.5 p-2 rounded-full hover:bg-purple-50 text-purple-900 hover:text-primary transition-all">
+                <button className="flex items-center gap-1.5 p-2 rounded-full hover:bg-white/10 text-purple-200 hover:text-white transition-all">
                   <FiUser size={20} />
                   <span className="text-xs font-semibold max-w-[80px] truncate">{user.name || 'Profile'}</span>
                 </button>
-                <div className="absolute right-0 mt-2 w-48 glass-premium rounded-xl shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-50 translate-y-1 group-hover:translate-y-0">
-                  <div className="px-4 py-2.5 border-b border-purple-50">
+                <div className="absolute right-0 mt-2 w-48 glass-dark-premium rounded-xl shadow-xl opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300 z-50 translate-y-1 group-hover:translate-y-0 border border-white/5">
+                  <div className="px-4 py-2.5 border-b border-white/5">
                     <p className="text-xs text-purple-400">Signed in as</p>
-                    <p className="text-sm font-bold text-purple-950 truncate">{user.name || user.phone}</p>
+                    <p className="text-sm font-bold text-white truncate">{user.name || user.phone}</p>
                   </div>
-                  <NextLink href={user.role === 'admin' ? '/admin/dashboard' : '/profile'} className="block px-4 py-2.5 text-sm text-purple-900 hover:bg-purple-50 hover:text-primary font-medium">
+                  <NextLink href={user.role === 'admin' ? '/admin/dashboard' : '/profile'} className="block px-4 py-2.5 text-sm text-purple-200 hover:bg-white/10 hover:text-gold font-medium">
                     {user.role === 'admin' ? 'Admin Dashboard' : 'My Account'}
                   </NextLink>
-                  <NextLink href="/profile?tab=orders" className="block px-4 py-2.5 text-sm text-purple-900 hover:bg-purple-50 hover:text-primary font-medium">
+                  <NextLink href="/profile?tab=orders" className="block px-4 py-2.5 text-sm text-purple-200 hover:bg-white/10 hover:text-gold font-medium">
                     Order History
                   </NextLink>
-                  <button onClick={logout} className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 font-semibold border-t border-purple-50">
+                  <button onClick={logout} className="w-full text-left flex items-center gap-2 px-4 py-2.5 text-sm text-red-400 hover:bg-red-950/20 font-semibold border-t border-white/5">
                     <FiLogOut size={16} /> Logout
                   </button>
                 </div>
@@ -170,16 +177,16 @@ export default function Header() {
 
       {/* Mobile Drawer Menu */}
       {menuOpen && (
-        <div className="md:hidden border-t border-purple-100 bg-white px-4 py-3 space-y-3 shadow-inner">
+        <div className="md:hidden border-t border-white/5 bg-[#0c0813]/95 text-white px-4 py-3 space-y-3 shadow-inner">
           <form onSubmit={handleSearch} className="relative">
             <input
               type="text"
               placeholder="Search items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-2 rounded-lg bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary text-sm text-purple-950"
+              className="w-full pl-4 pr-10 py-2 rounded-lg bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary text-sm text-white"
             />
-            <button type="submit" className="absolute right-3 top-2.5 text-purple-500">
+            <button type="submit" className="absolute right-3 top-2.5 text-purple-300">
               <FiSearch size={16} />
             </button>
           </form>
@@ -189,18 +196,18 @@ export default function Header() {
                 key={cat.name}
                 href={cat.path}
                 onClick={() => setMenuOpen(false)}
-                className="block text-center py-2 bg-purple-50/50 hover:bg-purple-100 rounded-lg text-sm font-semibold text-purple-900 transition-colors"
+                className="block text-center py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg text-sm font-semibold text-purple-200 transition-colors"
               >
                 {cat.name}
               </NextLink>
             ))}
           </div>
           {user ? (
-            <div className="pt-2 border-t border-purple-100 flex items-center justify-between">
+            <div className="pt-2 border-t border-white/5 flex items-center justify-between">
               <NextLink
                 href="/profile"
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center gap-2 text-sm font-bold text-purple-900"
+                className="flex items-center gap-2 text-sm font-bold text-purple-200 hover:text-white"
               >
                 <FiUser size={18} /> My Profile ({user.name || user.phone})
               </NextLink>
@@ -209,7 +216,7 @@ export default function Header() {
                   logout();
                   setMenuOpen(false);
                 }}
-                className="text-sm font-bold text-red-500 hover:text-red-700 flex items-center gap-1"
+                className="text-sm font-bold text-red-400 hover:text-red-600 flex items-center gap-1"
               >
                 <FiLogOut size={16} /> Logout
               </button>
