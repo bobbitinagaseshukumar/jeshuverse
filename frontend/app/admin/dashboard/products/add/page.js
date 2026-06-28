@@ -105,10 +105,6 @@ export default function AddProductPage() {
     if (!colorInput.trim()) return;
 
     const imgToUse = colorImageUrl.trim() || (imageUrls.length > 0 ? imageUrls[0] : '');
-    if (!imgToUse) {
-      alert('Please upload at least one Product Gallery Image first, or upload an image specifically for this color.');
-      return;
-    }
 
     const exists = colorsList.some(c => c.name.toLowerCase() === colorInput.trim().toLowerCase());
     if (!exists) {
@@ -460,7 +456,9 @@ export default function AddProductPage() {
                   key={idx}
                   className="inline-flex items-center gap-2 px-3 py-1.5 bg-purple-50 border border-purple-100 rounded-xl text-xs font-bold text-primary"
                 >
-                  <img src={col.image} alt={col.name} className="w-8 h-10 object-cover rounded-lg border border-purple-100" />
+                  {col.image && (
+                    <img src={col.image} alt={col.name} className="w-8 h-10 object-cover rounded-lg border border-purple-100" />
+                  )}
                   <span>{col.name}</span>
                   <button type="button" onClick={() => handleRemoveColor(idx)} className="text-red-500 hover:text-red-700 ml-1">
                     <FiX size={12} />
