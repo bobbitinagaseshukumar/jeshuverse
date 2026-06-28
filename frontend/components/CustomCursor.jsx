@@ -88,16 +88,16 @@ export default function CustomCursor() {
     <>
       {/* Outer cursor glow ring */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-gold pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border pointer-events-none z-[9999] hidden md:block"
         style={{
           x: cursorSpringX,
           y: cursorSpringY,
           translateX: '-50%',
           translateY: '-50%',
           scale: hovered ? 1.8 : clicked ? 0.8 : 1,
-          backgroundColor: hovered ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0)',
-          borderColor: hovered ? '#EAB308' : '#7E22CE',
-          boxShadow: hovered ? '0 0 15px rgba(234, 179, 8, 0.6)' : 'none',
+          backgroundColor: hovered ? 'rgba(234, 179, 8, 0.12)' : 'rgba(234, 179, 8, 0.02)',
+          borderColor: '#EAB308',
+          boxShadow: hovered ? '0 0 15px rgba(234, 179, 8, 0.6)' : '0 0 8px rgba(234, 179, 8, 0.25)',
         }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       />
