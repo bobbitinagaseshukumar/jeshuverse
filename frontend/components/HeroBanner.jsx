@@ -10,9 +10,9 @@ import { API_URL } from '../utils/api';
 export default function HeroBanner() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [slideImages, setSlideImages] = useState({
-    slide1: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=80",
-    slide2: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80",
-    slide3: "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1400&q=80",
+    slide1: "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=1600&q=80",
+    slide2: "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?auto=format&fit=crop&w=1600&q=80",
+    slide3: "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1600&q=80",
   });
 
   useEffect(() => {
@@ -20,9 +20,9 @@ export default function HeroBanner() {
       try {
         const res = await axios.get(`${API_URL}/admin/settings/public`);
         setSlideImages({
-          slide1: res.data.slide1Image || "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1400&q=80",
-          slide2: res.data.slide2Image || "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1400&q=80",
-          slide3: res.data.slide3Image || "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=1400&q=80",
+          slide1: res.data.slide1Image || "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=1600&q=80",
+          slide2: res.data.slide2Image || "https://images.unsplash.com/photo-1610030469668-93535c17b6b3?auto=format&fit=crop&w=1600&q=80",
+          slide3: res.data.slide3Image || "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1600&q=80",
         });
       } catch (err) {
         console.error('Error fetching hero banner settings:', err);

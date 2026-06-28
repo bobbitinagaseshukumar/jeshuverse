@@ -9,6 +9,7 @@ import CategoryGrid from '../components/CategoryGrid';
 import ProductCard from '../components/ProductCard';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall } from 'react-icons/fi';
 import NextLink from 'next/link';
+import { motion } from 'framer-motion';
 // Parallax Showcase Component
 function ParallaxShowcase() {
   const [offsetY, setOffsetY] = useState(0);
@@ -32,7 +33,7 @@ function ParallaxShowcase() {
         className="parallax-bg" 
         style={{ 
           transform: `translateY(${translateY}px) scale(1.05)`,
-          backgroundImage: "url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1500&q=80')" 
+          backgroundImage: "url('https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?auto=format&fit=crop&w=1600&q=80')" 
         }} 
       />
       <div className="absolute inset-0 bg-purple-950/80 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
@@ -137,7 +138,13 @@ export default function Home() {
       <CategoryGrid />
 
       {/* 3. Promo Banner */}
-      <section className="bg-purple-900 py-8 text-white grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl shadow-md border-b-4 border-gold">
+      <motion.section 
+        initial={{ opacity: 0, y: 35 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+        className="bg-purple-900 py-8 text-white grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl shadow-md border-b-4 border-gold"
+      >
         <div className="flex items-center gap-3 justify-center text-center sm:text-left">
           <FiTruck className="text-gold" size={32} />
           <div>
@@ -166,11 +173,17 @@ export default function Home() {
             <p className="text-xs text-purple-200">Direct WhatsApp assistance</p>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* 4. Trending / Featured Products */}
       {featuredProducts.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+        >
           <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
             <div>
               <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Weekly Spotlight</span>
@@ -186,11 +199,17 @@ export default function Home() {
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* 5. New Arrivals */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <motion.section 
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7 }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+      >
         <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
           <div>
             <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Just Added</span>
@@ -214,11 +233,17 @@ export default function Home() {
             ))}
           </div>
         )}
-      </section>
+      </motion.section>
 
       {/* 6. Women's Fashion Shelf */}
       {womenItems.length > 0 && (
-        <section className="bg-purple-50/30 py-12 border-y border-purple-100">
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="bg-purple-50/30 py-12 border-y border-purple-100"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
               <div>
@@ -236,7 +261,7 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* Parallax Clothes Showcase Section */}
@@ -244,7 +269,13 @@ export default function Home() {
 
       {/* 7. Jewellery Collection Shelf */}
       {jewelleryItems.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+        >
           <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
             <div>
               <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Royal Necklaces & Earrings</span>
@@ -260,12 +291,18 @@ export default function Home() {
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* 8. Men's Fashion Shelf */}
       {menItems.length > 0 && (
-        <section className="bg-purple-50/30 py-12 border-y border-purple-100">
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="bg-purple-50/30 py-12 border-y border-purple-100"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
               <div>
@@ -283,12 +320,18 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
       )}
 
       {/* 9. Kids Fashion Shelf */}
       {kidsItems.length > 0 && (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.7 }}
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
+        >
           <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
             <div>
               <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Cute & Stylish Frocks</span>
@@ -304,7 +347,7 @@ export default function Home() {
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
-        </section>
+        </motion.section>
       )}
 
 

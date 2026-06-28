@@ -3,15 +3,8 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
-import { FiMail, FiLock, FiInfo, FiChevronRight, FiStar } from 'react-icons/fi';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import dynamic from 'next/dynamic';
-
-// Heavy WebGL 3D scene, client-side only
-const Login3DScene = dynamic(() => import('../../components/Login3DScene'), {
-  ssr: false,
-});
-
+import { FiMail, FiLock, FiInfo, FiArrowRight, FiShield, FiTruck, FiGift } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function LoginContent() {
   const { user, sendOtp, verifyOtp } = useAuth();
@@ -25,29 +18,6 @@ function LoginContent() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [devOtp, setDevOtp] = useState('');
-
-  // 3D Card Hover Effect using Motion Values
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  // Map position values to 3D rotation angles
-  const rotateX = useTransform(y, [-100, 100], [15, -15]);
-  const rotateY = useTransform(x, [-100, 100], [-15, 15]);
-
-  function handleMouse(event) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = event.clientX - rect.left - width / 2;
-    const mouseY = event.clientY - rect.top - height / 2;
-    x.set(mouseX);
-    y.set(mouseY);
-  }
-
-  function handleMouseLeave() {
-    x.set(0);
-    y.set(0);
-  }
 
   // Redirect if logged in
   useEffect(() => {
@@ -125,153 +95,197 @@ function LoginContent() {
     }
   };
 
+  const perks = [
+    { icon: FiTruck, text: 'Free delivery on orders above ₹499' },
+    { icon: FiShield, text: 'Secure UPI payments & easy returns' },
+    { icon: FiGift, text: 'Member-only offers & early access' },
+  ];
+
   return (
-    <div className="relative min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-purple-950 via-indigo-950 to-purple-950">
-      
-      {/* Heavy WebGL 3D scene: morphing orb, gold ring, crystals, stars */}
-      <div className="absolute inset-0 z-0">
-        <Login3DScene />
-      </div>
-
-      {/* Premium ambient blur blobs (high performance, lightweight) */}
+    <div className="min-h-[85vh] flex items-center justify-center py-10 px-4 sm:px-6">
       <motion.div
-        animate={{
-          scale: [1, 1.15, 1],
-          x: [0, 30, 0],
-          y: [0, -50, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-[100px] top-[-10%] left-[-10%] pointer-events-none"
-      />
-      <motion.div
-        animate={{
-          scale: [1.1, 0.9, 1.1],
-          x: [0, -50, 0],
-          y: [0, 40, 0],
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute w-[32rem] h-[32rem] rounded-full bg-gold/5 blur-[120px] bottom-[-15%] right-[-10%] pointer-events-none"
-      />
-      <motion.div
-        animate={{
-          scale: [0.95, 1.1, 0.95],
-          x: [0, 40, 0],
-          y: [0, 30, 0],
-        }}
-        transition={{
-          duration: 9,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute w-[24rem] h-[24rem] rounded-full bg-purple-500/10 blur-[90px] top-[30%] left-[20%] pointer-events-none"
-      />
-
-      {/* 3D Perspective Card Wrapper */}
-      <div 
-        style={{ perspective: 1200 }} 
-        className="relative z-10 w-full max-w-md"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="w-full max-w-5xl grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/10 border border-purple-100 bg-white"
       >
-        <motion.div
-          style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-          onMouseMove={handleMouse}
-          onMouseLeave={handleMouseLeave}
-          className="bg-white/85 backdrop-blur-xl border border-purple-100/40 rounded-3xl p-6 sm:p-10 shadow-2xl flex flex-col space-y-6"
-        >
-          {/* Header */}
-          <div style={{ transform: "translateZ(50px)" }} className="text-center">
-            <div className="inline-flex p-3 bg-purple-50 rounded-2xl mb-4 text-primary shadow-inner">
-              <FiStar size={24} className="animate-pulse text-gold fill-gold" />
-            </div>
-            
-            <h2 className="font-display font-extrabold text-2xl tracking-tight text-purple-950">
-              Welcome to <span className="text-primary font-black">Jeshu<span className="text-gold">Verse</span></span>
-            </h2>
-            <p className="text-[10px] text-purple-400 font-bold tracking-widest uppercase mt-1">
-              Verify your identity instantly
+        {/* ---------- Left brand panel ---------- */}
+        <div className="relative hidden md:flex flex-col justify-between p-10 overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-primary-light text-white">
+          {/* soft decorative glows */}
+          <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-gold/20 blur-3xl" />
+          <div className="absolute -bottom-20 -left-10 w-72 h-72 rounded-full bg-white/10 blur-3xl" />
+
+          <div className="relative z-10">
+            <span className="font-display font-black text-3xl tracking-tight">
+              Jeshu<span className="text-gold">Verse</span>
+            </span>
+            <p className="text-[10px] tracking-[0.35em] uppercase text-purple-200 mt-1">
+              Fashion For Everyone
             </p>
           </div>
 
-          {errorMsg && (
-            <motion.div 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="p-3 bg-red-50 text-red-600 text-xs font-bold rounded-xl border border-red-100/30"
-            >
-              {errorMsg}
-            </motion.div>
-          )}
+          <div className="relative z-10">
+            <h3 className="font-display font-extrabold text-3xl leading-tight">
+              Step into a world of <span className="text-gold">premium</span> ethnic fashion.
+            </h3>
+            <p className="text-purple-200 text-sm mt-3 leading-relaxed max-w-sm">
+              Sign in to track orders, save your favourites, and unlock exclusive member pricing.
+            </p>
 
-          {/* Form */}
-          <div style={{ transform: "translateZ(30px)" }}>
+            <div className="mt-8 space-y-3">
+              {perks.map((p, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.12, duration: 0.5 }}
+                  className="flex items-center gap-3"
+                >
+                  <span className="grid place-items-center w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm text-gold shrink-0">
+                    <p.icon size={16} />
+                  </span>
+                  <span className="text-sm text-purple-100 font-medium">{p.text}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="relative z-10 text-[11px] text-purple-300/80">
+            © {new Date().getFullYear()} JeshuVerse. Crafted with care.
+          </div>
+        </div>
+
+        {/* ---------- Right form panel ---------- */}
+        <div className="p-7 sm:p-10 flex flex-col justify-center">
+          {/* Mobile logo */}
+          <div className="md:hidden mb-6 text-center">
+            <span className="font-display font-black text-2xl text-primary tracking-tight">
+              Jeshu<span className="text-gold">Verse</span>
+            </span>
+          </div>
+
+          <div className="mb-6">
+            <h2 className="font-display font-extrabold text-2xl text-purple-950">
+              {step === 1 ? 'Welcome back' : 'Verify it’s you'}
+            </h2>
+            <p className="text-sm text-purple-400 mt-1">
+              {step === 1
+                ? 'Sign in with your email or mobile number'
+                : `We sent a 6-digit code to ${identifier}`}
+            </p>
+          </div>
+
+          {/* Step progress */}
+          <div className="flex items-center gap-2 mb-6">
+            <span className="h-1.5 rounded-full flex-1 bg-primary transition-all" />
+            <span className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${step === 2 ? 'bg-primary' : 'bg-purple-100'}`} />
+          </div>
+
+          <AnimatePresence mode="wait">
+            {errorMsg && (
+              <motion.div
+                initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                animate={{ opacity: 1, height: 'auto', marginBottom: 16 }}
+                exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="p-3 bg-red-50 text-red-600 text-xs font-semibold rounded-xl border border-red-100">
+                  {errorMsg}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence mode="wait">
             {step === 1 ? (
-              <form onSubmit={handleRequestOtp} className="space-y-5">
+              <motion.form
+                key="step1"
+                onSubmit={handleRequestOtp}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.35 }}
+                className="space-y-5"
+              >
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">
-                    Email Address or Mobile Number
+                  <label className="text-xs font-semibold text-purple-700 block mb-1.5">
+                    Email or Mobile Number
                   </label>
-                  <div className="relative group">
+                  <div className="relative">
+                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300" size={16} />
                     <input
                       type="text"
                       required
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
-                      placeholder="e.g. mobile or user@email.com"
-                      className="input-glow w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100/80 focus:border-primary focus:outline-none rounded-xl text-sm placeholder-purple-300 text-purple-950 transition-all font-semibold"
+                      placeholder="you@email.com or 98765 43210"
+                      className="w-full pl-10 pr-3 py-3 bg-purple-50/40 border border-purple-100 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-sm text-purple-950 placeholder-purple-300 transition-all"
                     />
-                    <FiMail className="absolute left-3 top-3.5 text-purple-400 group-focus-within:text-primary transition-colors" size={16} />
                   </div>
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-premium w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm flex items-center justify-center gap-1"
+                  className="w-full py-3 bg-primary hover:bg-primary-light disabled:opacity-70 text-white font-bold rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 active:scale-[0.99] transition-all text-sm flex items-center justify-center gap-2"
                 >
-                  <span>{loading ? 'Sending OTP Code...' : 'Send Login OTP'}</span>
-                  <FiChevronRight size={16} />
+                  {loading ? (
+                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <>
+                      <span>Continue</span>
+                      <FiArrowRight size={16} />
+                    </>
+                  )}
                 </button>
-              </form>
+              </motion.form>
             ) : (
-              <form onSubmit={handleVerifyOtp} className="space-y-5">
-                
-                {/* Dev OTP Note */}
-                <div className="flex items-center gap-2 p-3.5 bg-emerald-50 text-emerald-800 text-xs font-bold rounded-xl border border-emerald-100/30 text-left leading-relaxed">
-                  <FiInfo className="shrink-0 text-emerald-600 animate-bounce" size={18} />
-                  <span>Developer Sandbox: Enter OTP code <span className="font-mono text-primary font-black text-sm bg-white px-2 py-0.5 rounded shadow-sm">123456</span> to access.</span>
+              <motion.form
+                key="step2"
+                onSubmit={handleVerifyOtp}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.35 }}
+                className="space-y-5"
+              >
+                <div className="flex items-start gap-2.5 p-3 bg-emerald-50 text-emerald-800 text-xs font-medium rounded-xl border border-emerald-100">
+                  <FiInfo className="shrink-0 text-emerald-600 mt-0.5" size={16} />
+                  <span>
+                    Developer sandbox — use code{' '}
+                    <span className="font-mono font-bold text-primary bg-white px-1.5 py-0.5 rounded">123456</span>{' '}
+                    to sign in.
+                  </span>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">
+                  <label className="text-xs font-semibold text-purple-700 block mb-1.5">
                     6-Digit Verification Code
                   </label>
                   <div className="relative">
+                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300" size={16} />
                     <input
                       type="text"
                       required
                       maxLength={6}
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Enter 123456"
-                      className="input-glow w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100 focus:outline-none focus:border-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 tracking-widest font-mono text-center font-bold"
+                      placeholder="• • • • • •"
+                      className="w-full pl-10 pr-3 py-3 bg-purple-50/40 border border-purple-100 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-base text-purple-950 placeholder-purple-200 tracking-[0.4em] font-mono text-center font-bold transition-all"
                     />
-                    <FiLock className="absolute left-3.5 top-3.5 text-purple-400" size={14} />
                   </div>
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className="btn-premium w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm"
+                  className="w-full py-3 bg-primary hover:bg-primary-light disabled:opacity-70 text-white font-bold rounded-xl shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 active:scale-[0.99] transition-all text-sm flex items-center justify-center gap-2"
                 >
-                  {loading ? 'Verifying...' : 'Verify & Enter Shop'}
+                  {loading ? (
+                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    'Verify & Continue'
+                  )}
                 </button>
 
                 <button
@@ -279,18 +293,21 @@ function LoginContent() {
                   onClick={() => {
                     setStep(1);
                     setOtp('');
+                    setErrorMsg('');
                   }}
-                  className="w-full text-center text-xs text-primary hover:underline font-bold mt-2"
+                  className="w-full text-center text-xs text-purple-500 hover:text-primary font-semibold transition-colors"
                 >
-                  Change Email or Phone
+                  ← Use a different email or phone
                 </button>
-              </form>
+              </motion.form>
             )}
-          </div>
-          
-        </motion.div>
-      </div>
+          </AnimatePresence>
 
+          <p className="mt-8 text-center text-[11px] text-purple-300 leading-relaxed">
+            By continuing you agree to our Terms of Service and Privacy Policy.
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }

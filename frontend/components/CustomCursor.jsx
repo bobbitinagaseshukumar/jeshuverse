@@ -1,79 +1,134 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
-// Premium glowing cursor with a trailing ring, magnetic hover scaling,
-// and click ripple. Desktop / fine-pointer only. Purely visual.
 export default function CustomCursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const [enabled, setEnabled] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [clickParticles, setClickParticles] = useState([]);
+  
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  
+  const springConfig = { stiffness: 400, damping: 28 };
+  const cursorSpringX = useSpring(cursorX, springConfig);
+  const cursorSpringY = useSpring(cursorY, springConfig);
 
   useEffect(() => {
-    // Only enable on devices with a precise pointer (desktop)
-    const fine = window.matchMedia('(pointer: fine)').matches;
-    if (!fine) return;
-    setEnabled(true);
-    document.body.classList.add('has-custom-cursor');
-
-    const dot = dotRef.current;
-    const ring = ringRef.current;
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let ringX = mouseX;
-    let ringY = mouseY;
-    let hovering = false;
-
-    const onMove = (e) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-      if (dot) {
-        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-      }
-
-      // Detect interactive targets for magnetic / grow effect
-      const el = e.target;
-      const interactive = el.closest('a, button, input, textarea, select, [role="button"], .cursor-interactive');
-      hovering = !!interactive;
+    setMounted(true);
+    
+    const moveCursor = (e) => {
+      cursorX.set(e.clientX);
+      cursorY.set(e.clientY);
     };
 
-    const onDown = () => ring && ring.classList.add('cursor-ring--click');
-    const onUp = () => ring && ring.classList.remove('cursor-ring--click');
-
-    let rafId;
-    const render = () => {
-      // Smooth lag for the trailing ring (inertia)
-      ringX += (mouseX - ringX) * 0.18;
-      ringY += (mouseY - ringY) * 0.18;
-      if (ring) {
-        const scale = hovering ? 1.8 : 1;
-        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%) scale(${scale})`;
-        ring.style.opacity = hovering ? '1' : '0.6';
-      }
-      rafId = requestAnimationFrame(render);
+    const handleMouseOver = (e) => {
+      const target = e.target;
+      const isInteractive = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'INPUT' || 
+        target.tagName === 'SELECT' || 
+        target.tagName === 'TEXTAREA' ||
+        target.closest('a') || 
+        target.closest('button') || 
+        target.closest('input') ||
+        target.closest('.interactive') ||
+        target.closest('[role="button"]');
+        
+      setHovered(!!isInteractive);
     };
-    rafId = requestAnimationFrame(render);
 
-    window.addEventListener('mousemove', onMove, { passive: true });
-    window.addEventListener('mousedown', onDown);
-    window.addEventListener('mouseup', onUp);
+    const handleMouseDown = (e) => {
+      setClicked(true);
+      
+      // Generate click explosion particles
+      const id = Math.random().toString();
+      const newParticles = Array.from({ length: 6 }).map((_, i) => {
+        const angle = (i * 60 * Math.PI) / 180;
+        const velocity = 30 + Math.random() * 40;
+        return {
+          id: `${id}-${i}`,
+          x: e.clientX,
+          y: e.clientY,
+          dx: Math.cos(angle) * velocity,
+          dy: Math.sin(angle) * velocity,
+        };
+      });
+
+      setClickParticles((prev) => [...prev, ...newParticles]);
+      
+      setTimeout(() => {
+        setClickParticles((prev) => prev.filter((p) => !p.id.startsWith(id)));
+      }, 800);
+    };
+
+    const handleMouseUp = () => {
+      setClicked(false);
+    };
+
+    window.addEventListener('mousemove', moveCursor);
+    window.addEventListener('mouseover', handleMouseOver);
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('mousemove', onMove);
-      window.removeEventListener('mousedown', onDown);
-      window.removeEventListener('mouseup', onUp);
-      document.body.classList.remove('has-custom-cursor');
+      window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('mouseover', handleMouseOver);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
-  if (!enabled) return null;
+  if (!mounted) return null;
 
   return (
     <>
-      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
-      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
+      {/* Outer cursor glow ring */}
+      <motion.div
+        className="fixed top-0 left-0 w-8 h-8 rounded-full border border-gold pointer-events-none z-[9999] mix-blend-difference hidden md:block"
+        style={{
+          x: cursorSpringX,
+          y: cursorSpringY,
+          translateX: '-50%',
+          translateY: '-50%',
+          scale: hovered ? 1.8 : clicked ? 0.8 : 1,
+          backgroundColor: hovered ? 'rgba(234, 179, 8, 0.15)' : 'rgba(234, 179, 8, 0)',
+          borderColor: hovered ? '#EAB308' : '#7E22CE',
+          boxShadow: hovered ? '0 0 15px rgba(234, 179, 8, 0.6)' : 'none',
+        }}
+        transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+      />
+
+      {/* Inner solid dot */}
+      <motion.div
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-gold rounded-full pointer-events-none z-[9999] hidden md:block"
+        style={{
+          x: cursorSpringX,
+          y: cursorSpringY,
+          translateX: '-50%',
+          translateY: '-50%',
+          scale: hovered ? 0.5 : 1,
+        }}
+      />
+
+      {/* Click explosion particles */}
+      {clickParticles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="fixed top-0 left-0 w-1.5 h-1.5 bg-gold rounded-full pointer-events-none z-[9999]"
+          initial={{ x: p.x, y: p.y, opacity: 1, scale: 1 }}
+          animate={{
+            x: p.x + p.dx,
+            y: p.y + p.dy,
+            opacity: 0,
+            scale: 0.2,
+          }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        />
+      ))}
     </>
   );
 }
