@@ -25,7 +25,7 @@ export const WishlistProvider = ({ children }) => {
           });
           setWishlistItems(response.data);
         } catch (error) {
-          console.error('Error fetching wishlist:', error);
+          console.warn('Error fetching wishlist:', error.message || error);
         }
       } else {
         const storedWishlist = localStorage.getItem('jv_wishlist');

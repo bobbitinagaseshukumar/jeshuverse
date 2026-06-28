@@ -4,11 +4,13 @@ import { API_URL } from '../../../../utils/api';
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../../context/AuthContext';
 import { FiSave, FiSettings, FiCheck, FiUploadCloud } from 'react-icons/fi';
 
 export default function AdminSettingsPage() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
+  const router = useRouter();
   
   // Settings States
   const [whatsappNumber, setWhatsappNumber] = useState('');
@@ -132,14 +134,19 @@ export default function AdminSettingsPage() {
         setSlide2Image(data.slide2Image || '');
         setSlide3Image(data.slide3Image || '');
       } catch (error) {
-        console.error('Error fetching admin settings:', error);
+        console.warn('Error fetching admin settings:', error.message || error);
+        if (error.response?.status === 401) {
+          logout();
+          router.replace('/admin/login');
+          return;
+        }
       } finally {
         setLoading(false);
       }
     };
 
     fetchSettings();
-  }, [token, API_URL]);
+  }, [token, API_URL, router, logout]);
 
   const handleSettingsSubmit = async (e) => {
     e.preventDefault();

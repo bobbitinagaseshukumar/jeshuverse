@@ -4,11 +4,13 @@ import { API_URL } from '../../../../utils/api';
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '../../../../context/AuthContext';
 import { FiCheck, FiRefreshCw, FiCalendar, FiClock } from 'react-icons/fi';
 
 export default function AdminOrdersPage() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
+  const router = useRouter();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
@@ -23,7 +25,12 @@ export default function AdminOrdersPage() {
       });
       setOrders(response.data);
     } catch (error) {
-      console.error('Error fetching admin orders:', error);
+      console.warn('Error fetching admin orders:', error.message || error);
+      if (error.response?.status === 401) {
+        logout();
+        router.replace('/admin/login');
+        return;
+      }
     } finally {
       setLoading(false);
     }
@@ -33,7 +40,7 @@ export default function AdminOrdersPage() {
     if (token) {
       fetchOrders();
     }
-  }, [token, API_URL]);
+  }, [token, API_URL, router, logout]);
 
   // Update order status on select change
   const handleStatusChange = async (orderId, updates) => {

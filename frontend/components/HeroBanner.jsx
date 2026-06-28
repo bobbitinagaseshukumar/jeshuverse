@@ -25,7 +25,7 @@ export default function HeroBanner() {
           slide3: res.data.slide3Image || "https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=1600&q=80",
         });
       } catch (err) {
-        console.error('Error fetching hero banner settings:', err);
+        console.warn('Error fetching hero banner settings:', err.message || err);
       }
     };
     fetchPublicSettings();

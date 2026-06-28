@@ -14,6 +14,7 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import wishlistRoutes from './routes/wishlistRoutes.js';
 
 // Model Imports (for seeding)
 import { Category, Product, Review, User } from './models/index.js';
@@ -200,6 +201,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/wishlist', wishlistRoutes);
 
 // Base route
 app.get('/', (req, res) => {
@@ -248,6 +250,11 @@ const startServer = async () => {
     await sequelize.query(`
       ALTER TABLE "Settings" ADD COLUMN IF NOT EXISTS "storeAddress" VARCHAR(255) DEFAULT 'Banumukkala, Nandyal';
     `).catch(err => console.log('storeAddress column check notice:', err.message));
+
+    // Programmatically ensure wishlist column is added to Users table
+    await sequelize.query(`
+      ALTER TABLE "Users" ADD COLUMN IF NOT EXISTS "wishlist" JSONB DEFAULT '[]'::jsonb;
+    `).catch(err => console.log('User wishlist column check notice:', err.message));
 
     // Programmatically ensure category and slider columns are added to Settings
     const addCols = [

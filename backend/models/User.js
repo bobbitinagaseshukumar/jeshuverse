@@ -37,6 +37,11 @@ const User = sequelize.define('User', {
     allowNull: false,
     defaultValue: false,
   },
+  wishlist: {
+    type: DataTypes.JSONB,
+    allowNull: true,
+    defaultValue: [],
+  },
 }, {
   hooks: {
     beforeSave: async (user) => {

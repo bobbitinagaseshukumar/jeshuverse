@@ -71,9 +71,10 @@ export default function RootLayout({ children }) {
         {/* Cinematic smooth/inertia scrolling */}
         <SmoothScroll />
 
-        {/* Subtle ambient gold glow blobs */}
-        <div className="absolute top-10 left-[-10%] w-[35rem] h-[35rem] rounded-full bg-amber-900/10 blur-[130px] pointer-events-none -z-20" />
-        <div className="absolute bottom-20 right-[-10%] w-[30rem] h-[30rem] rounded-full bg-amber-800/8 blur-[120px] pointer-events-none -z-20" />
+        {/* Vibrant ambient gold & purple glow blobs */}
+        <div className="absolute top-10 left-[-15%] w-[45rem] h-[45rem] rounded-full bg-amber-900/25 blur-[150px] pointer-events-none -z-20 animate-pulse-slow" />
+        <div className="absolute top-[35%] right-[-15%] w-[40rem] h-[40rem] rounded-full bg-purple-900/30 blur-[150px] pointer-events-none -z-20" />
+        <div className="absolute bottom-20 left-[20%] w-[35rem] h-[35rem] rounded-full bg-amber-800/20 blur-[130px] pointer-events-none -z-20 animate-pulse-slow" />
 
         <AuthProvider>
           <CartProvider>

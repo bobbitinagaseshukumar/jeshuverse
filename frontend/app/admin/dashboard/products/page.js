@@ -19,7 +19,7 @@ export default function AdminProductsPage() {
       const response = await axios.get(`${API_URL}/products`);
       setProducts(response.data);
     } catch (error) {
-      console.error('Error fetching admin products:', error);
+      console.warn('Error fetching admin products:', error.message || error);
     } finally {
       setLoading(false);
     }

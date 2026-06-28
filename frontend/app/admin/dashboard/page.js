@@ -2,12 +2,14 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 import { FiDollarSign, FiLayers, FiShoppingBag, FiUsers } from 'react-icons/fi';
 import { useAuth } from '../../../context/AuthContext';
 import { API_URL } from '../../../utils/api';
 
 export default function AdminDashboardPage() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
+  const router = useRouter();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
@@ -27,8 +29,13 @@ export default function AdminDashboardPage() {
         });
         setStats(response.data);
       } catch (error) {
-        console.error('Error loading admin stats:', error);
+        console.warn('Error loading admin stats:', error.message || error);
         setStats(null);
+        if (error.response?.status === 401) {
+          logout();
+          router.replace('/admin/login');
+          return;
+        }
         setErrorMsg(error.response?.data?.message || error.message || 'Failed to retrieve dashboard stats.');
       } finally {
         setLoading(false);
@@ -36,7 +43,7 @@ export default function AdminDashboardPage() {
     };
 
     fetchDashboardStats();
-  }, [token]);
+  }, [token, router, logout]);
 
   if (loading) {
     return (

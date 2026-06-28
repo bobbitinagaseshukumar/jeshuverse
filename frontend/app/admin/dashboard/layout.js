@@ -39,7 +39,7 @@ export default function AdminDashboardLayout({ children }) {
         const res = await axios.get(`${API_URL}/admin/settings/public`);
         setHasNewOrders(res.data.hasNewOrders);
       } catch (err) {
-        console.error('Error checking notifications:', err);
+        console.warn('Error checking notifications:', err.message || err);
       }
     };
     checkNotifications();
@@ -56,7 +56,7 @@ export default function AdminDashboardLayout({ children }) {
           headers: { Authorization: `Bearer ${token}` }
         });
       } catch (err) {
-        console.error('Failed to clear notifications:', err);
+        console.warn('Failed to clear notifications:', err.message || err);
       }
     }
   };

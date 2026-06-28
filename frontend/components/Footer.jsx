@@ -22,7 +22,7 @@ export default function Footer() {
         const response = await axios.get(`${API_URL}/admin/settings/public`);
         setSettings(response.data);
       } catch (err) {
-        console.error('Error loading footer settings:', err);
+        console.warn('Error loading footer settings:', err.message || err);
       }
     };
     fetchSettings();

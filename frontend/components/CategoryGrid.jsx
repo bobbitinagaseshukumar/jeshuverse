@@ -16,7 +16,7 @@ export default function CategoryGrid() {
         const res = await axios.get(`${API_URL}/categories`);
         setCategories(res.data);
       } catch (err) {
-        console.error('Error fetching dynamic categories:', err);
+        console.warn('Error fetching dynamic categories:', err.message || err);
       } finally {
         setLoading(false);
       }

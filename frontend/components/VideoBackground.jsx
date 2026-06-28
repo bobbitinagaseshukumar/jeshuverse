@@ -30,8 +30,8 @@ export default function VideoBackground() {
         preload="auto"
       />
 
-      {/* Dark veil — keeps video subtle while text stays readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70" />
+      {/* Dark veil — slightly less dark so the colors from the background videos pop more */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/60" />
       {/* Cinematic vignette */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.55)_100%)]" />
     </div>

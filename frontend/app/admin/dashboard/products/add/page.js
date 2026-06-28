@@ -9,7 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { FiSave, FiUploadCloud, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
 
 export default function AddProductPage() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const router = useRouter();
 
   // Form States
@@ -39,11 +39,15 @@ export default function AddProductPage() {
           setCategory(res.data[0].name);
         }
       } catch (err) {
-        console.error('Failed to load categories:', err);
+        console.warn('Failed to load categories:', err.message || err);
+        if (err.response?.status === 401) {
+          logout();
+          router.replace('/admin/login');
+        }
       }
     };
     fetchCats();
-  }, []);
+  }, [logout, router]);
 
   // Fetch subcategories when category changes
   useEffect(() => {
@@ -57,11 +61,15 @@ export default function AddProductPage() {
           setSubCategory('');
         }
       } catch (err) {
-        console.error('Failed to load subcategories:', err);
+        console.warn('Failed to load subcategories:', err.message || err);
+        if (err.response?.status === 401) {
+          logout();
+          router.replace('/admin/login');
+        }
       }
     };
     fetchSubCats();
-  }, [category, categories]);
+  }, [category, categories, logout, router]);
 
   // Size specifications
   const availableSizesList = ['S', 'M', 'L', 'XL', 'XXL', 'Free Size', 'Adjustable'];

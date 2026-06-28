@@ -30,7 +30,7 @@ export default function AdminCategoriesPage() {
       const res = await axios.get(`${API_URL}/categories`);
       setCategories(res.data);
     } catch (err) {
-      console.error('Error fetching categories:', err);
+      console.warn('Error fetching categories:', err.message || err);
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ export default function AdminCategoriesPage() {
       const res = await axios.get(`${API_URL}/subcategories?categoryId=${categoryId}`);
       setSubCategories(prev => ({ ...prev, [categoryId]: res.data }));
     } catch (err) {
-      console.error('Error fetching subcategories:', err);
+      console.warn('Error fetching subcategories:', err.message || err);
     } finally {
       setSubCatLoading(prev => ({ ...prev, [categoryId]: false }));
     }
