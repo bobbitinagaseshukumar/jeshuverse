@@ -80,6 +80,24 @@ export default function HeroBanner() {
   return (
     <section className="relative w-full h-[52vh] sm:h-[65vh] md:h-[80vh] bg-purple-950 overflow-hidden">
       
+      {/* Floating cinematic particles overlay */}
+      <div className="absolute inset-0 z-10 pointer-events-none">
+        {[...Array(14)].map((_, i) => (
+          <motion.span
+            key={i}
+            className="absolute rounded-full bg-gold/60"
+            style={{
+              width: 3 + (i % 3) * 2,
+              height: 3 + (i % 3) * 2,
+              left: `${(i * 37) % 100}%`,
+              top: `${(i * 53) % 100}%`,
+            }}
+            animate={{ y: [0, -40, 0], opacity: [0, 0.9, 0], scale: [0.6, 1.3, 0.6] }}
+            transition={{ duration: 5 + (i % 5), repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
+          />
+        ))}
+      </div>
+
       {/* Slide Carousel */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -136,7 +154,7 @@ export default function HeroBanner() {
               >
                 <NextLink
                   href={slides[currentSlide].ctaLink}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all"
+                  className="btn-premium inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg hover:shadow-xl transition-all cursor-interactive"
                 >
                   <span>{slides[currentSlide].ctaText}</span>
                   <FiArrowRight size={14} />

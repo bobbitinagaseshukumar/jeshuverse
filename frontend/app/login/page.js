@@ -5,6 +5,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { FiMail, FiLock, FiInfo, FiChevronRight, FiStar } from 'react-icons/fi';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
+import dynamic from 'next/dynamic';
+
+// Heavy WebGL 3D scene, client-side only
+const Login3DScene = dynamic(() => import('../../components/Login3DScene'), {
+  ssr: false,
+});
 
 
 function LoginContent() {
@@ -122,6 +128,11 @@ function LoginContent() {
   return (
     <div className="relative min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-purple-950 via-indigo-950 to-purple-950">
       
+      {/* Heavy WebGL 3D scene: morphing orb, gold ring, crystals, stars */}
+      <div className="absolute inset-0 z-0">
+        <Login3DScene />
+      </div>
+
       {/* Premium ambient blur blobs (high performance, lightweight) */}
       <motion.div
         animate={{
@@ -213,7 +224,7 @@ function LoginContent() {
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       placeholder="e.g. mobile or user@email.com"
-                      className="w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100/80 focus:border-primary focus:outline-none rounded-xl text-sm placeholder-purple-300 text-purple-950 transition-all font-semibold"
+                      className="input-glow w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100/80 focus:border-primary focus:outline-none rounded-xl text-sm placeholder-purple-300 text-purple-950 transition-all font-semibold"
                     />
                     <FiMail className="absolute left-3 top-3.5 text-purple-400 group-focus-within:text-primary transition-colors" size={16} />
                   </div>
@@ -222,7 +233,7 @@ function LoginContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm flex items-center justify-center gap-1"
+                  className="btn-premium w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm flex items-center justify-center gap-1"
                 >
                   <span>{loading ? 'Sending OTP Code...' : 'Send Login OTP'}</span>
                   <FiChevronRight size={16} />
@@ -249,7 +260,7 @@ function LoginContent() {
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                       placeholder="Enter 123456"
-                      className="w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100 focus:outline-none focus:border-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 tracking-widest font-mono text-center font-bold"
+                      className="input-glow w-full pl-9 pr-3 py-3 bg-purple-50/50 border border-purple-100 focus:outline-none focus:border-primary rounded-xl text-sm placeholder-purple-300 text-purple-950 tracking-widest font-mono text-center font-bold"
                     />
                     <FiLock className="absolute left-3.5 top-3.5 text-purple-400" size={14} />
                   </div>
@@ -258,7 +269,7 @@ function LoginContent() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm"
+                  className="btn-premium w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all text-sm"
                 >
                   {loading ? 'Verifying...' : 'Verify & Enter Shop'}
                 </button>

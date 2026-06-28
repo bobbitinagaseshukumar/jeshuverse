@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { useWishlist } from '../context/WishlistContext';
 import { FiHeart } from 'react-icons/fi';
 import { motion } from 'framer-motion';
+import Tilt3D from './Tilt3D';
 
 export default function ProductCard({ product }) {
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -27,7 +28,8 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm hover-3d flex flex-col h-full">
+    <Tilt3D max={9} scale={1.03} className="h-full rounded-2xl">
+      <div className="group relative bg-white rounded-2xl border border-purple-100 overflow-hidden shadow-sm glow-hover flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
       
       {/* Product Image Wrapper */}
       <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-purple-50/50 overflow-hidden">
@@ -109,6 +111,7 @@ export default function ProductCard({ product }) {
           </NextLink>
         </div>
       </div>
-    </div>
+      </div>
+    </Tilt3D>
   );
 }

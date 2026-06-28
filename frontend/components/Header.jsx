@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { FiSearch, FiHeart, FiShoppingCart, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
+import Magnetic from './Magnetic';
 
 // In Next.js, importing from 'next/link' is correct
 import NextLink from 'next/link';
@@ -18,7 +19,16 @@ export default function Header() {
   const { wishlistItems } = useWishlist();
   const [searchQuery, setSearchQuery] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const router = useRouter();
+
+  // Shrink + intensify glass on scroll
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Hide header on admin pages
   if (pathname && pathname.startsWith('/admin')) {
@@ -42,9 +52,9 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-purple-100 shadow-sm transition-all duration-300">
+    <header className={`sticky top-0 z-50 glass-premium border-b border-purple-100/60 transition-all duration-500 ${scrolled ? 'shadow-lg shadow-purple-900/5' : ''}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+        <div className={`flex items-center justify-between gap-4 transition-all duration-500 ${scrolled ? 'h-14 sm:h-16' : 'h-16 sm:h-20'}`}>
           
           {/* Menu button for mobile */}
           <div className="flex items-center md:hidden">
@@ -90,13 +100,15 @@ export default function Header() {
             {/* Desktop Categories Links */}
             <nav className="hidden lg:flex items-center gap-6 mr-4">
               {categories.map((cat) => (
-                <NextLink
-                  key={cat.name}
-                  href={cat.path}
-                  className="text-sm font-semibold text-purple-950 hover:text-amber-500 transition-colors"
-                >
-                  {cat.name}
-                </NextLink>
+                <Magnetic key={cat.name} strength={0.5}>
+                  <NextLink
+                    href={cat.path}
+                    className="group relative text-sm font-semibold text-purple-950 hover:text-amber-500 transition-colors cursor-interactive"
+                  >
+                    {cat.name}
+                    <span className="absolute -bottom-1 left-0 h-0.5 w-0 bg-gradient-to-r from-primary to-gold group-hover:w-full transition-all duration-300 rounded-full" />
+                  </NextLink>
+                </Magnetic>
               ))}
             </nav>
 
@@ -144,10 +156,12 @@ export default function Header() {
                 </div>
               </div>
             ) : (
-              <NextLink href="/login" className="hidden md:flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md hover:bg-primary-light transition-all">
-                <FiUser size={16} />
-                <span>Login</span>
-              </NextLink>
+              <Magnetic strength={0.5}>
+                <NextLink href="/login" className="btn-premium hidden md:flex items-center gap-1.5 px-4.5 py-2 rounded-full bg-primary text-white text-sm font-semibold shadow-md hover:bg-primary-light transition-all cursor-interactive">
+                  <FiUser size={16} />
+                  <span>Login</span>
+                </NextLink>
+              </Magnetic>
             )}
 
           </div>

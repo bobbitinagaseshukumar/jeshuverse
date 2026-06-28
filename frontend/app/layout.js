@@ -7,6 +7,10 @@ import Header from "../components/Header";
 import BottomNavigation from "../components/BottomNavigation";
 import Footer from "../components/Footer";
 import ScrollToTop from '../components/ScrollToTop';
+import Background3D from "../components/Background3D";
+import SmoothScroll from "../components/SmoothScroll";
+import CustomCursor from "../components/CustomCursor";
+import LoadingScreen from "../components/LoadingScreen";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,6 +65,15 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-purple-50/15 text-purple-950 flex flex-col font-sans relative overflow-x-hidden">
+        {/* Luxury intro loader (once per session) */}
+        <LoadingScreen />
+        {/* Cinematic smooth/inertia scrolling */}
+        <SmoothScroll />
+        {/* Premium glowing custom cursor (desktop only) */}
+        <CustomCursor />
+        {/* Site-wide ambient 3D depth layer */}
+        <Background3D />
+
         {/* Soft, modern ambient blur blobs for premium styling (no WebGL overhead!) */}
         <div className="absolute top-10 left-[-10%] w-[35rem] h-[35rem] rounded-full bg-purple-200/20 blur-[130px] pointer-events-none -z-20" />
         <div className="absolute bottom-20 right-[-10%] w-[30rem] h-[30rem] rounded-full bg-amber-100/30 blur-[120px] pointer-events-none -z-20" />
