@@ -5,12 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '../../context/AuthContext';
 import { FiMail, FiLock, FiInfo, FiChevronRight, FiStar } from 'react-icons/fi';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import dynamic from 'next/dynamic';
 
-// Heavy 3D scene loaded client-side only (Three.js / React Three Fiber)
-const Login3DScene = dynamic(() => import('../../components/Login3DScene'), {
-  ssr: false,
-});
 
 function LoginContent() {
   const { user, sendOtp, verifyOtp } = useAuth();
@@ -125,40 +120,47 @@ function LoginContent() {
   };
 
   return (
-    <div className="relative min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-purple-950">
+    <div className="relative min-h-[85vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-purple-950 via-indigo-950 to-purple-950">
       
-      {/* Heavy WebGL 3D Scene Background (morphing orb, gold ring, crystals, stars) */}
-      <div className="absolute inset-0 z-0">
-        <Login3DScene />
-      </div>
-
-      {/* 3D Floating Neon Background Blurs */}
+      {/* Premium ambient blur blobs (high performance, lightweight) */}
       <motion.div
         animate={{
-          scale: [1, 1.2, 1],
-          x: [0, 40, 0],
-          y: [0, -30, 0],
+          scale: [1, 1.15, 1],
+          x: [0, 30, 0],
+          y: [0, -50, 0],
         }}
         transition={{
-          duration: 12,
+          duration: 8,
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute w-80 h-80 rounded-full bg-primary/20 blur-3xl -top-20 -left-20 pointer-events-none"
+        className="absolute w-[28rem] h-[28rem] rounded-full bg-primary/10 blur-[100px] top-[-10%] left-[-10%] pointer-events-none"
       />
-
       <motion.div
         animate={{
           scale: [1.1, 0.9, 1.1],
-          x: [0, -40, 0],
-          y: [0, 50, 0],
+          x: [0, -50, 0],
+          y: [0, 40, 0],
         }}
         transition={{
-          duration: 15,
+          duration: 10,
           repeat: Infinity,
           ease: "easeInOut"
         }}
-        className="absolute w-96 h-96 rounded-full bg-gold/10 blur-3xl -bottom-30 -right-30 pointer-events-none"
+        className="absolute w-[32rem] h-[32rem] rounded-full bg-gold/5 blur-[120px] bottom-[-15%] right-[-10%] pointer-events-none"
+      />
+      <motion.div
+        animate={{
+          scale: [0.95, 1.1, 0.95],
+          x: [0, 40, 0],
+          y: [0, 30, 0],
+        }}
+        transition={{
+          duration: 9,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute w-[24rem] h-[24rem] rounded-full bg-purple-500/10 blur-[90px] top-[30%] left-[20%] pointer-events-none"
       />
 
       {/* 3D Perspective Card Wrapper */}

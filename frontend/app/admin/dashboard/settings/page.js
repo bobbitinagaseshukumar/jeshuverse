@@ -5,7 +5,7 @@ import { API_URL } from '../../../../utils/api';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../../../context/AuthContext';
-import { FiSave, FiSettings, FiCheck } from 'react-icons/fi';
+import { FiSave, FiSettings, FiCheck, FiUploadCloud } from 'react-icons/fi';
 
 export default function AdminSettingsPage() {
   const { token } = useAuth();
@@ -35,6 +35,80 @@ export default function AdminSettingsPage() {
   
   const [loading, setLoading] = useState(true);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [uploadingState, setUploadingState] = useState({});
+
+  const handleFieldImageUpload = async (e, fieldKey, fieldSetter) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setUploadingState((prev) => ({ ...prev, [fieldKey]: true }));
+    const formData = new FormData();
+    files.forEach((file) => formData.append('images', file));
+
+    try {
+      const response = await axios.post(`${API_URL}/products/upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.urls && response.data.urls.length > 0) {
+        fieldSetter(response.data.urls[0]);
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || 'Image upload failed');
+    } finally {
+      setUploadingState((prev) => ({ ...prev, [fieldKey]: false }));
+    }
+  };
+
+  const ImageSettingField = ({ label, value, fieldKey, onChange, setter }) => {
+    const isUploading = uploadingState[fieldKey];
+    return (
+      <div className="bg-purple-50/20 p-4.5 rounded-2xl border border-purple-100/50 space-y-3">
+        <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block">{label}</label>
+        
+        <div className="flex items-center gap-4">
+          {/* Preview */}
+          <div className="w-16 h-20 rounded-xl overflow-hidden bg-purple-50 border border-purple-100 flex items-center justify-center shrink-0 shadow-sm relative group">
+            {value ? (
+              <img src={value} alt={label} className="w-full h-full object-cover object-top" />
+            ) : (
+              <FiUploadCloud size={20} className="text-purple-300 animate-pulse" />
+            )}
+          </div>
+
+          {/* Upload Action */}
+          <div className="flex-1 space-y-2">
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/*"
+                disabled={isUploading}
+                onChange={(e) => handleFieldImageUpload(e, fieldKey, setter)}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+              />
+              <button
+                type="button"
+                disabled={isUploading}
+                className="px-4 py-2 border border-purple-100 hover:border-purple-300 text-xs font-bold text-purple-950 bg-white rounded-xl shadow-sm hover:shadow transition-all w-full text-center"
+              >
+                {isUploading ? 'Uploading...' : value ? 'Change Gallery Photo' : 'Upload from Gallery'}
+              </button>
+            </div>
+            
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(e)}
+              placeholder="Or paste direct image URL"
+              className="w-full px-3 py-1.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-lg text-[10px] text-purple-950 placeholder-purple-300 font-medium"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -188,82 +262,64 @@ export default function AdminSettingsPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Women's Category Image URL</label>
-              <input
-                type="text"
-                value={womenCategoryPic}
-                onChange={(e) => setWomenCategoryPic(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
-              />
-            </div>
+            <ImageSettingField
+              label="Women's Category Image"
+              value={womenCategoryPic}
+              fieldKey="womenCategoryPic"
+              onChange={setWomenCategoryPic}
+              setter={setWomenCategoryPic}
+            />
 
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Men's Category Image URL</label>
-              <input
-                type="text"
-                value={menCategoryPic}
-                onChange={(e) => setMenCategoryPic(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
-              />
-            </div>
+            <ImageSettingField
+              label="Men's Category Image"
+              value={menCategoryPic}
+              fieldKey="menCategoryPic"
+              onChange={setMenCategoryPic}
+              setter={setMenCategoryPic}
+            />
 
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Kids' Category Image URL</label>
-              <input
-                type="text"
-                value={kidsCategoryPic}
-                onChange={(e) => setKidsCategoryPic(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
-              />
-            </div>
+            <ImageSettingField
+              label="Kids' Category Image"
+              value={kidsCategoryPic}
+              fieldKey="kidsCategoryPic"
+              onChange={setKidsCategoryPic}
+              setter={setKidsCategoryPic}
+            />
 
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Jewellery Category Image URL</label>
-              <input
-                type="text"
-                value={jewelleryCategoryPic}
-                onChange={(e) => setJewelleryCategoryPic(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
-              />
-            </div>
+            <ImageSettingField
+              label="Jewellery Category Image"
+              value={jewelleryCategoryPic}
+              fieldKey="jewelleryCategoryPic"
+              onChange={setJewelleryCategoryPic}
+              setter={setJewelleryCategoryPic}
+            />
           </div>
 
-          <div className="space-y-3 pt-2">
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 1 (Jewellery Banner)</label>
-              <input
-                type="text"
+          <div className="space-y-4 pt-2">
+            <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Homepage Slideshow Banners</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <ImageSettingField
+                label="Hero Slider Slide 1 (Jewellery)"
                 value={slide1Image}
-                onChange={(e) => setSlide1Image(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+                fieldKey="slide1Image"
+                onChange={setSlide1Image}
+                setter={setSlide1Image}
               />
-            </div>
 
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 2 (Women's Wear Banner)</label>
-              <input
-                type="text"
+              <ImageSettingField
+                label="Hero Slider Slide 2 (Women's Wear)"
                 value={slide2Image}
-                onChange={(e) => setSlide2Image(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+                fieldKey="slide2Image"
+                onChange={setSlide2Image}
+                setter={setSlide2Image}
               />
-            </div>
 
-            <div>
-              <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Hero Slider Slide 3 (Men's Wear Banner)</label>
-              <input
-                type="text"
+              <ImageSettingField
+                label="Hero Slider Slide 3 (Men's Wear)"
                 value={slide3Image}
-                onChange={(e) => setSlide3Image(e.target.value)}
-                placeholder="Image URL"
-                className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs placeholder-purple-300 text-purple-950 font-medium"
+                fieldKey="slide3Image"
+                onChange={setSlide3Image}
+                setter={setSlide3Image}
               />
             </div>
           </div>

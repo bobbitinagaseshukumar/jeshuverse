@@ -101,16 +101,20 @@ export default function AddProductPage() {
 
   // Handle Color Add
   const handleAddColor = (e) => {
-    if (e) e.preventDefault();
-    if (colorInput.trim() && colorImageUrl.trim()) {
-      const exists = colorsList.some(c => c.name === colorInput.trim());
-      if (!exists) {
-        setColorsList([...colorsList, { name: colorInput.trim(), image: colorImageUrl.trim() }]);
-        setColorInput('');
-        setColorImageUrl('');
-      }
-    } else if (colorInput.trim() && !colorImageUrl.trim()) {
-      alert('Please upload or paste an image URL for this color');
+    if (e && typeof e.preventDefault === 'function') e.preventDefault();
+    if (!colorInput.trim()) return;
+
+    const imgToUse = colorImageUrl.trim() || (imageUrls.length > 0 ? imageUrls[0] : '');
+    if (!imgToUse) {
+      alert('Please upload at least one Product Gallery Image first, or upload an image specifically for this color.');
+      return;
+    }
+
+    const exists = colorsList.some(c => c.name.toLowerCase() === colorInput.trim().toLowerCase());
+    if (!exists) {
+      setColorsList([...colorsList, { name: colorInput.trim(), image: imgToUse }]);
+      setColorInput('');
+      setColorImageUrl('');
     }
   };
 
@@ -405,7 +409,7 @@ export default function AddProductPage() {
                 placeholder="e.g. Royal Blue"
                 value={colorInput}
                 onChange={(e) => setColorInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddColor(); } }}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleAddColor(e); } }}
                 className="flex-1 px-3.5 py-2 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-xs text-purple-950 placeholder-purple-300"
               />
             </div>
