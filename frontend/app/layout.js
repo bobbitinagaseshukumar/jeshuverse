@@ -9,7 +9,6 @@ import Footer from "../components/Footer";
 import ScrollToTop from '../components/ScrollToTop';
 import SmoothScroll from "../components/SmoothScroll";
 import LoadingScreen from "../components/LoadingScreen";
-import CustomCursor from "../components/CustomCursor";
 import FloatingParticles from "../components/FloatingParticles";
 
 const geistSans = Geist({
@@ -65,8 +64,6 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-purple-50/15 text-purple-950 flex flex-col font-sans relative overflow-x-hidden">
-        {/* Luxury custom cursor for desktop */}
-        <CustomCursor />
         {/* Ambient floating particle system */}
         <FloatingParticles />
         {/* Luxury intro loader (once per session) */}
