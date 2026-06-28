@@ -67,7 +67,7 @@ export default function CategoryGrid() {
                 className="w-full h-full object-cover object-top transition-transform duration-700 opacity-80 group-hover:opacity-95"
               />
               {/* Dynamic Aurora Glow Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#110c1a] via-[#110c1a]/30 to-transparent opacity-90 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent opacity-90 transition-opacity duration-300" />
             </div>
 
             {/* Glowing active outline */}
@@ -84,8 +84,8 @@ export default function CategoryGrid() {
               </h3>
               
               {/* Animated link reveal */}
-              <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-purple-200 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
-                <span className="border-b border-purple-200/50 pb-0.5">Explore Catalog</span>
+              <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-gray-400 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-300">
+                <span className="border-b border-gray-400/50 pb-0.5">Explore Catalog</span>
                 <span>→</span>
               </div>
             </div>

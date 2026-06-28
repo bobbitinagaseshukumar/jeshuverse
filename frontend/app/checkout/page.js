@@ -190,23 +190,23 @@ function CheckoutContent() {
       {paymentSession ? (
         
         /* Step 2: UPI / PhonePe Dynamic QR payment Screen */
-        <div className="max-w-md mx-auto bg-white rounded-3xl border border-purple-100 shadow-2xl p-6 sm:p-8 text-center space-y-6">
+        <div className="max-w-md mx-auto bg-[#111] rounded-3xl border border-white/10 shadow-2xl p-6 sm:p-8 text-center space-y-6">
           <div className="flex items-center justify-center gap-2 text-primary">
-            <FaMobileAlt size={32} className="text-purple-600 fill-purple-600" />
-            <h2 className="font-display font-extrabold text-xl sm:text-2xl text-purple-950">
+            <FaMobileAlt size={32} className="text-gray-400 fill-gray-400" />
+            <h2 className="font-display font-extrabold text-xl sm:text-2xl text-white">
               PhonePe Payment
             </h2>
           </div>
 
-          <div className="p-4 bg-purple-50/50 rounded-2xl border border-purple-100/50">
-            <span className="text-[10px] font-bold text-purple-400 uppercase tracking-widest block">Total Amount Payable</span>
+          <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Total Amount Payable</span>
             <span className="font-display font-extrabold text-2xl sm:text-3xl text-primary mt-1 block">
               ₹{grandTotal.toLocaleString('en-IN')}
             </span>
           </div>
 
           {/* Render dynamic base64 QR Code */}
-          <div className="bg-white p-3 border border-purple-100 rounded-3xl w-fit mx-auto shadow-sm">
+          <div className="bg-white p-3 border border-white/10 rounded-3xl w-fit mx-auto shadow-lg shadow-black/20">
             <img 
               src={paymentSession.qrCodeDataUrl} 
               alt="Scan QR code using PhonePe" 
@@ -214,21 +214,21 @@ function CheckoutContent() {
             />
           </div>
 
-          <p className="text-xs text-purple-900 font-semibold px-4">
+          <p className="text-xs text-gray-200 font-semibold px-4">
             Scan QR code using PhonePe, GPay, Paytm, or any UPI app to complete payment.
           </p>
 
           {/* Deep link button for mobile screens */}
           <a
             href={paymentSession.upiUri}
-            className="w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-2xl shadow-md transition-colors block text-sm"
+            className="w-full py-3 bg-primary hover:bg-primary-light text-white font-extrabold rounded-2xl shadow-xl shadow-black/30 transition-colors block text-sm"
           >
             Tap to Pay on Mobile
           </a>
 
           {/* Simulated gateway options */}
-          <div className="pt-6 border-t border-purple-100 space-y-4">
-            <div className="flex items-center gap-1.5 justify-center text-amber-600 text-xs font-semibold bg-amber-50 p-3 rounded-xl">
+          <div className="pt-6 border-t border-white/10 space-y-4">
+            <div className="flex items-center gap-1.5 justify-center text-amber-400 text-xs font-semibold bg-amber-950/30 p-3 rounded-xl">
               <FiInfo shrink-0 size={14} />
               <span>Developer mode: Simulate payment resolution below</span>
             </div>
@@ -262,18 +262,18 @@ function CheckoutContent() {
           
           {/* Left Column: Form details */}
           <div className="lg:col-span-8">
-            <form onSubmit={handlePlaceOrder} className="bg-white p-6 sm:p-8 rounded-3xl border border-purple-100 shadow-sm space-y-6">
+            <form onSubmit={handlePlaceOrder} className="bg-[#111] p-6 sm:p-8 rounded-3xl border border-white/10 shadow-lg shadow-black/20 space-y-6">
               
-              <div className="flex items-center gap-2 pb-4 border-b border-purple-50">
+              <div className="flex items-center gap-2 pb-4 border-b border-white/5">
                 <FiMapPin className="text-primary" size={22} />
-                <h2 className="font-display font-extrabold text-lg sm:text-xl text-purple-950">
+                <h2 className="font-display font-extrabold text-lg sm:text-xl text-white">
                   Shipping & Delivery Address
                 </h2>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Full Name</label>
+                  <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Full Name</label>
                   <div className="relative">
                     <input
                       type="text"
@@ -281,14 +281,14 @@ function CheckoutContent() {
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Priyanika Sharma"
-                      className="w-full pl-9 pr-3 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                      className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                     />
-                    <FiUser className="absolute left-3.5 top-3.5 text-purple-400" size={14} />
+                    <FiUser className="absolute left-3.5 top-3.5 text-gray-500" size={14} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Mobile Number</label>
+                  <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Mobile Number</label>
                   <div className="relative">
                     <input
                       type="tel"
@@ -296,73 +296,73 @@ function CheckoutContent() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="e.g. 9876543210"
-                      className="w-full pl-9 pr-3 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                      className="w-full pl-9 pr-3 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                     />
-                    <FiPhone className="absolute left-3.5 top-3.5 text-purple-400" size={14} />
+                    <FiPhone className="absolute left-3.5 top-3.5 text-gray-500" size={14} />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Street Address</label>
+                <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Street Address</label>
                 <input
                   type="text"
                   required
                   value={street}
                   onChange={(e) => setStreet(e.target.value)}
                   placeholder="House No, Apartment Name, Street Name"
-                  className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                  className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">City</label>
+                  <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">City</label>
                   <input
                     type="text"
                     required
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     placeholder="e.g. Bangalore"
-                    className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">State</label>
+                  <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">State</label>
                   <input
                     type="text"
                     required
                     value={state}
                     onChange={(e) => setState(e.target.value)}
                     placeholder="e.g. Karnataka"
-                    className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Pin Code</label>
+                  <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Pin Code</label>
                   <input
                     type="text"
                     required
                     value={zipCode}
                     onChange={(e) => setZipCode(e.target.value)}
                     placeholder="e.g. 560001"
-                    className="w-full px-3.5 py-2.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-300 text-purple-950"
+                    className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                   />
                 </div>
               </div>
 
               {/* Payment Methods */}
-              <div className="pt-6 border-t border-purple-50 space-y-4">
-                <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Select Payment Method</span>
+              <div className="pt-6 border-t border-white/5 space-y-4">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">Select Payment Method</span>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* PhonePe Radio */}
                   <label className={`flex items-center justify-between p-4 border rounded-2xl cursor-pointer transition-all ${
                     paymentMethod === 'PhonePe'
-                      ? 'border-primary bg-purple-50/30'
-                      : 'border-purple-100 hover:border-purple-200'
+                      ? 'border-primary bg-white/5'
+                      : 'border-white/10 hover:border-white/15'
                   }`}>
                     <div className="flex items-center gap-3">
                       <input
@@ -374,18 +374,18 @@ function CheckoutContent() {
                         className="text-primary focus:ring-primary"
                       />
                       <div className="text-left">
-                        <span className="text-sm font-bold text-purple-950 block">PhonePe UPI</span>
-                        <span className="text-[10px] text-purple-400">Scan QR Code or UPI tap</span>
+                        <span className="text-sm font-bold text-white block">PhonePe UPI</span>
+                        <span className="text-[10px] text-gray-500">Scan QR Code or UPI tap</span>
                       </div>
                     </div>
-                    <FaMobileAlt size={24} className="text-purple-600 fill-purple-600 shrink-0" />
+                    <FaMobileAlt size={24} className="text-gray-400 fill-gray-400 shrink-0" />
                   </label>
 
                   {/* COD Radio */}
                   <label className={`flex items-center justify-between p-4 border rounded-2xl cursor-pointer transition-all ${
                     paymentMethod === 'COD'
-                      ? 'border-primary bg-purple-50/30'
-                      : 'border-purple-100 hover:border-purple-200'
+                      ? 'border-primary bg-white/5'
+                      : 'border-white/10 hover:border-white/15'
                   }`}>
                     <div className="flex items-center gap-3">
                       <input
@@ -397,11 +397,11 @@ function CheckoutContent() {
                         className="text-primary focus:ring-primary"
                       />
                       <div className="text-left">
-                        <span className="text-sm font-bold text-purple-950 block">Cash On Delivery</span>
-                        <span className="text-[10px] text-purple-400">Pay when order arrives</span>
+                        <span className="text-sm font-bold text-white block">Cash On Delivery</span>
+                        <span className="text-[10px] text-gray-500">Pay when order arrives</span>
                       </div>
                     </div>
-                    <FaMoneyBillWave size={22} className="text-emerald-600 shrink-0" />
+                    <FaMoneyBillWave size={22} className="text-emerald-400 shrink-0" />
                   </label>
                 </div>
               </div>
@@ -409,7 +409,7 @@ function CheckoutContent() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-extrabold rounded-2xl shadow-md transition-colors mt-6 uppercase text-sm tracking-wider"
+                className="w-full py-3.5 bg-primary hover:bg-primary-light text-white font-extrabold rounded-2xl shadow-xl shadow-black/30 transition-colors mt-6 uppercase text-sm tracking-wider"
               >
                 {loading ? 'Processing Checkout...' : `Confirm & Place Order • ₹${grandTotal.toLocaleString('en-IN')}`}
               </button>
@@ -418,25 +418,25 @@ function CheckoutContent() {
           </div>
 
           {/* Right Column: Checkout Summary Box */}
-          <div className="lg:col-span-4 bg-white p-6 rounded-3xl border border-purple-100 shadow-sm h-fit space-y-5">
-            <h3 className="font-display font-extrabold text-purple-950 text-base border-b border-purple-50 pb-3">
+          <div className="lg:col-span-4 bg-[#111] p-6 rounded-3xl border border-white/10 shadow-lg shadow-black/20 h-fit space-y-5">
+            <h3 className="font-display font-extrabold text-white text-base border-b border-white/5 pb-3">
               Order Review
             </h3>
             
-            <div className="divide-y divide-purple-50 max-h-72 overflow-y-auto no-scrollbar">
+            <div className="divide-y divide-white/5 max-h-72 overflow-y-auto no-scrollbar">
               {orderItems.map((item, index) => (
                 <div key={index} className="py-3 flex gap-3 items-center">
-                  <img src={item.image} alt={item.name} className="w-11 h-14 object-cover object-top rounded-lg shrink-0 border border-purple-50" />
+                  <img src={item.image} alt={item.name} className="w-11 h-14 object-cover object-top rounded-lg shrink-0 border border-white/5" />
                   <div className="min-w-0 flex-1">
-                    <h4 className="text-xs font-bold text-purple-950 truncate">{item.name}</h4>
-                    <p className="text-[10px] text-purple-400 mt-0.5">Qty: {item.quantity} • Size: {item.size || 'N/A'}</p>
-                    <p className="text-xs font-extrabold text-purple-950 mt-1">₹{item.price.toLocaleString('en-IN')}</p>
+                    <h4 className="text-xs font-bold text-white truncate">{item.name}</h4>
+                    <p className="text-[10px] text-gray-500 mt-0.5">Qty: {item.quantity} • Size: {item.size || 'N/A'}</p>
+                    <p className="text-xs font-extrabold text-white mt-1">₹{item.price.toLocaleString('en-IN')}</p>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="border-t border-purple-100 pt-4 space-y-2 text-xs font-semibold text-purple-900">
+            <div className="border-t border-white/10 pt-4 space-y-2 text-xs font-semibold text-gray-200">
               <div className="flex justify-between">
                 <span>Items Subtotal</span>
                 <span>₹{orderTotal.toLocaleString('en-IN')}</span>
@@ -445,7 +445,7 @@ function CheckoutContent() {
                 <span>Delivery Shipping</span>
                 <span>{shippingCharges === 0 ? 'FREE' : `₹${shippingCharges}`}</span>
               </div>
-              <div className="border-t border-purple-100 pt-3 flex justify-between font-display font-extrabold text-sm sm:text-base text-purple-950">
+              <div className="border-t border-white/10 pt-3 flex justify-between font-display font-extrabold text-sm sm:text-base text-white">
                 <span>Grand Total</span>
                 <span className="text-primary">₹{grandTotal.toLocaleString('en-IN')}</span>
               </div>

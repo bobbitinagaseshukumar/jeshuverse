@@ -34,7 +34,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-black/90 text-purple-100 border-t border-white/10 pt-12 pb-24 md:pb-12 mt-16 transition-all">
+    <footer className="bg-[#0a0a0a] text-gray-300 border-t border-white/10 pt-12 pb-24 md:pb-12 mt-16 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
@@ -48,17 +48,17 @@ export default function Footer() {
                 Fashion For Everyone
               </span>
             </NextLink>
-            <p className="text-sm text-purple-300 leading-relaxed">
+            <p className="text-sm text-gray-500 leading-relaxed">
               Step into premium fashion with JeshuVerse. Explore our curated collections of ethnic women's wear, classic men's wear, cute kids attire, and royal 24K gold plated jewellery.
             </p>
             <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="p-2 bg-primary/40 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
+              <a href="#" className="p-2 bg-white/10 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
                 <FiFacebook size={18} />
               </a>
-              <a href="#" className="p-2 bg-primary/40 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
+              <a href="#" className="p-2 bg-white/10 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
                 <FiInstagram size={18} />
               </a>
-              <a href="#" className="p-2 bg-primary/40 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
+              <a href="#" className="p-2 bg-white/10 hover:bg-gold hover:text-primary-dark rounded-full text-white transition-all">
                 <FiYoutube size={18} />
               </a>
             </div>
@@ -66,7 +66,7 @@ export default function Footer() {
 
           {/* Categories Col */}
           <div>
-            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-purple-800 pb-2.5 mb-4">
+            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-gold/30 pb-2.5 mb-4">
               Categories
             </h3>
             <ul className="space-y-2.5 text-sm">
@@ -105,7 +105,7 @@ export default function Footer() {
 
           {/* Quick Links Col */}
           <div>
-            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-purple-800 pb-2.5 mb-4">
+            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-gold/30 pb-2.5 mb-4">
               Customer Support
             </h3>
             <ul className="space-y-2.5 text-sm">
@@ -125,7 +125,7 @@ export default function Footer() {
                 </NextLink>
               </li>
               <li>
-                <NextLink href="/admin/login" className="text-purple-400 hover:text-gold transition-colors block font-semibold">
+                <NextLink href="/admin/login" className="text-gray-600 hover:text-gold transition-colors block font-semibold">
                   Admin Control Panel
                 </NextLink>
               </li>
@@ -134,25 +134,25 @@ export default function Footer() {
 
           {/* Contact Col */}
           <div>
-            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-purple-800 pb-2.5 mb-4">
+            <h3 className="text-white font-bold text-base tracking-wider uppercase border-b border-gold/30 pb-2.5 mb-4">
               Get in Touch
             </h3>
             <ul className="space-y-3.5 text-sm">
               <li className="flex items-start gap-3">
                 <FiMapPin className="text-gold shrink-0 mt-1" size={16} />
-                <span className="text-purple-300">
+                <span className="text-gray-500">
                   {settings.storeAddress || 'Banumukkala, Nandyal'}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <FiPhone className="text-gold shrink-0" size={16} />
-                <a href={`tel:${(settings.whatsappNumber || '').replace(/\D/g, '')}`} className="text-purple-300 hover:text-gold transition-colors">
+                <a href={`tel:${(settings.whatsappNumber || '').replace(/\D/g, '')}`} className="text-gray-500 hover:text-gold transition-colors">
                   {settings.whatsappNumber || '+91 99999 99999'}
                 </a>
               </li>
               <li className="flex items-center gap-3">
                 <FiMail className="text-gold shrink-0" size={16} />
-                <a href="mailto:support@jeshuverse.com" className="text-purple-300 hover:text-gold transition-colors">
+                <a href="mailto:support@jeshuverse.com" className="text-gray-500 hover:text-gold transition-colors">
                   support@jeshuverse.com
                 </a>
               </li>
@@ -166,7 +166,7 @@ export default function Footer() {
                   })()}`} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-purple-300 hover:text-gold transition-colors font-semibold flex items-center gap-1"
+                  className="text-gray-500 hover:text-gold transition-colors font-semibold flex items-center gap-1"
                 >
                   WhatsApp Support
                 </a>
@@ -176,12 +176,12 @@ export default function Footer() {
 
         </div>
 
-        <div className="border-t border-purple-900 mt-12 pt-6 text-center text-xs text-purple-400 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-white/5 mt-12 pt-6 text-center text-xs text-gray-600 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p>© {currentYear} JeshuVerse Store. All rights reserved.</p>
           <div className="flex items-center gap-3">
-            <span className="px-2 py-0.5 border border-purple-800 rounded text-[10px] uppercase font-bold text-purple-400">BHIM UPI</span>
-            <span className="px-2 py-0.5 border border-purple-800 rounded text-[10px] uppercase font-bold text-purple-400">PhonePe</span>
-            <span className="px-2 py-0.5 border border-purple-800 rounded text-[10px] uppercase font-bold text-purple-400">WhatsApp Pay</span>
+            <span className="px-2 py-0.5 border border-white/10 rounded text-[10px] uppercase font-bold text-gray-600">BHIM UPI</span>
+            <span className="px-2 py-0.5 border border-white/10 rounded text-[10px] uppercase font-bold text-gray-600">PhonePe</span>
+            <span className="px-2 py-0.5 border border-white/10 rounded text-[10px] uppercase font-bold text-gray-600">WhatsApp Pay</span>
           </div>
         </div>
       </div>

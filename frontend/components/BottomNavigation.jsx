@@ -44,7 +44,7 @@ export default function BottomNavigation() {
   ];
 
   return (
-    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-purple-100 shadow-[0_-4px_12px_rgba(88,28,135,0.08)] py-2 px-2 z-50 flex items-center justify-around">
+    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-white/10 shadow-[0_-4px_12px_rgba(0,0,0,0.5)] py-2 px-2 z-50 flex items-center justify-around">
       {navItems.map((item) => {
         const IconComponent = item.icon;
         const active = isActive(item.path);
@@ -55,8 +55,8 @@ export default function BottomNavigation() {
             href={item.path}
             className={`flex flex-col items-center justify-center flex-1 relative py-1 transition-all ${
               active 
-                ? 'text-primary scale-110 font-bold' 
-                : 'text-purple-400 hover:text-primary'
+                ? 'text-gold scale-110 font-bold' 
+                : 'text-gray-600 hover:text-gold'
             }`}
           >
             <div className="relative">
@@ -64,7 +64,7 @@ export default function BottomNavigation() {
               
               {/* Badges */}
               {item.badge !== undefined && item.badge > 0 ? (
-                <span className="absolute -top-1.5 -right-2 bg-amber-500 text-white font-bold text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center border border-white">
+                <span className="absolute -top-1.5 -right-2 bg-amber-500 text-white font-bold text-[9px] w-4.5 h-4.5 rounded-full flex items-center justify-center border border-black">
                   {item.badge}
                 </span>
               ) : null}

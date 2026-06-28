@@ -61,7 +61,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="min-h-screen bg-transparent text-white flex flex-col font-sans relative overflow-x-hidden">
         {/* Ambient floating particle system */}
@@ -71,9 +71,9 @@ export default function RootLayout({ children }) {
         {/* Cinematic smooth/inertia scrolling */}
         <SmoothScroll />
 
-        {/* Soft, modern ambient blur blobs for premium styling (no WebGL overhead!) */}
-        <div className="absolute top-10 left-[-10%] w-[35rem] h-[35rem] rounded-full bg-purple-200/20 blur-[130px] pointer-events-none -z-20" />
-        <div className="absolute bottom-20 right-[-10%] w-[30rem] h-[30rem] rounded-full bg-amber-100/30 blur-[120px] pointer-events-none -z-20" />
+        {/* Subtle ambient gold glow blobs */}
+        <div className="absolute top-10 left-[-10%] w-[35rem] h-[35rem] rounded-full bg-amber-900/10 blur-[130px] pointer-events-none -z-20" />
+        <div className="absolute bottom-20 right-[-10%] w-[30rem] h-[30rem] rounded-full bg-amber-800/8 blur-[120px] pointer-events-none -z-20" />
 
         <AuthProvider>
           <CartProvider>

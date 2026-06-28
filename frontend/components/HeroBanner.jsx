@@ -39,7 +39,6 @@ export default function HeroBanner() {
       image: slideImages.slide1,
       ctaText: "Shop Jewellery",
       ctaLink: "/category/jewellery",
-      align: "left"
     },
     {
       title: "Festive Women's Wardrobe",
@@ -48,7 +47,6 @@ export default function HeroBanner() {
       image: slideImages.slide2,
       ctaText: "Explore Sarees",
       ctaLink: "/category/women-wear",
-      align: "right"
     },
     {
       title: "Men's Premium Ethnic Wear",
@@ -57,7 +55,6 @@ export default function HeroBanner() {
       image: slideImages.slide3,
       ctaText: "Shop Men's Wear",
       ctaLink: "/category/men-wear",
-      align: "left"
     }
   ];
 
@@ -78,26 +75,8 @@ export default function HeroBanner() {
   };
 
   return (
-    <section className="relative w-full h-[55vh] sm:h-[70vh] md:h-[85vh] bg-purple-950 overflow-hidden border-b border-white/5">
+    <section className="relative w-full h-[60vh] sm:h-[75vh] md:h-[90vh] bg-black overflow-hidden">
       
-      {/* Floating particles background overlay */}
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        {[...Array(14)].map((_, i) => (
-          <motion.span
-            key={i}
-            className="absolute rounded-full bg-gold/50"
-            style={{
-              width: 3 + (i % 3) * 2,
-              height: 3 + (i % 3) * 2,
-              left: `${(i * 37) % 100}%`,
-              top: `${(i * 53) % 100}%`,
-            }}
-            animate={{ y: [0, -40, 0], opacity: [0, 0.9, 0], scale: [0.6, 1.3, 0.6] }}
-            transition={{ duration: 5 + (i % 5), repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
-          />
-        ))}
-      </div>
-
       {/* Slide Carousel */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -109,7 +88,7 @@ export default function HeroBanner() {
           className="absolute inset-0 w-full h-full"
         >
           {/* Background Media */}
-          <div className="absolute inset-0 bg-cover bg-center w-full h-full">
+          <div className="absolute inset-0 w-full h-full">
             {slides[currentSlide].image && (
               slides[currentSlide].image.toLowerCase().endsWith('.mp4') || 
               slides[currentSlide].image.toLowerCase().endsWith('.webm') || 
@@ -121,74 +100,114 @@ export default function HeroBanner() {
                 loop
                 muted
                 playsInline
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
               />
             ) : (
               <div 
-                className="absolute inset-0 bg-cover bg-center w-full h-full" 
+                className="absolute inset-0 bg-cover bg-center w-full h-full opacity-30" 
                 style={{ backgroundImage: `url(${slides[currentSlide].image})` }} 
               />
             )}
-            {/* Elegant dark purple and gold gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-transparent md:bg-gradient-to-r md:from-primary-dark/90 md:via-primary-dark/65 md:to-transparent" />
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
             
-            {/* Animated light beam sweep */}
+            {/* Animated gold light beam sweep */}
             <motion.div 
-              className="absolute inset-0 opacity-20" 
-              style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(234,179,8,0.3) 50%, transparent 60%)' }}
+              className="absolute inset-0 opacity-15" 
+              style={{ background: 'linear-gradient(105deg, transparent 40%, rgba(234,179,8,0.25) 50%, transparent 60%)' }}
               animate={{ x: ['-100%', '200%'] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
+              transition={{ duration: 8, repeat: Infinity, ease: 'linear', repeatDelay: 3 }}
             />
           </div>
 
-          {/* Caption Container */}
-          <div className="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-            <div className={`max-w-xl text-left ${slides[currentSlide].align === 'right' ? 'md:ml-auto' : ''}`}>
-              
-              <motion.span
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-gold font-extrabold text-[10px] sm:text-sm tracking-widest uppercase mb-1.5 sm:mb-3 block"
-              >
-                {slides[currentSlide].subtitle}
-              </motion.span>
+          {/* Centered Content */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-4 sm:px-6">
+            
+            {/* Gold decorative line */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="w-16 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-6"
+            />
 
-              <motion.h1
-                initial={{ y: -50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-                className="font-display font-extrabold text-2xl sm:text-5xl lg:text-6xl text-white tracking-tight leading-tight"
-              >
-                {slides[currentSlide].title}
-              </motion.h1>
+            {/* Subtitle */}
+            <motion.span
+              initial={{ y: -30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-gold font-medium text-[11px] sm:text-sm tracking-[0.3em] uppercase mb-4 block"
+            >
+              {slides[currentSlide].subtitle}
+            </motion.span>
 
-              <motion.p
-                initial={{ y: -40, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="mt-2 sm:mt-4 text-purple-200 text-xs sm:text-base lg:text-lg font-medium leading-relaxed"
-              >
-                {slides[currentSlide].tagline}
-              </motion.p>
+            {/* Main Title — elegant serif */}
+            <motion.h1
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="font-display font-bold text-3xl sm:text-5xl lg:text-7xl text-white tracking-tight leading-tight max-w-4xl"
+            >
+              {slides[currentSlide].title}
+            </motion.h1>
 
-              {/* Call to action */}
-              <motion.div
-                initial={{ y: -30, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.5, duration: 0.5 }}
-                className="mt-5 sm:mt-8 flex items-center gap-4"
-              >
-                <NextLink
-                  href={slides[currentSlide].ctaLink}
-                  className="btn-premium btn-ripple inline-flex items-center gap-2 px-5 py-2.5 sm:px-8 sm:py-3.5 bg-gold hover:bg-gold-light text-primary-dark font-extrabold text-xs sm:text-base rounded-full shadow-lg shadow-gold/30 hover:shadow-xl hover:shadow-gold/50 transition-all cursor-interactive"
-                >
-                  <span>{slides[currentSlide].ctaText}</span>
-                  <FiArrowRight size={14} />
-                </NextLink>
-              </motion.div>
+            {/* Gold underline decorator */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="w-16 h-[3px] bg-gradient-to-r from-gold-dark via-gold to-gold-dark mt-5 rounded-full"
+            />
 
-            </div>
+            {/* Tagline */}
+            <motion.p
+              initial={{ y: -30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+              className="mt-5 text-gray-400 text-xs sm:text-base lg:text-lg font-light leading-relaxed max-w-xl"
+            >
+              {slides[currentSlide].tagline}
+            </motion.p>
+
+            {/* Call to action */}
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              className="mt-8 sm:mt-10"
+            >
+              <NextLink
+                href={slides[currentSlide].ctaLink}
+                className="btn-premium btn-ripple inline-flex items-center gap-2.5 px-8 py-3 sm:px-10 sm:py-4 bg-gold hover:bg-gold-light text-black font-bold text-xs sm:text-sm tracking-wider uppercase rounded-none shadow-lg shadow-gold/20 hover:shadow-xl hover:shadow-gold/40 transition-all"
+              >
+                <span>{slides[currentSlide].ctaText}</span>
+                <FiArrowRight size={16} />
+              </NextLink>
+            </motion.div>
+
+            {/* Stats Row */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="mt-10 sm:mt-14 flex items-center gap-8 sm:gap-12"
+            >
+              <div className="text-center">
+                <span className="block text-gold font-display font-bold text-xl sm:text-2xl">500+</span>
+                <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">Products</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <span className="block text-gold font-display font-bold text-xl sm:text-2xl">1000+</span>
+                <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">Customers</span>
+              </div>
+              <div className="w-px h-8 bg-white/10" />
+              <div className="text-center">
+                <span className="block text-gold font-display font-bold text-xl sm:text-2xl">6</span>
+                <span className="text-gray-500 text-[10px] sm:text-xs uppercase tracking-wider">Categories</span>
+              </div>
+            </motion.div>
+
           </div>
         </motion.div>
       </AnimatePresence>
@@ -196,15 +215,15 @@ export default function HeroBanner() {
       {/* Slide Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors hidden sm:block z-20"
+        className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 bg-black/40 hover:bg-gold/20 text-white hover:text-gold border border-white/10 hover:border-gold/30 rounded-none transition-all hidden sm:block z-20"
       >
-        <FiChevronLeft size={24} />
+        <FiChevronLeft size={22} />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-white/10 hover:bg-white/20 text-white rounded-full transition-colors hidden sm:block z-20"
+        className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 bg-black/40 hover:bg-gold/20 text-white hover:text-gold border border-white/10 hover:border-gold/30 rounded-none transition-all hidden sm:block z-20"
       >
-        <FiChevronRight size={24} />
+        <FiChevronRight size={22} />
       </button>
 
       {/* Bullet Indicators */}
@@ -213,7 +232,7 @@ export default function HeroBanner() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`rounded-full transition-all duration-500 ${currentSlide === index ? 'bg-gold w-10 h-3 shadow-md shadow-gold/50' : 'bg-white/30 w-3 h-3 hover:bg-white/50'}`}
+            className={`transition-all duration-500 ${currentSlide === index ? 'bg-gold w-10 h-1' : 'bg-white/20 w-6 h-1 hover:bg-white/40'}`}
           />
         ))}
       </div>

@@ -52,7 +52,7 @@ function SearchContent() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       
       {/* Search Input Banner */}
-      <div className="bg-purple-900 rounded-3xl p-6 sm:p-10 text-white mb-10 border-b-4 border-gold shadow-md">
+      <div className="bg-[#111] rounded-3xl p-6 sm:p-10 text-white mb-10 border-b-4 border-gold shadow-xl shadow-black/30">
         <h1 className="font-display font-extrabold text-xl sm:text-2xl lg:text-3xl text-center mb-4.5">
           Find Your Perfect Style
         </h1>
@@ -62,19 +62,19 @@ function SearchContent() {
             placeholder="Search sarees, kurtas, choker jewellery..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-5 pr-12 py-3 rounded-full bg-white text-purple-950 font-medium placeholder-purple-400 focus:outline-none focus:ring-2 focus:ring-gold border-none shadow-lg text-sm"
+            className="w-full pl-5 pr-12 py-3 rounded-full bg-white/10 text-white font-medium placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gold border border-white/10 shadow-lg text-sm"
           />
-          <button type="submit" className="absolute right-4 top-3.5 text-purple-900 hover:text-primary">
+          <button type="submit" className="absolute right-4 top-3.5 text-gray-300 hover:text-primary">
             <FiSearch size={20} />
           </button>
         </form>
       </div>
 
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-purple-950">
+        <h2 className="text-lg font-bold text-white">
           Search Results for: <span className="text-primary font-extrabold">"{query}"</span>
         </h2>
-        <p className="text-xs text-purple-400 mt-1">
+        <p className="text-xs text-gray-500 mt-1">
           {loading ? 'Searching...' : `${products.length} products found`}
         </p>
       </div>
@@ -82,14 +82,14 @@ function SearchContent() {
       {loading ? (
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse-slow">
           {[1, 2, 3, 4].map(n => (
-            <div key={n} className="bg-purple-100/50 rounded-2xl h-80" />
+            <div key={n} className="bg-white/8 rounded-2xl h-80" />
           ))}
         </div>
       ) : products.length === 0 ? (
-        <div className="text-center py-16 bg-white border border-purple-100 rounded-3xl p-8 max-w-lg mx-auto">
+        <div className="text-center py-16 bg-[#111] border border-white/10 rounded-3xl p-8 max-w-lg mx-auto">
           <div className="text-4xl mb-4">🔍</div>
-          <h3 className="font-display font-extrabold text-lg text-purple-950">No results found</h3>
-          <p className="text-xs text-purple-400 leading-relaxed mt-2.5">
+          <h3 className="font-display font-extrabold text-lg text-white">No results found</h3>
+          <p className="text-xs text-gray-500 leading-relaxed mt-2.5">
             We couldn't find any clothing or jewellery matching "{query}". Double-check spelling or try search terms like "Saree", "Nehru", "Kundan" or "Choker".
           </p>
           <button
@@ -109,8 +109,8 @@ function SearchContent() {
 
       {/* Recommended items under search results */}
       {recommendations.length > 0 && (
-        <div className="mt-16 pt-12 border-t border-purple-100">
-          <h3 className="font-display font-extrabold text-lg sm:text-xl text-purple-950 mb-6">
+        <div className="mt-16 pt-12 border-t border-white/10">
+          <h3 className="font-display font-extrabold text-lg sm:text-xl text-white mb-6">
             Trending Collections Recommended For You
           </h3>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

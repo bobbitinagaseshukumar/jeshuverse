@@ -41,7 +41,7 @@ export default function LoadingScreen() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.05, filter: 'blur(8px)' }}
           transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0a0414] overflow-hidden"
+          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#020106] overflow-hidden"
         >
           {/* Aurora glow */}
           <div className="absolute w-[60vw] h-[60vw] rounded-full bg-primary/30 blur-[120px] animate-pulse" />
@@ -78,7 +78,7 @@ export default function LoadingScreen() {
               <span className="text-white">Jeshu</span>
               <span className="text-gold">Verse</span>
             </motion.h1>
-            <p className="mt-3 text-purple-300 text-[10px] sm:text-xs tracking-[0.4em] uppercase font-bold">
+            <p className="mt-3 text-gray-400 text-[10px] sm:text-xs tracking-[0.4em] uppercase font-bold">
               Fashion For Everyone
             </p>
 

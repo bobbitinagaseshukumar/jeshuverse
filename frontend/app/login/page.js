@@ -107,7 +107,7 @@ function LoginContent() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="w-full max-w-5xl grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-xl shadow-purple-900/10 border border-purple-100 bg-white"
+        className="w-full max-w-5xl grid md:grid-cols-2 rounded-3xl overflow-hidden shadow-xl shadow-black/30 border border-white/10 bg-[#111]"
       >
         {/* ---------- Left brand panel ---------- */}
         <div className="relative hidden md:flex flex-col justify-between p-10 overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-primary-light text-white">
@@ -165,10 +165,10 @@ function LoginContent() {
           </div>
 
           <div className="mb-6">
-            <h2 className="font-display font-extrabold text-2xl text-purple-950">
-              {step === 1 ? 'Welcome back' : 'Verify it’s you'}
+            <h2 className="font-display font-extrabold text-2xl text-white">
+              {step === 1 ? 'Welcome back' : 'Verify it\u2019s you'}
             </h2>
-            <p className="text-sm text-purple-400 mt-1">
+            <p className="text-sm text-gray-500 mt-1">
               {step === 1
                 ? 'Sign in with your email or mobile number'
                 : `We sent a 6-digit code to ${identifier}`}
@@ -178,7 +178,7 @@ function LoginContent() {
           {/* Step progress */}
           <div className="flex items-center gap-2 mb-6">
             <span className="h-1.5 rounded-full flex-1 bg-primary transition-all" />
-            <span className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${step === 2 ? 'bg-primary' : 'bg-purple-100'}`} />
+            <span className={`h-1.5 rounded-full flex-1 transition-all duration-500 ${step === 2 ? 'bg-primary' : 'bg-white/10'}`} />
           </div>
 
           <AnimatePresence mode="wait">
@@ -189,7 +189,7 @@ function LoginContent() {
                 exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                 className="overflow-hidden"
               >
-                <div className="p-3 bg-red-50 text-red-600 text-xs font-semibold rounded-xl border border-red-100">
+                <div className="p-3 bg-red-950/30 text-red-400 text-xs font-semibold rounded-xl border border-red-800/30">
                   {errorMsg}
                 </div>
               </motion.div>
@@ -208,18 +208,18 @@ function LoginContent() {
                 className="space-y-5"
               >
                 <div>
-                  <label className="text-xs font-semibold text-purple-700 block mb-1.5">
+                  <label className="text-xs font-semibold text-gray-300 block mb-1.5">
                     Email or Mobile Number
                   </label>
                   <div className="relative">
-                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300" size={16} />
+                    <FiMail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input
                       type="text"
                       required
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
                       placeholder="you@email.com or 98765 43210"
-                      className="w-full pl-10 pr-3 py-3 bg-purple-50/40 border border-purple-100 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-sm text-purple-950 placeholder-purple-300 transition-all"
+                      className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 focus:border-primary focus:bg-white/10 focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-sm text-white placeholder-gray-500 transition-all"
                     />
                   </div>
                 </div>
@@ -249,21 +249,21 @@ function LoginContent() {
                 transition={{ duration: 0.35 }}
                 className="space-y-5"
               >
-                <div className="flex items-start gap-2.5 p-3 bg-emerald-50 text-emerald-800 text-xs font-medium rounded-xl border border-emerald-100">
-                  <FiInfo className="shrink-0 text-emerald-600 mt-0.5" size={16} />
+                <div className="flex items-start gap-2.5 p-3 bg-emerald-950/30 text-emerald-300 text-xs font-medium rounded-xl border border-emerald-800/30">
+                  <FiInfo className="shrink-0 text-emerald-400 mt-0.5" size={16} />
                   <span>
                     Developer sandbox — use code{' '}
-                    <span className="font-mono font-bold text-primary bg-white px-1.5 py-0.5 rounded">123456</span>{' '}
+                    <span className="font-mono font-bold text-primary bg-white/10 px-1.5 py-0.5 rounded">123456</span>{' '}
                     to sign in.
                   </span>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-purple-700 block mb-1.5">
+                  <label className="text-xs font-semibold text-gray-300 block mb-1.5">
                     6-Digit Verification Code
                   </label>
                   <div className="relative">
-                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-purple-300" size={16} />
+                    <FiLock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                     <input
                       type="text"
                       required
@@ -271,7 +271,7 @@ function LoginContent() {
                       value={otp}
                       onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                       placeholder="• • • • • •"
-                      className="w-full pl-10 pr-3 py-3 bg-purple-50/40 border border-purple-100 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-base text-purple-950 placeholder-purple-200 tracking-[0.4em] font-mono text-center font-bold transition-all"
+                      className="w-full pl-10 pr-3 py-3 bg-white/5 border border-white/10 focus:border-primary focus:bg-white/10 focus:ring-2 focus:ring-primary/15 focus:outline-none rounded-xl text-base text-white placeholder-gray-500 tracking-[0.4em] font-mono text-center font-bold transition-all"
                     />
                   </div>
                 </div>
@@ -295,7 +295,7 @@ function LoginContent() {
                     setOtp('');
                     setErrorMsg('');
                   }}
-                  className="w-full text-center text-xs text-purple-500 hover:text-primary font-semibold transition-colors"
+                  className="w-full text-center text-xs text-gray-400 hover:text-primary font-semibold transition-colors"
                 >
                   ← Use a different email or phone
                 </button>
@@ -303,7 +303,7 @@ function LoginContent() {
             )}
           </AnimatePresence>
 
-          <p className="mt-8 text-center text-[11px] text-purple-300 leading-relaxed">
+          <p className="mt-8 text-center text-[11px] text-gray-400 leading-relaxed">
             By continuing you agree to our Terms of Service and Privacy Policy.
           </p>
         </div>

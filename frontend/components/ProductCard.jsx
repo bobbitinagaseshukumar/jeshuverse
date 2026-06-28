@@ -29,10 +29,10 @@ export default function ProductCard({ product }) {
 
   return (
     <Tilt3D max={9} scale={1.03} className="h-full rounded-2xl animate-card-float card-reflection relative">
-      <div className="group relative bg-[#181127] rounded-2xl border border-white/10 overflow-hidden shadow-xl hover:shadow-[0_20px_40px_rgba(234,179,8,0.12)] transition-all duration-500 flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="group relative bg-[#0d0d0d] rounded-2xl border border-white/10 overflow-hidden shadow-xl hover:shadow-[0_20px_40px_rgba(234,179,8,0.12)] transition-all duration-500 flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
       
         {/* Product Image Wrapper */}
-        <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-purple-950/20 overflow-hidden">
+        <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-black overflow-hidden">
           {/* Zoom scale hover class */}
           <div className="w-full h-full zoom-container">
             <img
@@ -96,13 +96,13 @@ export default function ProductCard({ product }) {
                 ₹{activePrice.toLocaleString('en-IN')}
               </span>
               {hasDiscount && (
-                <span className="text-[10px] text-purple-300/50 line-through font-bold">
+                <span className="text-[10px] text-gray-600 line-through font-bold">
                   ₹{originalPrice.toLocaleString('en-IN')}
                 </span>
               )}
             </div>
             
-            <span className="text-[9px] font-black text-purple-400 uppercase tracking-wider hidden sm:block bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
+            <span className="text-[9px] font-black text-gray-500 uppercase tracking-wider hidden sm:block bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
               New
             </span>
           </div>

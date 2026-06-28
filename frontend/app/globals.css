@@ -9,7 +9,7 @@
   --color-gold-dark: #A16207; /* Dark Gold/Bronze */
   --color-accent: #EAB308;
   
-  --font-display: 'Outfit', sans-serif;
+  --font-display: 'Playfair Display', 'Outfit', serif;
   --font-body: 'Inter', sans-serif;
 
   --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -18,9 +18,9 @@
 
 @layer base {
   :root {
-    --background: #020106; /* Pitch Black */
-    --foreground: #f4f3f6; /* Very light silver/white */
-    --card: #0c0813;
+    --background: #020106;
+    --foreground: #f4f3f6;
+    --card: #0d0d0d;
     --card-foreground: #f4f3f6;
   }
 
@@ -40,23 +40,23 @@
   }
 }
 
-/* Custom Premium Scrollbar */
+/* Custom Premium Scrollbar — Dark */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f3e8ff;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c084fc;
+  background: linear-gradient(180deg, #A16207, #EAB308);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #7e22ce;
+  background: #EAB308;
 }
 
 /* Floating animation for subtle premium elements */
@@ -89,7 +89,7 @@
 }
 
 .glass-dark {
-  background: rgba(24, 15, 38, 0.85);
+  background: rgba(13, 13, 13, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
@@ -117,7 +117,6 @@
   left: 0;
   width: 100%;
   height: 125%;
-  background-image: url('https://images.unsplash.com/photo-1590736969955-71cc94801759?q=80&w=1600');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -133,28 +132,26 @@
 
 .hover-3d:hover {
   transform: perspective(1000px) rotateX(3deg) rotateY(-3deg) translateZ(12px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(88, 28, 135, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   border-color: rgba(234, 179, 8, 0.4);
 }
 
 
 /* ============================================================
-   PREMIUM 3D / FUTURISTIC UI SYSTEM (visual only)
+   PREMIUM BLACK & GOLD LUXURY UI SYSTEM
    ============================================================ */
-
-/* ---- Custom Cursor (disabled) ---- */
 
 /* ---- Glassmorphism (premium) ---- */
 .glass-premium {
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(13, 13, 13, 0.65);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 8px 40px rgba(88, 28, 135, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
 }
 
 .glass-dark-premium {
-  background: rgba(20, 10, 35, 0.55);
+  background: rgba(13, 13, 13, 0.55);
   backdrop-filter: blur(18px) saturate(160%);
   -webkit-backdrop-filter: blur(18px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -181,7 +178,7 @@
   left: -120%;
   width: 80%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
   transform: skewX(-20deg);
   transition: left 0.6s ease;
   pointer-events: none;
@@ -195,12 +192,12 @@
   transition: box-shadow 0.4s ease, transform 0.4s ease;
 }
 .glow-hover:hover {
-  box-shadow: 0 0 28px rgba(234, 179, 8, 0.45), 0 0 60px rgba(126, 34, 206, 0.25);
+  box-shadow: 0 0 28px rgba(234, 179, 8, 0.35), 0 0 60px rgba(234, 179, 8, 0.15);
 }
 
 /* ---- Animated gradient text ---- */
 .text-aurora {
-  background: linear-gradient(90deg, #7E22CE, #EAB308, #C084FC, #7E22CE);
+  background: linear-gradient(90deg, #EAB308, #FDE047, #EAB308, #FDE047);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -219,11 +216,11 @@
 .animate-float-slow { animation: floatY 6s ease-in-out infinite; }
 .animate-float-med { animation: floatY 4s ease-in-out infinite; }
 
-/* ---- Shimmer / progressive image load ---- */
+/* ---- Shimmer / progressive image load (dark) ---- */
 .img-shimmer {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(110deg, #f3e8ff 8%, #faf5ff 18%, #f3e8ff 33%);
+  background: linear-gradient(110deg, #111 8%, #1a1a1a 18%, #111 33%);
   background-size: 200% 100%;
   animation: shimmer 1.4s linear infinite;
 }
@@ -233,7 +230,7 @@
 
 /* ---- Glassy floating input focus glow (forms) ---- */
 .input-glow:focus {
-  box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.18), 0 0 22px rgba(234, 179, 8, 0.25);
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.18), 0 0 22px rgba(234, 179, 8, 0.15);
 }
 
 /* ---- Aurora blob backdrop (sections) ---- */
@@ -247,9 +244,9 @@
   inset: -20%;
   z-index: -1;
   background:
-    radial-gradient(40% 40% at 20% 30%, rgba(126, 34, 206, 0.25), transparent 60%),
-    radial-gradient(35% 35% at 80% 20%, rgba(234, 179, 8, 0.2), transparent 60%),
-    radial-gradient(45% 45% at 60% 80%, rgba(192, 132, 252, 0.22), transparent 60%);
+    radial-gradient(40% 40% at 20% 30%, rgba(234, 179, 8, 0.08), transparent 60%),
+    radial-gradient(35% 35% at 80% 20%, rgba(234, 179, 8, 0.06), transparent 60%),
+    radial-gradient(45% 45% at 60% 80%, rgba(234, 179, 8, 0.05), transparent 60%);
   filter: blur(40px);
   animation: auroraMove 16s ease-in-out infinite alternate;
 }
@@ -325,7 +322,7 @@
   left: 5%;
   right: 5%;
   height: 40%;
-  background: linear-gradient(to bottom, rgba(88,28,135,0.08), transparent);
+  background: linear-gradient(to bottom, rgba(234,179,8,0.06), transparent);
   filter: blur(8px);
   transform: scaleY(-1);
   pointer-events: none;
@@ -336,21 +333,56 @@
   opacity: 1;
 }
 
-/* ---- Luxury Section Divider ---- */
+/* ---- Luxury Section Divider (Gold) ---- */
 .luxury-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(234,179,8,0.4), rgba(126,34,206,0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(234,179,8,0.5), transparent);
   border: none;
   margin: 2rem auto;
   max-width: 80%;
+}
+
+/* ---- Gold Underline Decorator ---- */
+.gold-underline {
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #A16207, #EAB308, #A16207);
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* ---- Section Title (Centered Serif with Gold Underline) ---- */
+.section-title {
+  font-family: 'Playfair Display', 'Outfit', serif;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-align: center;
+  color: white;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #A16207, #EAB308, #A16207);
+  margin: 12px auto 0;
+  border-radius: 2px;
+}
+
+/* ---- Dark Card Utility ---- */
+.dark-card {
+  background: #111;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
 }
 
 /* ---- Premium Form Focus Effects ---- */
 .form-premium input:focus,
 .form-premium select:focus,
 .form-premium textarea:focus {
-  box-shadow: 0 0 0 3px rgba(126, 34, 206, 0.15), 0 0 20px rgba(234, 179, 8, 0.15);
-  border-color: rgba(126, 34, 206, 0.4);
+  box-shadow: 0 0 0 3px rgba(234, 179, 8, 0.15), 0 0 20px rgba(234, 179, 8, 0.1);
+  border-color: rgba(234, 179, 8, 0.4);
   transform: translateY(-1px);
   transition: all 0.3s ease;
 }
@@ -370,7 +402,7 @@
   animation: imageReveal 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
 }
 
-/* ---- Gradient Text Shine ---- */
+/* ---- Gradient Text Shine (Gold) ---- */
 .text-shine {
   background: linear-gradient(120deg, #EAB308 0%, #FDE047 25%, #EAB308 50%, #FDE047 75%, #EAB308 100%);
   background-size: 200% auto;
@@ -400,12 +432,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* ---- Premium Scrollbar Enhancement ---- */
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #7E22CE, #EAB308);
-  border-radius: 4px;
 }
 
 /* ---- Reduced motion safety ---- */

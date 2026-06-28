@@ -122,12 +122,12 @@ function CategoryContent() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       
       {/* Category Title Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-purple-100 pb-5 mb-8 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/10 pb-5 mb-8 gap-4">
         <div>
-          <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-purple-950 capitalize">
+          <h1 className="font-display font-extrabold text-2xl sm:text-4xl text-white capitalize">
             {categoryName === 'All' ? 'All Collections' : categoryName}
           </h1>
-          <p className="text-xs text-purple-400 font-semibold mt-1.5">
+          <p className="text-xs text-gray-500 font-semibold mt-1.5">
             {loading ? 'Searching styles...' : `${products.length} stunning styles found`}
           </p>
         </div>
@@ -136,7 +136,7 @@ function CategoryContent() {
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={() => setMobileFilterOpen(true)}
-            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4.5 py-2.5 bg-white border border-purple-100 rounded-xl text-sm font-semibold text-purple-900 hover:border-primary lg:hidden shadow-sm transition-colors"
+            className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4.5 py-2.5 bg-[#111] border border-white/10 rounded-xl text-sm font-semibold text-gray-200 hover:border-primary lg:hidden shadow-lg shadow-black/20 transition-colors"
           >
             <FiSliders size={16} />
             <span>Filters</span>
@@ -145,7 +145,7 @@ function CategoryContent() {
           <select
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
-            className="flex-1 sm:flex-none px-4 py-2.5 bg-white border border-purple-100 rounded-xl text-sm font-semibold text-purple-900 focus:outline-none focus:ring-1 focus:ring-primary shadow-sm cursor-pointer"
+            className="flex-1 sm:flex-none px-4 py-2.5 bg-[#111] border border-white/10 rounded-xl text-sm font-semibold text-gray-200 focus:outline-none focus:ring-1 focus:ring-primary shadow-lg shadow-black/20 cursor-pointer"
           >
             <option value="latest">Sort: Newest</option>
             <option value="price-low-high">Price: Low to High</option>
@@ -161,8 +161,8 @@ function CategoryContent() {
             onClick={() => setSelectedSubCategory('')}
             className={`px-4 py-2 border rounded-xl text-xs font-semibold transition-all ${
               selectedSubCategory === ''
-                ? 'border-primary bg-primary text-white shadow-sm'
-                : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+                ? 'border-primary bg-primary text-white shadow-lg shadow-black/20'
+                : 'border-white/10 text-gray-200 bg-[#111] hover:border-white/15'
             }`}
           >
             All
@@ -173,8 +173,8 @@ function CategoryContent() {
               onClick={() => setSelectedSubCategory(sc.name)}
               className={`px-4 py-2 border rounded-xl text-xs font-semibold transition-all ${
                 selectedSubCategory === sc.name
-                  ? 'border-primary bg-primary text-white shadow-sm'
-                  : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+                  ? 'border-primary bg-primary text-white shadow-lg shadow-black/20'
+                  : 'border-white/10 text-gray-200 bg-[#111] hover:border-white/15'
               }`}
             >
               {sc.name}
@@ -187,32 +187,32 @@ function CategoryContent() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         
         {/* Left Side Filters Sidebar (Desktop) */}
-        <div className="hidden lg:block space-y-6 bg-white p-6 rounded-3xl border border-purple-100 shadow-sm h-fit">
-          <div className="flex justify-between items-center pb-3 border-b border-purple-50">
-            <h3 className="font-display font-extrabold text-purple-950 text-base">Filter Panel</h3>
-            <button onClick={handleClearFilters} className="text-xs text-amber-600 font-bold hover:underline">
+        <div className="hidden lg:block space-y-6 bg-[#111] p-6 rounded-3xl border border-white/10 shadow-lg shadow-black/20 h-fit">
+          <div className="flex justify-between items-center pb-3 border-b border-white/5">
+            <h3 className="font-display font-extrabold text-white text-base">Filter Panel</h3>
+            <button onClick={handleClearFilters} className="text-xs text-amber-400 font-bold hover:underline">
               Clear All
             </button>
           </div>
 
           {/* Price Filter */}
           <div className="space-y-3">
-            <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Price Range</span>
+            <span className="text-xs font-bold text-white uppercase tracking-wider block">Price Range</span>
             <form onSubmit={handleApplyPriceFilter} className="flex items-center gap-2">
               <input
                 type="number"
                 placeholder="Min ₹"
                 value={minPrice}
                 onChange={(e) => setMinPrice(e.target.value)}
-                className="w-full px-3 py-1.5 bg-purple-50/50 border border-purple-100 rounded-xl text-xs text-purple-950 focus:outline-none focus:ring-1 focus:ring-primary placeholder-purple-300"
+                className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary placeholder-gray-500"
               />
-              <span className="text-purple-300 text-xs">-</span>
+              <span className="text-gray-400 text-xs">-</span>
               <input
                 type="number"
                 placeholder="Max ₹"
                 value={maxPrice}
                 onChange={(e) => setMaxPrice(e.target.value)}
-                className="w-full px-3 py-1.5 bg-purple-50/50 border border-purple-100 rounded-xl text-xs text-purple-950 focus:outline-none focus:ring-1 focus:ring-primary placeholder-purple-300"
+                className="w-full px-3 py-1.5 bg-white/5 border border-white/10 rounded-xl text-xs text-white focus:outline-none focus:ring-1 focus:ring-primary placeholder-gray-500"
               />
               <button type="submit" className="px-3 py-2 bg-primary hover:bg-primary-light text-white text-xs font-bold rounded-xl shadow">
                 Go
@@ -221,8 +221,8 @@ function CategoryContent() {
           </div>
 
           {/* Size Filter */}
-          <div className="space-y-3 pt-4 border-t border-purple-50">
-            <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Filter by Size</span>
+          <div className="space-y-3 pt-4 border-t border-white/5">
+            <span className="text-xs font-bold text-white uppercase tracking-wider block">Filter by Size</span>
             <div className="flex flex-wrap gap-1.5">
               {sizes.map((sz) => (
                 <button
@@ -231,7 +231,7 @@ function CategoryContent() {
                   className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
                     selectedSize === sz
                       ? 'border-primary bg-primary text-white'
-                      : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+                      : 'border-white/10 text-gray-200 bg-[#111] hover:border-white/15'
                   }`}
                 >
                   {sz}
@@ -241,8 +241,8 @@ function CategoryContent() {
           </div>
 
           {/* Color Filter */}
-          <div className="space-y-3 pt-4 border-t border-purple-50">
-            <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Filter by Color</span>
+          <div className="space-y-3 pt-4 border-t border-white/5">
+            <span className="text-xs font-bold text-white uppercase tracking-wider block">Filter by Color</span>
             <div className="flex flex-wrap gap-1.5">
               {colors.map((col) => (
                 <button
@@ -250,8 +250,8 @@ function CategoryContent() {
                   onClick={() => setSelectedColor(selectedColor === col ? '' : col)}
                   className={`px-3 py-1.5 border rounded-lg text-xs font-semibold transition-all ${
                     selectedColor === col
-                      ? 'border-primary bg-purple-900 text-white'
-                      : 'border-purple-100 text-purple-900 bg-white hover:border-purple-300'
+                      ? 'border-primary bg-[#111] text-white'
+                      : 'border-white/10 text-gray-200 bg-[#111] hover:border-white/15'
                   }`}
                 >
                   {col}
@@ -266,19 +266,19 @@ function CategoryContent() {
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
               {[1, 2, 3, 4, 5, 6].map(n => (
-                <div key={n} className="bg-purple-100/50 rounded-2xl h-80 animate-pulse-slow" />
+                <div key={n} className="bg-white/8 rounded-2xl h-80 animate-pulse-slow" />
               ))}
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-purple-100 rounded-3xl p-8 max-w-lg mx-auto">
+            <div className="text-center py-20 bg-[#111] border border-white/10 rounded-3xl p-8 max-w-lg mx-auto">
               <div className="text-4xl mb-4">✨</div>
-              <h3 className="font-display font-extrabold text-lg text-purple-950">No styles matched your search</h3>
-              <p className="text-xs text-purple-400 leading-relaxed mt-2.5">
+              <h3 className="font-display font-extrabold text-lg text-white">No styles matched your search</h3>
+              <p className="text-xs text-gray-500 leading-relaxed mt-2.5">
                 Try loosening your filters, adjusting the price sliders, or browsing another Category department.
               </p>
               <button
                 onClick={handleClearFilters}
-                className="mt-6 px-6 py-2 bg-purple-100 hover:bg-primary text-primary hover:text-white font-bold text-xs rounded-xl shadow transition-colors"
+                className="mt-6 px-6 py-2 bg-white/10 hover:bg-primary text-primary hover:text-white font-bold text-xs rounded-xl shadow transition-colors"
               >
                 Clear Filters
               </button>
@@ -298,19 +298,19 @@ function CategoryContent() {
       {mobileFilterOpen && (
         <div className="fixed inset-0 z-50 flex justify-end lg:hidden">
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-purple-950/40 backdrop-blur-sm" onClick={() => setMobileFilterOpen(false)} />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileFilterOpen(false)} />
 
           {/* Drawer Panel */}
-          <div className="relative w-full max-w-sm bg-white h-full shadow-2xl p-6 overflow-y-auto z-10 flex flex-col justify-between">
+          <div className="relative w-full max-w-sm bg-[#111] h-full shadow-2xl p-6 overflow-y-auto z-10 flex flex-col justify-between">
             <div className="space-y-6">
-              <div className="flex justify-between items-center pb-3 border-b border-purple-100">
-                <div className="flex items-center gap-1.5 text-purple-950">
+              <div className="flex justify-between items-center pb-3 border-b border-white/10">
+                <div className="flex items-center gap-1.5 text-white">
                   <FiFilter size={18} />
                   <h3 className="font-display font-extrabold text-base">Filter Styles</h3>
                 </div>
                 <button
                   onClick={() => setMobileFilterOpen(false)}
-                  className="p-1 rounded-full text-purple-400 hover:bg-purple-50 hover:text-purple-900"
+                  className="p-1 rounded-full text-gray-500 hover:bg-purple-50 hover:text-gray-200"
                 >
                   <FiX size={20} />
                 </button>
@@ -318,29 +318,29 @@ function CategoryContent() {
 
               {/* Price Filter */}
               <div className="space-y-3">
-                <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Price Range</span>
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">Price Range</span>
                 <div className="flex items-center gap-2">
                   <input
                     type="number"
                     placeholder="Min ₹"
                     value={minPrice}
                     onChange={(e) => setMinPrice(e.target.value)}
-                    className="w-full px-3 py-2 bg-purple-50/50 border border-purple-100 rounded-xl text-sm text-purple-950"
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white"
                   />
-                  <span className="text-purple-300">-</span>
+                  <span className="text-gray-400">-</span>
                   <input
                     type="number"
                     placeholder="Max ₹"
                     value={maxPrice}
                     onChange={(e) => setMaxPrice(e.target.value)}
-                    className="w-full px-3 py-2 bg-purple-50/50 border border-purple-100 rounded-xl text-sm text-purple-950"
+                    className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white"
                   />
                 </div>
               </div>
 
               {/* Size Filter */}
-              <div className="space-y-3 pt-4 border-t border-purple-50">
-                <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Filter by Size</span>
+              <div className="space-y-3 pt-4 border-t border-white/5">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">Filter by Size</span>
                 <div className="flex flex-wrap gap-1.5">
                   {sizes.map((sz) => (
                     <button
@@ -349,7 +349,7 @@ function CategoryContent() {
                       className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${
                         selectedSize === sz
                           ? 'border-primary bg-primary text-white'
-                          : 'border-purple-100 text-purple-900 bg-white'
+                          : 'border-white/10 text-gray-200 bg-white'
                       }`}
                     >
                       {sz}
@@ -359,8 +359,8 @@ function CategoryContent() {
               </div>
 
               {/* Color Filter */}
-              <div className="space-y-3 pt-4 border-t border-purple-50">
-                <span className="text-xs font-bold text-purple-950 uppercase tracking-wider block">Filter by Color</span>
+              <div className="space-y-3 pt-4 border-t border-white/5">
+                <span className="text-xs font-bold text-white uppercase tracking-wider block">Filter by Color</span>
                 <div className="flex flex-wrap gap-1.5">
                   {colors.map((col) => (
                     <button
@@ -368,8 +368,8 @@ function CategoryContent() {
                       onClick={() => setSelectedColor(selectedColor === col ? '' : col)}
                       className={`px-3 py-2 border rounded-lg text-xs font-semibold transition-all ${
                         selectedColor === col
-                          ? 'border-primary bg-purple-900 text-white'
-                          : 'border-purple-100 text-purple-900 bg-white'
+                          ? 'border-primary bg-[#111] text-white'
+                          : 'border-white/10 text-gray-200 bg-white'
                       }`}
                     >
                       {col}
@@ -379,13 +379,13 @@ function CategoryContent() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3 pt-6 border-t border-purple-100 mt-6">
+            <div className="grid grid-cols-2 gap-3 pt-6 border-t border-white/10 mt-6">
               <button
                 onClick={() => {
                   handleClearFilters();
                   setMobileFilterOpen(false);
                 }}
-                className="py-2.5 bg-purple-50 text-purple-900 text-xs font-bold rounded-xl"
+                className="py-2.5 bg-purple-50 text-gray-200 text-xs font-bold rounded-xl"
               >
                 Clear All
               </button>

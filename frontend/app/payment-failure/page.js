@@ -11,21 +11,21 @@ function PaymentFailureContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center">
-      <div className="bg-white border border-purple-100 rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-lg text-center space-y-6">
-        <div className="w-16 h-16 bg-red-50 text-red-600 rounded-full flex items-center justify-center mx-auto shadow-inner">
+      <div className="bg-[#111] border border-white/10 rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-lg text-center space-y-6">
+        <div className="w-16 h-16 bg-red-50 text-red-400 rounded-full flex items-center justify-center mx-auto shadow-inner">
           <FiXCircle size={36} className="stroke-[2.5px]" />
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">
+          <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
             Payment Transaction Failed!
           </h1>
-          <p className="text-sm text-purple-400 font-bold">
+          <p className="text-sm text-gray-500 font-bold">
             Order Reference: <span className="font-mono text-primary font-extrabold">{orderId}</span>
           </p>
         </div>
 
-        <p className="text-xs text-purple-900 leading-relaxed font-semibold">
+        <p className="text-xs text-gray-200 leading-relaxed font-semibold">
           Your transaction couldn't be processed by the bank networks. No funds were deducted from your account. If amount is debited, it will be refunded automatically within 24 hours.
         </p>
 
@@ -34,10 +34,10 @@ function PaymentFailureContent() {
           <span>Please double-check your UPI application PIN, network signals, and retry the payment, or select Cash on Delivery.</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-purple-50">
+        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/5">
           <NextLink
             href="/cart"
-            className="py-3 bg-purple-50 hover:bg-purple-100 text-primary font-bold text-xs rounded-xl transition-colors block text-center"
+            className="py-3 bg-[#0d0d0d] hover:bg-purple-100 text-primary font-bold text-xs rounded-xl transition-colors block text-center"
           >
             Review Cart
           </NextLink>

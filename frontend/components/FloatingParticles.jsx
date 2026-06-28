@@ -7,7 +7,7 @@ const particles = Array.from({ length: 22 }, (_, i) => ({
   left: `${(i * 4.5) % 100}%`,
   delay: `${(i * 0.7) % 8}s`,
   duration: `${12 + (i % 10)}s`,
-  color: i % 3 === 0 ? 'rgba(234,179,8,0.4)' : 'rgba(126,34,206,0.3)',
+  color: i % 3 === 0 ? 'rgba(234,179,8,0.4)' : 'rgba(234,179,8,0.2)',
 }));
 
 export default function FloatingParticles() {

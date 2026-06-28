@@ -236,7 +236,7 @@ Please confirm my order.`;
   if (!product) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-xl font-bold text-purple-950">Product not found</h2>
+        <h2 className="text-xl font-bold text-white">Product not found</h2>
         <button onClick={() => router.push('/')} className="mt-4 px-6 py-2 bg-primary text-white rounded-full">
           Go Home
         </button>
@@ -253,12 +253,12 @@ Please confirm my order.`;
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
       
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-1.5 text-xs font-semibold text-purple-400 mb-6">
+      <nav className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 mb-6">
         <span className="hover:text-primary cursor-pointer" onClick={() => router.push('/')}>Home</span>
         <FiChevronRight />
         <span className="hover:text-primary cursor-pointer" onClick={() => router.push(`/category/${product.category.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`)}>{product.category}</span>
         <FiChevronRight />
-        <span className="text-purple-900 truncate max-w-[150px]">{product.name}</span>
+        <span className="text-gray-200 truncate max-w-[150px]">{product.name}</span>
       </nav>
 
       {/* Main product display columns */}
@@ -275,7 +275,7 @@ Please confirm my order.`;
                   key={index}
                   onClick={() => setSelectedImage(imgUrl)}
                   className={`w-full aspect-[4/5] rounded-xl overflow-hidden border-2 transition-all ${
-                    selectedImage === imgUrl ? 'border-primary shadow-sm' : 'border-purple-100/50 opacity-70 hover:opacity-100'
+                    selectedImage === imgUrl ? 'border-primary shadow-lg shadow-black/20' : 'border-white/8 opacity-70 hover:opacity-100'
                   }`}
                 >
                   <img src={imgUrl} alt="" className="w-full h-full object-cover object-top" />
@@ -284,7 +284,7 @@ Please confirm my order.`;
             </div>
 
             {/* Main Interactive Zoom Box */}
-            <div className="col-span-10 relative aspect-[4/5] bg-purple-50/20 border border-purple-100 rounded-3xl overflow-hidden">
+            <div className="col-span-10 relative aspect-[4/5] bg-white/5 border border-white/10 rounded-3xl overflow-hidden">
               <div 
                 className="w-full h-full relative cursor-zoom-in"
                 ref={zoomImageRef}
@@ -300,7 +300,7 @@ Please confirm my order.`;
 
               {/* Magnified Hover Window overlay (Zoom) */}
               <div
-                className="absolute inset-0 pointer-events-none rounded-3xl z-10 border border-purple-100/50 bg-no-repeat"
+                className="absolute inset-0 pointer-events-none rounded-3xl z-10 border border-white/8 bg-no-repeat"
                 style={{
                   ...zoomStyle,
                   backgroundSize: '250%' // Zoom factor
@@ -321,50 +321,50 @@ Please confirm my order.`;
         {/* Right Col: Details information */}
         <div className="lg:col-span-5 flex flex-col space-y-6">
           <div>
-            <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">
+            <span className="text-amber-400 font-extrabold text-xs tracking-widest uppercase block mb-1">
               {product.category}
             </span>
-            <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950 leading-tight">
+            <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-white leading-tight">
               {product.name}
             </h1>
-            <p className="text-xs text-purple-400 mt-2">SKU: <span className="font-mono font-semibold">{product.sku}</span></p>
+            <p className="text-xs text-gray-500 mt-2">SKU: <span className="font-mono font-semibold">{product.sku}</span></p>
           </div>
 
           {/* Pricing Box */}
-          <div className="p-4.5 bg-purple-50/50 rounded-2xl border border-purple-100">
+          <div className="p-4.5 bg-white/5 rounded-2xl border border-white/10">
             <div className="flex items-baseline gap-3">
               <span className="font-display font-extrabold text-2xl sm:text-3xl text-primary">
                 ₹{currentPrice.toLocaleString('en-IN')}
               </span>
               {isDiscounted && (
                 <>
-                  <span className="text-sm text-purple-400 line-through">
+                  <span className="text-sm text-gray-500 line-through">
                     ₹{product.price.toLocaleString('en-IN')}
                   </span>
-                  <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-amber-400 bg-amber-950/30 px-2 py-0.5 rounded">
                     Save ₹{(product.price - product.discountPrice).toLocaleString('en-IN')}
                   </span>
                 </>
               )}
             </div>
-            <p className="text-[10px] text-purple-400 mt-1.5">*Inclusive of all taxes. Free shipping on orders over ₹499.</p>
+            <p className="text-[10px] text-gray-500 mt-1.5">*Inclusive of all taxes. Free shipping on orders over ₹499.</p>
           </div>
 
           {/* Jewellery Specifications */}
           {product.category?.toLowerCase() === 'jewellery' && (product.grams || product.cost) && (
-            <div className="p-4 bg-amber-50/40 rounded-2xl border border-amber-100/50 space-y-2.5">
-              <span className="text-amber-800 text-[10px] font-extrabold uppercase tracking-wider block">✨ Jewellery Specifications</span>
-              <div className="grid grid-cols-2 gap-4 text-xs font-semibold text-purple-950">
+            <div className="p-4 bg-amber-950/20 rounded-2xl border border-amber-800/20 space-y-2.5">
+              <span className="text-amber-300 text-[10px] font-extrabold uppercase tracking-wider block">✨ Jewellery Specifications</span>
+              <div className="grid grid-cols-2 gap-4 text-xs font-semibold text-white">
                 {product.grams && (
-                  <div className="bg-white/60 p-2.5 rounded-xl border border-amber-100">
-                    <span className="text-purple-400 text-[9px] block uppercase tracking-wide">Weight</span>
-                    <span className="text-amber-900 font-bold text-sm">{product.grams}</span>
+                  <div className="bg-white/5 p-2.5 rounded-xl border border-amber-800/30">
+                    <span className="text-gray-500 text-[9px] block uppercase tracking-wide">Weight</span>
+                    <span className="text-amber-400 font-bold text-sm">{product.grams}</span>
                   </div>
                 )}
                 {product.cost && (
-                  <div className="bg-white/60 p-2.5 rounded-xl border border-amber-100">
-                    <span className="text-purple-400 text-[9px] block uppercase tracking-wide">Making Cost</span>
-                    <span className="text-amber-900 font-bold text-sm">₹{Number(product.cost).toLocaleString('en-IN')}</span>
+                  <div className="bg-white/5 p-2.5 rounded-xl border border-amber-800/30">
+                    <span className="text-gray-500 text-[9px] block uppercase tracking-wide">Making Cost</span>
+                    <span className="text-amber-400 font-bold text-sm">₹{Number(product.cost).toLocaleString('en-IN')}</span>
                   </div>
                 )}
               </div>
@@ -375,7 +375,7 @@ Please confirm my order.`;
           {product.sizes && product.sizes.length > 0 && (
             <div className="space-y-3">
               <div className="flex justify-between items-center text-xs font-bold">
-                <span className="text-purple-950 uppercase tracking-wider">Select Size</span>
+                <span className="text-white uppercase tracking-wider">Select Size</span>
                 <span className="text-primary hover:underline cursor-pointer">Size Chart</span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -385,8 +385,8 @@ Please confirm my order.`;
                     onClick={() => setSelectedSize(sz)}
                     className={`px-4 py-2 border rounded-xl text-sm font-semibold transition-all ${
                       selectedSize === sz
-                        ? 'border-primary bg-primary text-white shadow-sm'
-                        : 'border-purple-200 text-purple-900 bg-white hover:border-purple-400'
+                        ? 'border-primary bg-primary text-white shadow-lg shadow-black/20'
+                        : 'border-white/15 text-gray-200 bg-[#111] hover:border-white/20'
                     }`}
                   >
                     {sz}
@@ -399,7 +399,7 @@ Please confirm my order.`;
           {/* Specs: Colors selection */}
           {product.colors && product.colors.length > 0 && (
             <div className="space-y-3">
-              <span className="text-purple-950 text-xs font-bold uppercase tracking-wider block">Select Color</span>
+              <span className="text-white text-xs font-bold uppercase tracking-wider block">Select Color</span>
               <div className="flex flex-wrap gap-2">
                 {product.colors.map((col, idx) => {
                   // Support both old format (string) and new format ({name, image})
@@ -419,12 +419,12 @@ Please confirm my order.`;
                       }}
                       className={`px-4 py-2 border rounded-xl text-sm font-semibold transition-all flex items-center gap-2 ${
                         isSelected
-                          ? 'border-primary bg-purple-900 text-white shadow-sm'
-                          : 'border-purple-200 text-purple-900 bg-white hover:border-purple-400'
+                          ? 'border-primary bg-[#111] text-white shadow-lg shadow-black/20'
+                          : 'border-white/15 text-gray-200 bg-[#111] hover:border-white/20'
                       }`}
                     >
                       {colorImage && (
-                        <img src={colorImage} alt={colorName} className="w-6 h-8 object-cover rounded-md border border-purple-100" />
+                        <img src={colorImage} alt={colorName} className="w-6 h-8 object-cover rounded-md border border-white/10" />
                       )}
                       {colorName}
                     </button>
@@ -436,24 +436,24 @@ Please confirm my order.`;
 
           {/* Quantity Selector */}
           <div className="space-y-2">
-            <span className="text-purple-950 text-xs font-bold uppercase tracking-wider block">Quantity</span>
+            <span className="text-white text-xs font-bold uppercase tracking-wider block">Quantity</span>
             <div className="flex items-center gap-3">
-              <div className="flex items-center border border-purple-200 rounded-xl bg-white">
+              <div className="flex items-center border border-white/15 rounded-xl bg-white">
                 <button
                   onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                  className="px-3.5 py-2 hover:bg-purple-50 text-purple-950 font-bold transition-colors"
+                  className="px-3.5 py-2 hover:bg-purple-50 text-white font-bold transition-colors"
                 >
                   -
                 </button>
-                <span className="px-4 py-2 text-sm font-semibold text-purple-950">{quantity}</span>
+                <span className="px-4 py-2 text-sm font-semibold text-white">{quantity}</span>
                 <button
                   onClick={() => setQuantity(prev => Math.min(product.stockQuantity, prev + 1))}
-                  className="px-3.5 py-2 hover:bg-purple-50 text-purple-950 font-bold transition-colors"
+                  className="px-3.5 py-2 hover:bg-purple-50 text-white font-bold transition-colors"
                 >
                   +
                 </button>
               </div>
-              <span className="text-xs text-purple-400">
+              <span className="text-xs text-gray-500">
                 {product.stockQuantity > 0 
                   ? `${product.stockQuantity} items left in stock` 
                   : 'Out of Stock'}
@@ -462,12 +462,12 @@ Please confirm my order.`;
           </div>
 
           {/* Action buttons */}
-          <div className="space-y-3 pt-4 border-t border-purple-100">
+          <div className="space-y-3 pt-4 border-t border-white/10">
             {product.stockQuantity > 0 ? (
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => addToCart(product, quantity, selectedSize, selectedColor)}
-                  className="flex items-center justify-center gap-2 py-3 bg-purple-50 hover:bg-purple-100 border border-purple-300 text-primary font-bold rounded-2xl shadow-sm transition-all"
+                  className="flex items-center justify-center gap-2 py-3 bg-purple-50 hover:bg-white/10 border border-white/15 text-primary font-bold rounded-2xl shadow-lg shadow-black/20 transition-all"
                 >
                   <FiShoppingCart size={18} />
                   <span>Add to Cart</span>
@@ -482,7 +482,7 @@ Please confirm my order.`;
                 </button>
               </div>
             ) : (
-              <div className="w-full text-center bg-red-50 border border-red-200 text-red-600 font-bold py-3.5 rounded-2xl">
+              <div className="w-full text-center bg-red-950/30 border border-red-800/30 text-red-400 font-bold py-3.5 rounded-2xl">
                 Product Currently Out Of Stock
               </div>
             )}
@@ -491,7 +491,7 @@ Please confirm my order.`;
             <div className="flex gap-3 mt-2">
               <button
                 onClick={() => setWhatsappModalOpen(true)}
-                className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-sm transition-all"
+                className="flex-1 flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-black/20 transition-all"
               >
                 <FaWhatsapp size={20} />
                 <span>Order via WhatsApp</span>
@@ -501,8 +501,8 @@ Please confirm my order.`;
                 onClick={() => toggleWishlist(product)}
                 className={`px-4 py-3 rounded-2xl border transition-all ${
                   isProductStarred
-                    ? 'bg-red-50 border-red-200 text-red-500'
-                    : 'bg-white border-purple-200 text-purple-900 hover:border-purple-300'
+                    ? 'bg-red-950/30 border-red-800/30 text-red-400'
+                    : 'bg-[#111] border-white/15 text-gray-200 hover:border-white/15'
                 }`}
               >
                 <FiHeart size={20} className={isProductStarred ? 'fill-red-500' : ''} />
@@ -511,11 +511,11 @@ Please confirm my order.`;
           </div>
 
           {/* Description */}
-          <div className="pt-6 border-t border-purple-100">
-            <h3 className="font-display font-extrabold text-sm text-purple-950 uppercase tracking-wider mb-2">
+          <div className="pt-6 border-t border-white/10">
+            <h3 className="font-display font-extrabold text-sm text-white uppercase tracking-wider mb-2">
               Product Description
             </h3>
-            <p className="text-purple-900 text-sm leading-relaxed whitespace-pre-line">
+            <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">
               {product.description}
             </p>
           </div>
@@ -524,35 +524,35 @@ Please confirm my order.`;
       </div>
 
       {/* Review list and submit review sections */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-16 pt-12 border-t border-purple-100">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-16 pt-12 border-t border-white/10">
         
         {/* Left: Reviews List */}
         <div className="lg:col-span-7 space-y-6">
-          <h2 className="font-display font-extrabold text-xl sm:text-2xl text-purple-950">
+          <h2 className="font-display font-extrabold text-xl sm:text-2xl text-white">
             Customer Reviews ({reviews.length})
           </h2>
           
           {reviews.length === 0 ? (
-            <p className="text-purple-400 text-sm italic bg-purple-50/50 p-6 rounded-2xl border border-purple-100/30">
+            <p className="text-gray-500 text-sm italic bg-white/5 p-6 rounded-2xl border border-white/8">
               No reviews yet. Be the first to leave a review!
             </p>
           ) : (
             <div className="space-y-4">
               {reviews.map((rev) => (
-                <div key={rev._id} className="bg-white p-5 rounded-2xl border border-purple-100 shadow-sm">
+                <div key={rev._id} className="bg-[#111] p-5 rounded-2xl border border-white/10 shadow-lg shadow-black/20">
                   <div className="flex justify-between items-center mb-2.5">
-                    <span className="font-bold text-sm text-purple-950">{rev.userName}</span>
-                    <span className="text-[10px] text-purple-400">{new Date(rev.createdAt).toLocaleDateString('en-IN')}</span>
+                    <span className="font-bold text-sm text-white">{rev.userName}</span>
+                    <span className="text-[10px] text-gray-500">{new Date(rev.createdAt).toLocaleDateString('en-IN')}</span>
                   </div>
                   <div className="flex items-center gap-0.5 mb-2">
                     {[...Array(5)].map((_, idx) => (
                       <FiStar 
                         key={idx} 
-                        className={`w-3.5 h-3.5 ${idx < rev.rating ? 'text-gold fill-gold' : 'text-purple-100'}`} 
+                        className={`w-3.5 h-3.5 ${idx < rev.rating ? 'text-gold fill-gold' : 'text-gray-300'}`} 
                       />
                     ))}
                   </div>
-                  <p className="text-sm text-purple-950 leading-relaxed font-medium">
+                  <p className="text-sm text-white leading-relaxed font-medium">
                     {rev.comment}
                   </p>
                 </div>
@@ -562,20 +562,20 @@ Please confirm my order.`;
         </div>
 
         {/* Right: Submit Review Form */}
-        <div className="lg:col-span-5 bg-white p-6 rounded-3xl border border-purple-100 shadow-sm h-fit">
-          <h3 className="font-display font-extrabold text-lg text-purple-950 mb-4">
+        <div className="lg:col-span-5 bg-[#111] p-6 rounded-3xl border border-white/10 shadow-lg shadow-black/20 h-fit">
+          <h3 className="font-display font-extrabold text-lg text-white mb-4">
             Write a Review
           </h3>
           
           {token ? (
             <form onSubmit={handleReviewSubmit} className="space-y-4">
               {reviewSuccess && (
-                <div className="p-3 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-lg">
+                <div className="p-3 bg-emerald-950/30 text-emerald-400 text-xs font-semibold rounded-lg">
                   {reviewSuccess}
                 </div>
               )}
               <div>
-                <label className="text-xs font-bold text-purple-950 block mb-1.5 uppercase">Rating</label>
+                <label className="text-xs font-bold text-white block mb-1.5 uppercase">Rating</label>
                 <div className="flex gap-1.5">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
@@ -586,7 +586,7 @@ Please confirm my order.`;
                     >
                       <FiStar 
                         size={22} 
-                        className={star <= rating ? 'text-gold fill-gold' : 'text-purple-200'} 
+                        className={star <= rating ? 'text-gold fill-gold' : 'text-gray-400'} 
                       />
                     </button>
                   ))}
@@ -594,14 +594,14 @@ Please confirm my order.`;
               </div>
 
               <div>
-                <label className="text-xs font-bold text-purple-950 block mb-1.5 uppercase">Comment</label>
+                <label className="text-xs font-bold text-white block mb-1.5 uppercase">Comment</label>
                 <textarea
                   required
                   rows={4}
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                   placeholder="Share your experience styling this clothing/jewellery..."
-                  className="w-full p-3 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-purple-400 text-purple-950"
+                  className="w-full p-3 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm placeholder-gray-500 text-white"
                 />
               </div>
 
@@ -614,7 +614,7 @@ Please confirm my order.`;
             </form>
           ) : (
             <div className="text-center py-6">
-              <p className="text-xs text-purple-400 font-semibold mb-4">Please log in to submit product feedback.</p>
+              <p className="text-xs text-gray-500 font-semibold mb-4">Please log in to submit product feedback.</p>
               <button 
                 onClick={() => router.push('/login')} 
                 className="px-5 py-2 bg-purple-55 bg-primary text-white font-bold text-xs rounded-xl shadow"
@@ -629,8 +629,8 @@ Please confirm my order.`;
 
       {/* Related Products Shelf */}
       {relatedProducts.length > 0 && (
-        <section className="mt-16 pt-12 border-t border-purple-100">
-          <h2 className="font-display font-extrabold text-xl sm:text-2xl text-purple-950 mb-8">
+        <section className="mt-16 pt-12 border-t border-white/10">
+          <h2 className="font-display font-extrabold text-xl sm:text-2xl text-white mb-8">
             You May Also Like
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -646,38 +646,38 @@ Please confirm my order.`;
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
           
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-purple-950/40 backdrop-blur-sm" onClick={() => setWhatsappModalOpen(false)} />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setWhatsappModalOpen(false)} />
 
           {/* Dialog Container */}
-          <div className="bg-white rounded-3xl border border-purple-100 shadow-2xl relative w-full max-w-md p-6 sm:p-8 z-10 animate-float-slow">
+          <div className="bg-[#111] rounded-3xl border border-white/10 shadow-2xl relative w-full max-w-md p-6 sm:p-8 z-10 animate-float-slow">
             <button
               onClick={() => setWhatsappModalOpen(false)}
-              className="absolute top-4 right-4 text-purple-400 hover:text-purple-950 p-1 rounded-full hover:bg-purple-50 transition-colors"
+              className="absolute top-4 right-4 text-gray-500 hover:text-white p-1 rounded-full hover:bg-purple-50 transition-colors"
             >
               <FiX size={20} />
             </button>
 
-            <div className="flex items-center gap-2 mb-4 text-emerald-600">
+            <div className="flex items-center gap-2 mb-4 text-emerald-400">
               <FaWhatsapp size={26} />
-              <h3 className="font-display font-extrabold text-lg sm:text-xl text-purple-950">
+              <h3 className="font-display font-extrabold text-lg sm:text-xl text-white">
                 WhatsApp Checkout
               </h3>
             </div>
 
-            <p className="text-xs text-purple-400 leading-relaxed mb-6 font-semibold">
+            <p className="text-xs text-gray-500 leading-relaxed mb-6 font-semibold">
               Fill in your checkout details below. We will generate the formatted order request and open WhatsApp directly.
             </p>
 
             <div className="space-y-4">
               <div>
-                <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Shipping Address</label>
+                <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Shipping Address</label>
                 <textarea
                   required
                   rows={4}
                   value={whatsappAddress}
                   onChange={(e) => setWhatsappAddress(e.target.value)}
                   placeholder="Enter your delivery address: House No, Street, Landmark, City, State - Zip Code"
-                  className="w-full pl-3 pr-3 py-3.5 bg-purple-50/50 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-purple-950 placeholder-purple-300 font-semibold"
+                  className="w-full pl-3 pr-3 py-3.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm text-white placeholder-gray-500 font-semibold"
                 />
               </div>
 

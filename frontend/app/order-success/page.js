@@ -35,33 +35,33 @@ function OrderSuccessContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 flex justify-center">
-      <div className="glass-premium rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-2xl text-center space-y-6 neon-gold-border">
-        <div className="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-inner animate-float-slow" style={{ boxShadow: '0 0 30px rgba(16,185,129,0.3)' }}>
+      <div className="glass-dark-premium rounded-3xl p-8 sm:p-12 max-w-md w-full shadow-2xl text-center space-y-6 neon-gold-border">
+        <div className="w-20 h-20 bg-emerald-950/30 text-emerald-400 rounded-full flex items-center justify-center mx-auto shadow-inner animate-float-slow" style={{ boxShadow: '0 0 30px rgba(16,185,129,0.3)' }}>
           <FiCheckCircle size={36} className="stroke-[2.5px]" />
         </div>
 
         <div className="space-y-2">
-          <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">
+          <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-white">
             Order Placed Successfully!
           </h1>
-          <p className="text-sm text-purple-400 font-bold">
+          <p className="text-sm text-gray-500 font-bold">
             Order ID: <span className="font-mono text-primary font-extrabold">{orderId}</span>
           </p>
         </div>
 
-        <p className="text-xs text-purple-900 leading-relaxed font-semibold">
+        <p className="text-xs text-gray-200 leading-relaxed font-semibold">
           Thank you for shopping at JeshuVerse! We have received your order. Our warehouse team is preparing your package. A confirmation message with tracking details has been generated.
         </p>
 
-        <div className="flex items-center gap-3 p-4 bg-purple-50/50 rounded-2xl border border-purple-100/30 text-left text-xs font-semibold text-purple-900">
+        <div className="flex items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/10 text-left text-xs font-semibold text-gray-200">
           <FiTruck className="text-gold shrink-0" size={20} />
           <span>Expected delivery within 3 - 5 business days across India.</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-purple-50">
+        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-white/5">
           <NextLink
             href="/profile?tab=orders"
-            className="py-3 bg-purple-50 hover:bg-purple-100 text-primary font-bold text-xs rounded-xl transition-all duration-300 block text-center btn-premium"
+            className="py-3 bg-white/5 hover:bg-white/10 text-primary font-bold text-xs rounded-xl transition-all duration-300 block text-center btn-premium"
           >
             Track Order
           </NextLink>

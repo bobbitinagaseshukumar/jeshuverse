@@ -11,23 +11,20 @@ import Reveal from '../components/Reveal';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall } from 'react-icons/fi';
 import NextLink from 'next/link';
 
-// Section heading shared across the dark home page
+// Luxury centered section heading with gold underline
 function SectionHead({ label, title, href }) {
   return (
-    <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
-      <div className="flex items-start gap-3">
-        <div className="bg-gold/15 border border-gold/30 rounded-xl w-10 h-10 flex items-center justify-center text-gold text-lg shrink-0 shadow-[0_0_15px_rgba(234,179,8,0.1)]">
-          ✨
-        </div>
-        <div>
-          <span className="text-gold font-extrabold text-[10px] tracking-widest uppercase block mb-0.5">{label}</span>
-          <h2 className="font-display font-black text-xl sm:text-2xl text-white tracking-tight leading-tight">{title}</h2>
-        </div>
-      </div>
+    <div className="text-center mb-10">
+      <span className="text-gold font-medium text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-3 block">
+        {label}
+      </span>
+      <h2 className="section-title text-2xl sm:text-3xl lg:text-4xl">
+        {title}
+      </h2>
       {href && (
-        <NextLink href={href} className="text-gold hover:text-white font-bold text-xs uppercase tracking-wider flex items-center gap-1.5 transition-colors">
-          <span>Explore All</span>
-          <FiArrowRight size={14} />
+        <NextLink href={href} className="inline-flex items-center gap-1.5 mt-5 text-gold hover:text-gold-light font-medium text-xs uppercase tracking-wider transition-colors border-b border-gold/30 hover:border-gold pb-0.5">
+          <span>View All</span>
+          <FiArrowRight size={12} />
         </NextLink>
       )}
     </div>
@@ -51,7 +48,7 @@ function ParallaxShowcase() {
   const translateY = (offsetY * 0.12) % 180;
 
   return (
-    <section className="parallax-section relative w-full overflow-hidden border-y border-white/10 max-w-7xl mx-auto my-6 sm:rounded-3xl shadow-2xl">
+    <section className="parallax-section relative w-full overflow-hidden border-y border-white/5 max-w-7xl mx-auto my-6 sm:rounded-lg shadow-2xl">
       <div
         className="parallax-bg"
         style={{
@@ -59,17 +56,18 @@ function ParallaxShowcase() {
           backgroundImage: "url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1500&q=80')"
         }}
       />
-      <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
-        <span className="text-gold font-extrabold text-[10px] sm:text-xs tracking-widest uppercase mb-3 block animate-pulse">
+      <div className="absolute inset-0 bg-black/75 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
+        <div className="w-12 h-[2px] bg-gradient-to-r from-transparent via-gold to-transparent mb-5" />
+        <span className="text-gold font-medium text-[10px] sm:text-xs tracking-[0.3em] uppercase mb-3 block">
           JESHUVERSE LUXURY STUDIO
         </span>
-        <h3 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight max-w-3xl">
+        <h3 className="font-display font-bold text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight max-w-3xl">
           Where Heritage Weaves Meet Contemporary Style
         </h3>
-        <p className="mt-4 text-purple-100/80 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
+        <p className="mt-4 text-gray-400 text-xs sm:text-base max-w-xl font-light leading-relaxed">
           Sourced from traditional artisans, our designer sarees, ethnic wear, and luxury sets are crafted to celebrate you.
         </p>
-        <div className="w-12 h-1 bg-gold mt-6 rounded-full" />
+        <div className="w-12 h-[3px] bg-gradient-to-r from-gold-dark via-gold to-gold-dark mt-6 rounded-full" />
       </div>
     </section>
   );
@@ -147,32 +145,32 @@ export default function Home() {
 
   const features = [
     { icon: FiTruck, title: 'Free Delivery', desc: 'On all orders above ₹499' },
-    { icon: FiShield, title: 'Secure UPI Payments', desc: 'Direct PhonePe QR code' },
+    { icon: FiShield, title: 'Secure Payments', desc: 'Direct PhonePe QR code' },
     { icon: FiRefreshCw, title: 'Easy Exchange', desc: '7-day hassle free returns' },
     { icon: FiPhoneCall, title: '24/7 Support', desc: 'Direct WhatsApp assistance' },
   ];
 
   return (
     <div className="relative text-white">
-      {/* Cinematic video backdrop (visible through the dark glass theme) */}
+      {/* Cinematic video backdrop */}
       <VideoBackground />
 
-      <div className="relative z-10 space-y-12">
+      <div className="relative z-10 space-y-16">
         {/* 1. Hero banner */}
         <HeroBanner />
 
         {/* 2. Category grid */}
         <CategoryGrid />
 
-        {/* 3. Promo / trust bar — dark glass */}
+        {/* 3. Trust bar — dark card with gold icons */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="glass-dark-premium rounded-3xl border border-white/10 py-8 grid grid-cols-2 lg:grid-cols-4 gap-6 px-6 shadow-2xl">
+          <div className="bg-[#0d0d0d] border border-white/8 rounded-lg py-8 grid grid-cols-2 lg:grid-cols-4 gap-6 px-6">
             {features.map((f, i) => (
               <Reveal key={i} direction="up" delay={i * 0.08} className="flex items-center gap-3 justify-center text-center sm:text-left">
-                <f.icon className="text-gold shrink-0" size={32} />
+                <f.icon className="text-gold shrink-0" size={28} />
                 <div>
-                  <h4 className="font-bold text-sm sm:text-base text-white">{f.title}</h4>
-                  <p className="text-xs text-purple-100/70">{f.desc}</p>
+                  <h4 className="font-semibold text-sm sm:text-base text-white">{f.title}</h4>
+                  <p className="text-xs text-gray-500">{f.desc}</p>
                 </div>
               </Reveal>
             ))}
@@ -199,7 +197,7 @@ export default function Home() {
           {loading ? (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map(n => (
-                <div key={n} className="bg-white/10 rounded-2xl h-80 animate-pulse" />
+                <div key={n} className="bg-white/5 rounded-lg h-80 animate-pulse" />
               ))}
             </div>
           ) : (
@@ -215,7 +213,7 @@ export default function Home() {
 
         {/* 6. Women's Fashion Shelf */}
         {womenItems.length > 0 && (
-          <section className="bg-black/35 backdrop-blur-xl py-12 border-y border-white/5">
+          <section className="bg-black/40 backdrop-blur-xl py-14 border-y border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <Reveal><SectionHead label="Sarees & Ethnic Wear" title="Women's Signature Collection" href="/category/women-wear" /></Reveal>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -229,7 +227,7 @@ export default function Home() {
           </section>
         )}
 
-        {/* Parallax Clothes Showcase Section */}
+        {/* Parallax Showcase Section */}
         <ParallaxShowcase />
 
         {/* 7. Jewellery Collection Shelf */}
@@ -248,7 +246,7 @@ export default function Home() {
 
         {/* 8. Men's Fashion Shelf */}
         {menItems.length > 0 && (
-          <section className="bg-black/35 backdrop-blur-xl py-12 border-y border-white/5">
+          <section className="bg-black/40 backdrop-blur-xl py-14 border-y border-white/5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <Reveal><SectionHead label="Designer Kurtas & Blazers" title="Men's Elite Collection" href="/category/men-wear" /></Reveal>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">

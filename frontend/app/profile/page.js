@@ -116,16 +116,16 @@ function ProfileContent() {
   const getStatusBadge = (status) => {
     switch (status) {
       case 'Delivered':
-        return 'bg-emerald-50 text-emerald-700 border border-emerald-200';
+        return 'bg-emerald-950/30 text-emerald-400 border border-emerald-800/30';
       case 'Shipped':
-        return 'bg-blue-50 text-blue-700 border border-blue-200';
+        return 'bg-blue-950/30 text-blue-400 border border-blue-800/30';
       case 'Processing':
-        return 'bg-amber-50 text-amber-700 border border-amber-200';
+        return 'bg-amber-950/30 text-amber-400 border border-amber-200';
       case 'Cancelled':
-        return 'bg-red-50 text-red-700 border border-red-200';
+        return 'bg-red-950/30 text-red-400 border border-red-800/30';
       case 'Pending':
       default:
-        return 'bg-purple-50 text-purple-700 border border-purple-200';
+        return 'bg-purple-50 text-gray-300 border border-white/15';
     }
   };
 
@@ -136,23 +136,23 @@ function ProfileContent() {
         
         {/* Left Side: Sidebar navigation tab list */}
         <div className="lg:col-span-3 space-y-3">
-          <div className="bg-white rounded-3xl border border-purple-100 shadow-sm p-6 text-center space-y-4">
-            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto text-primary text-2xl font-bold">
+          <div className="bg-[#111] rounded-3xl border border-white/10 shadow-lg shadow-black/20 p-6 text-center space-y-4">
+            <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center mx-auto text-primary text-2xl font-bold">
               {name ? name.charAt(0).toUpperCase() : <FiUser />}
             </div>
             <div>
-              <h2 className="font-display font-extrabold text-base text-purple-950 truncate">{name || 'Customer'}</h2>
-              <p className="text-xs text-purple-400 font-semibold truncate mt-0.5">+{user.phone}</p>
+              <h2 className="font-display font-extrabold text-base text-white truncate">{name || 'Customer'}</h2>
+              <p className="text-xs text-gray-500 font-semibold truncate mt-0.5">+{user.phone}</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-3xl border border-purple-100 shadow-sm p-2 space-y-1">
+          <div className="bg-[#111] rounded-3xl border border-white/10 shadow-lg shadow-black/20 p-2 space-y-1">
             <button
               onClick={() => setActiveTab('profile')}
               className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-colors ${
                 activeTab === 'profile'
                   ? 'bg-primary text-white'
-                  : 'text-purple-950 hover:bg-purple-50'
+                  : 'text-white hover:bg-purple-50'
               }`}
             >
               <FiUser size={18} />
@@ -164,7 +164,7 @@ function ProfileContent() {
               className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-colors ${
                 activeTab === 'orders'
                   ? 'bg-primary text-white'
-                  : 'text-purple-950 hover:bg-purple-50'
+                  : 'text-white hover:bg-purple-50'
               }`}
             >
               <FiShoppingBag size={18} />
@@ -176,7 +176,7 @@ function ProfileContent() {
               className={`w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold rounded-2xl transition-colors ${
                 activeTab === 'wishlist'
                   ? 'bg-primary text-white'
-                  : 'text-purple-950 hover:bg-purple-50'
+                  : 'text-white hover:bg-purple-50'
               }`}
             >
               <FiHeart size={18} />
@@ -185,7 +185,7 @@ function ProfileContent() {
 
             <button
               onClick={handleLogoutClick}
-              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-2xl transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-3 text-sm font-semibold text-red-400 hover:bg-red-950/30 rounded-2xl transition-colors"
             >
               <FiLogOut size={18} />
               <span>Log Out</span>
@@ -198,13 +198,13 @@ function ProfileContent() {
           
           {/* Tab 1: Profile Details Form */}
           {activeTab === 'profile' && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-purple-100 shadow-sm space-y-6">
-              <div className="flex justify-between items-center pb-4 border-b border-purple-50">
-                <h3 className="font-display font-extrabold text-lg text-purple-950">Profile Settings</h3>
+            <div className="bg-[#111] p-6 sm:p-8 rounded-3xl border border-white/10 shadow-lg shadow-black/20 space-y-6">
+              <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                <h3 className="font-display font-extrabold text-lg text-white">Profile Settings</h3>
                 {!editMode && (
                   <button
                     onClick={() => setEditMode(true)}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-purple-50 hover:bg-purple-100 text-primary text-xs font-bold rounded-xl shadow-sm transition-colors"
+                    className="flex items-center gap-1.5 px-4 py-2 bg-purple-50 hover:bg-white/10 text-primary text-xs font-bold rounded-xl shadow-lg shadow-black/20 transition-colors"
                   >
                     <FiEdit2 size={12} />
                     <span>Edit Profile</span>
@@ -213,7 +213,7 @@ function ProfileContent() {
               </div>
 
               {saveSuccess && (
-                <div className="p-3 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-xl flex items-center gap-2">
+                <div className="p-3 bg-emerald-950/30 text-emerald-400 text-xs font-semibold rounded-xl flex items-center gap-2">
                   <FiCheck size={16} />
                   <span>Profile updated successfully!</span>
                 </div>
@@ -222,93 +222,93 @@ function ProfileContent() {
               <form onSubmit={handleUpdateProfile} className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Full Name</label>
+                    <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Full Name</label>
                     <input
                       type="text"
                       disabled={!editMode}
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="Enter name"
-                      className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Email Address</label>
+                    <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Email Address</label>
                     <input
                       type="email"
                       disabled={!editMode}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Enter email"
-                      className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-4 pt-4 border-t border-purple-50">
-                  <div className="flex items-center gap-2 mb-2 text-purple-900 font-bold text-sm">
+                <div className="space-y-4 pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-2 mb-2 text-gray-200 font-bold text-sm">
                     <FiMapPin size={16} />
                     <span>Shipping Address Address</span>
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Street Address</label>
+                    <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Street Address</label>
                     <input
                       type="text"
                       disabled={!editMode}
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
                       placeholder="House No, Street name"
-                      className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                      className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
-                      <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">City</label>
+                      <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">City</label>
                       <input
                         type="text"
                         disabled={!editMode}
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         placeholder="City"
-                        className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                        className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">State</label>
+                      <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">State</label>
                       <input
                         type="text"
                         disabled={!editMode}
                         value={state}
                         onChange={(e) => setState(e.target.value)}
                         placeholder="State"
-                        className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                        className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                       />
                     </div>
 
                     <div>
-                      <label className="text-[10px] font-bold text-purple-950 uppercase tracking-wide block mb-1.5">Pin Code</label>
+                      <label className="text-[10px] font-bold text-white uppercase tracking-wide block mb-1.5">Pin Code</label>
                       <input
                         type="text"
                         disabled={!editMode}
                         value={zipCode}
                         onChange={(e) => setZipCode(e.target.value)}
                         placeholder="Pin Code"
-                        className="w-full px-3.5 py-2.5 bg-purple-50/20 border border-purple-100 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-purple-950 font-medium"
+                        className="w-full px-3.5 py-2.5 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-primary rounded-xl text-sm disabled:opacity-60 text-white font-medium"
                       />
                     </div>
                   </div>
                 </div>
 
                 {editMode && (
-                  <div className="flex gap-3 justify-end pt-4 border-t border-purple-50">
+                  <div className="flex gap-3 justify-end pt-4 border-t border-white/5">
                     <button
                       type="button"
                       onClick={() => setEditMode(false)}
-                      className="px-5 py-2 bg-purple-50 hover:bg-purple-100 text-purple-900 font-bold text-xs rounded-xl"
+                      className="px-5 py-2 bg-purple-50 hover:bg-white/10 text-gray-200 font-bold text-xs rounded-xl"
                     >
                       Cancel
                     </button>
@@ -326,8 +326,8 @@ function ProfileContent() {
 
           {/* Tab 2: Orders List */}
           {activeTab === 'orders' && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-purple-100 shadow-sm space-y-6">
-              <h3 className="font-display font-extrabold text-lg text-purple-950 pb-4 border-b border-purple-50">
+            <div className="bg-[#111] p-6 sm:p-8 rounded-3xl border border-white/10 shadow-lg shadow-black/20 space-y-6">
+              <h3 className="font-display font-extrabold text-lg text-white pb-4 border-b border-white/5">
                 Order History
               </h3>
 
@@ -339,20 +339,20 @@ function ProfileContent() {
                 </div>
               ) : orders.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-sm text-purple-400 italic">You haven't placed any orders yet.</p>
+                  <p className="text-sm text-gray-500 italic">You haven't placed any orders yet.</p>
                 </div>
               ) : (
                 <div className="space-y-6">
                   {orders.map((order) => (
-                    <div key={order._id} className="border border-purple-100 rounded-3xl p-5 shadow-sm space-y-4">
+                    <div key={order._id} className="border border-white/10 rounded-3xl p-5 shadow-lg shadow-black/20 space-y-4">
                       
                       {/* Order Info Row */}
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-purple-50 pb-3 gap-3">
+                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-white/5 pb-3 gap-3">
                         <div>
-                          <p className="text-xs text-purple-400 font-bold uppercase tracking-wider">
-                            Order ID: <span className="font-mono text-purple-900 font-extrabold">{order.orderId}</span>
+                          <p className="text-xs text-gray-500 font-bold uppercase tracking-wider">
+                            Order ID: <span className="font-mono text-gray-200 font-extrabold">{order.orderId}</span>
                           </p>
-                          <div className="flex items-center gap-1.5 text-[10px] text-purple-400 font-semibold mt-1">
+                          <div className="flex items-center gap-1.5 text-[10px] text-gray-500 font-semibold mt-1">
                             <FiCalendar />
                             <span>Placed on {new Date(order.createdAt).toLocaleDateString('en-IN')}</span>
                           </div>
@@ -364,8 +364,8 @@ function ProfileContent() {
                           </span>
                           <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
                             order.paymentStatus === 'Paid' 
-                              ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
-                              : 'bg-red-50 text-red-700 border border-red-200'
+                              ? 'bg-emerald-950/30 text-emerald-400 border border-emerald-800/30' 
+                              : 'bg-red-950/30 text-red-400 border border-red-800/30'
                           }`}>
                             Payment: {order.paymentStatus}
                           </span>
@@ -373,17 +373,17 @@ function ProfileContent() {
                       </div>
 
                       {/* Items Row */}
-                      <div className="divide-y divide-purple-50">
+                      <div className="divide-y divide-white/5">
                         {order.items.map((item, idx) => (
                           <div key={idx} className="py-3 flex gap-4 items-center">
-                            <img src={item.image} alt={item.name} className="w-12 h-15 object-cover object-top rounded-lg border border-purple-50 shrink-0" />
+                            <img src={item.image} alt={item.name} className="w-12 h-15 object-cover object-top rounded-lg border border-white/5 shrink-0" />
                             <div className="min-w-0 flex-1">
-                              <h4 className="text-sm font-bold text-purple-950 truncate leading-snug">{item.name}</h4>
-                              <p className="text-xs text-purple-400 mt-1 font-semibold">
+                              <h4 className="text-sm font-bold text-white truncate leading-snug">{item.name}</h4>
+                              <p className="text-xs text-gray-500 mt-1 font-semibold">
                                 Qty: {item.quantity} {item.size && `• Size: ${item.size}`} {item.color && `• Color: ${item.color}`}
                               </p>
                             </div>
-                            <span className="font-display font-extrabold text-sm text-purple-950 shrink-0">
+                            <span className="font-display font-extrabold text-sm text-white shrink-0">
                               ₹{item.price.toLocaleString('en-IN')}
                             </span>
                           </div>
@@ -391,10 +391,10 @@ function ProfileContent() {
                       </div>
 
                       {/* Totals Row */}
-                      <div className="pt-3 border-t border-purple-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs font-semibold text-purple-900">
+                      <div className="pt-3 border-t border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 text-xs font-semibold text-gray-200">
                         <div>
-                          <p>Payment Method: <span className="text-purple-950 font-bold">{order.paymentMethod}</span></p>
-                          {order.whatsappOrdered && <p className="text-[10px] text-emerald-600 mt-0.5">✓ Ordered via WhatsApp</p>}
+                          <p>Payment Method: <span className="text-white font-bold">{order.paymentMethod}</span></p>
+                          {order.whatsappOrdered && <p className="text-[10px] text-emerald-400 mt-0.5">✓ Ordered via WhatsApp</p>}
                         </div>
                         <div className="text-right flex items-baseline gap-1">
                           <span>Total Amount:</span>
@@ -411,14 +411,14 @@ function ProfileContent() {
 
           {/* Tab 3: Wishlist Bookmarks */}
           {activeTab === 'wishlist' && (
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-purple-100 shadow-sm space-y-6">
-              <h3 className="font-display font-extrabold text-lg text-purple-950 pb-4 border-b border-purple-50">
+            <div className="bg-[#111] p-6 sm:p-8 rounded-3xl border border-white/10 shadow-lg shadow-black/20 space-y-6">
+              <h3 className="font-display font-extrabold text-lg text-white pb-4 border-b border-white/5">
                 My Wishlist ({wishlistItems.length})
               </h3>
 
               {wishlistItems.length === 0 ? (
                 <div className="text-center py-12">
-                  <p className="text-sm text-purple-400 italic">Your wishlist is empty.</p>
+                  <p className="text-sm text-gray-500 italic">Your wishlist is empty.</p>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
