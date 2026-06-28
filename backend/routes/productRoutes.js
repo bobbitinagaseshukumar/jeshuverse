@@ -80,12 +80,8 @@ router.get('/', async (req, res) => {
     const { category, subCategory, size, priceMin, priceMax, search } = req.query;
     let query = {};
 
-    // 1. Search filter
-    if (search) {
-      query.name = { [Op.iLike]: `%${search}%` };
-    }
-
-    // 2. Category slug / id filter
+    // 1. Category slug / id filter (resolve first so subcategory can use categoryId)
+    let resolvedCategoryId = null;
     if (category && category.toLowerCase() !== 'all') {
       let categoryObj;
       const isUUID = category.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
@@ -104,31 +100,82 @@ router.get('/', async (req, res) => {
 
       if (categoryObj) {
         query.categoryId = categoryObj.id;
+        resolvedCategoryId = categoryObj.id;
       } else {
         return res.json([]);
       }
     }
 
-    // 3. SubCategory filter
+    // 2. SubCategory filter (resolve using resolvedCategoryId if available to avoid cross-category overlaps)
     if (subCategory) {
       let subCategoryObj;
       const isSubUUID = subCategory.match(/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/);
       if (isSubUUID) {
         subCategoryObj = await SubCategory.findByPk(subCategory);
       } else {
-        subCategoryObj = await SubCategory.findOne({
-          where: {
-            [Op.or]: [
-              { slug: subCategory },
-              { name: subCategory }
-            ]
-          }
-        });
+        const subCatWhere = {
+          [Op.or]: [
+            { slug: subCategory },
+            { name: subCategory }
+          ]
+        };
+        if (resolvedCategoryId) {
+          subCatWhere.categoryId = resolvedCategoryId;
+        }
+        subCategoryObj = await SubCategory.findOne({ where: subCatWhere });
       }
       if (subCategoryObj) {
         query.subCategoryId = subCategoryObj.id;
       } else {
         return res.json([]);
+      }
+    }
+
+    // 3. Advanced search filter (tokenized matching across product, category, and subcategory)
+    if (search) {
+      const searchTerms = search.trim().split(/\s+/).filter(Boolean);
+      if (searchTerms.length > 0) {
+        const matchingCategories = await Category.findAll({
+          where: {
+            [Op.or]: searchTerms.map(term => ({
+              name: { [Op.iLike]: `%${term}%` }
+            }))
+          }
+        });
+
+        const matchingSubCategories = await SubCategory.findAll({
+          where: {
+            [Op.or]: searchTerms.map(term => ({
+              name: { [Op.iLike]: `%${term}%` }
+            }))
+          }
+        });
+
+        query[Op.and] = searchTerms.map(term => {
+          const matchedCatIds = matchingCategories
+            .filter(c => {
+              const nameLower = c.name.toLowerCase();
+              const termLower = term.toLowerCase();
+              if (termLower === 'men' && nameLower.includes('women')) {
+                const words = nameLower.split(/[^a-z]+/);
+                return words.includes('men');
+              }
+              return nameLower.includes(termLower);
+            })
+            .map(c => c.id);
+
+          const matchedSubCatIds = matchingSubCategories
+            .filter(sc => sc.name.toLowerCase().includes(term.toLowerCase()))
+            .map(sc => sc.id);
+
+          return {
+            [Op.or]: [
+              { name: { [Op.iLike]: `%${term}%` } },
+              ...(matchedCatIds.length > 0 ? [{ categoryId: { [Op.in]: matchedCatIds } }] : []),
+              ...(matchedSubCatIds.length > 0 ? [{ subCategoryId: { [Op.in]: matchedSubCatIds } }] : []),
+            ]
+          };
+        });
       }
     }
 
