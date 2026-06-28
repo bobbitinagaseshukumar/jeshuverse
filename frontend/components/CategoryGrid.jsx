@@ -42,7 +42,7 @@ export default function CategoryGrid() {
         <span className="text-shine font-extrabold text-xs sm:text-sm tracking-widest uppercase mb-2 block">
           Shop By Department
         </span>
-        <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-purple-950 tracking-tight">
+        <h2 className="font-display font-extrabold text-2xl sm:text-4xl text-white tracking-tight drop-shadow-lg">
           Curated Fashion Collections
         </h2>
         <div className="luxury-divider" />

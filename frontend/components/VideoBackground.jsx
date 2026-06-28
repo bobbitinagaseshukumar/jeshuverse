@@ -65,9 +65,11 @@ export default function VideoBackground() {
         />
       </div>
 
-      {/* Readability veil + cinematic vignette */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white/70 via-white/55 to-white/75" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(59,7,100,0.18)_100%)]" />
+      {/* Dark "black mirror" veil — keeps video vivid while text stays readable */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/30 to-black/65" />
+      {/* subtle brand tint + cinematic vignette */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary-dark/30 via-transparent to-black/40" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(0,0,0,0.55)_100%)]" />
     </div>
   );
 }

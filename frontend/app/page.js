@@ -1,15 +1,34 @@
 'use client';
 import { API_URL } from '../utils/api';
 
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import HeroBanner from '../components/HeroBanner';
 import CategoryGrid from '../components/CategoryGrid';
 import ProductCard from '../components/ProductCard';
+import VideoBackground from '../components/VideoBackground';
+import Reveal from '../components/Reveal';
 import { FiArrowRight, FiShield, FiTruck, FiRefreshCw, FiPhoneCall } from 'react-icons/fi';
 import NextLink from 'next/link';
-import { motion } from 'framer-motion';
+
+// Section heading shared across the dark home page
+function SectionHead({ label, title, href }) {
+  return (
+    <div className="flex justify-between items-end mb-8 border-b border-white/10 pb-4">
+      <div>
+        <span className="text-gold font-extrabold text-xs tracking-widest uppercase block mb-1">{label}</span>
+        <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white drop-shadow-lg">{title}</h2>
+      </div>
+      {href && (
+        <NextLink href={href} className="text-gold hover:text-white font-bold text-sm flex items-center gap-1.5 transition-colors">
+          <span>View All</span>
+          <FiArrowRight size={14} />
+        </NextLink>
+      )}
+    </div>
+  );
+}
+
 // Parallax Showcase Component
 function ParallaxShowcase() {
   const [offsetY, setOffsetY] = useState(0);
@@ -24,26 +43,25 @@ function ParallaxShowcase() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Translate background slightly slower relative to scroll
   const translateY = (offsetY * 0.12) % 180;
 
   return (
-    <section className="parallax-section relative w-full overflow-hidden border-y border-purple-900/10 max-w-7xl mx-auto my-6 sm:rounded-3xl shadow-xl">
-      <div 
-        className="parallax-bg" 
-        style={{ 
+    <section className="parallax-section relative w-full overflow-hidden border-y border-white/10 max-w-7xl mx-auto my-6 sm:rounded-3xl shadow-2xl">
+      <div
+        className="parallax-bg"
+        style={{
           transform: `translateY(${translateY}px) scale(1.05)`,
-          backgroundImage: "url('https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?auto=format&fit=crop&w=1600&q=80')" 
-        }} 
+          backgroundImage: "url('https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1500&q=80')"
+        }}
       />
-      <div className="absolute inset-0 bg-purple-950/80 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
+      <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center p-6 sm:p-12 text-center select-none">
         <span className="text-gold font-extrabold text-[10px] sm:text-xs tracking-widest uppercase mb-3 block animate-pulse">
           JESHUVERSE LUXURY STUDIO
         </span>
         <h3 className="font-display font-black text-2xl sm:text-4xl lg:text-5xl text-white tracking-tight leading-tight max-w-3xl">
           Where Heritage Weaves Meet Contemporary Style
         </h3>
-        <p className="mt-4 text-purple-200 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
+        <p className="mt-4 text-purple-100/80 text-xs sm:text-base max-w-xl font-medium leading-relaxed">
           Sourced from traditional artisans, our designer sarees, ethnic wear, and luxury sets are crafted to celebrate you.
         </p>
         <div className="w-12 h-1 bg-gold mt-6 rounded-full" />
@@ -56,8 +74,6 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
-
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -65,7 +81,6 @@ export default function Home() {
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching home page products:', error);
-        // Load fallback sample items if backend fails
         setProducts([
           {
             _id: "sample-1",
@@ -118,7 +133,6 @@ export default function Home() {
     fetchProducts();
   }, [API_URL]);
 
-  // Product Filters
   const featuredProducts = products.filter(p => p.featured).slice(0, 4);
   const newArrivals = products.slice(0, 4);
   const jewelleryItems = products.filter(p => p.category === 'Jewellery').slice(0, 4);
@@ -126,232 +140,137 @@ export default function Home() {
   const womenItems = products.filter(p => p.category === "Women's Wear").slice(0, 4);
   const menItems = products.filter(p => p.category === "Men's Wear").slice(0, 4);
 
-
+  const features = [
+    { icon: FiTruck, title: 'Free Delivery', desc: 'On all orders above ₹499' },
+    { icon: FiShield, title: 'Secure UPI Payments', desc: 'Direct PhonePe QR code' },
+    { icon: FiRefreshCw, title: 'Easy Exchange', desc: '7-day hassle free returns' },
+    { icon: FiPhoneCall, title: '24/7 Support', desc: 'Direct WhatsApp assistance' },
+  ];
 
   return (
-    <div className="space-y-12">
-      
-      {/* 1. Hero banner */}
-      <HeroBanner />
+    <div className="relative text-white">
+      {/* Cinematic video backdrop (visible through the dark glass theme) */}
+      <VideoBackground />
 
-      {/* 2. Category grid */}
-      <CategoryGrid />
+      <div className="relative z-10 space-y-12">
+        {/* 1. Hero banner */}
+        <HeroBanner />
 
-      {/* 3. Promo Banner */}
-      <motion.section 
-        initial={{ opacity: 0, y: 35 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-        className="bg-purple-900 py-8 text-white grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 rounded-3xl shadow-md border-b-4 border-gold"
-      >
-        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
-          <FiTruck className="text-gold" size={32} />
-          <div>
-            <h4 className="font-bold text-sm sm:text-base">Free Delivery</h4>
-            <p className="text-xs text-purple-200">On all orders above ₹499</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
-          <FiShield className="text-gold" size={32} />
-          <div>
-            <h4 className="font-bold text-sm sm:text-base">Secure UPI Payments</h4>
-            <p className="text-xs text-purple-200">Direct PhonePe QR code</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
-          <FiRefreshCw className="text-gold" size={32} />
-          <div>
-            <h4 className="font-bold text-sm sm:text-base">Easy Exchange</h4>
-            <p className="text-xs text-purple-200">7-day hassle free returns</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 justify-center text-center sm:text-left">
-          <FiPhoneCall className="text-gold" size={32} />
-          <div>
-            <h4 className="font-bold text-sm sm:text-base">24/7 Support</h4>
-            <p className="text-xs text-purple-200">Direct WhatsApp assistance</p>
-          </div>
-        </div>
-      </motion.section>
+        {/* 2. Category grid */}
+        <CategoryGrid />
 
-      {/* 4. Trending / Featured Products */}
-      {featuredProducts.length > 0 && (
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
-        >
-          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-            <div>
-              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Weekly Spotlight</span>
-              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Trending Products</h2>
+        {/* 3. Promo / trust bar — dark glass */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="glass-dark-premium rounded-3xl border border-white/10 py-8 grid grid-cols-2 lg:grid-cols-4 gap-6 px-6 shadow-2xl">
+            {features.map((f, i) => (
+              <Reveal key={i} direction="up" delay={i * 0.08} className="flex items-center gap-3 justify-center text-center sm:text-left">
+                <f.icon className="text-gold shrink-0" size={32} />
+                <div>
+                  <h4 className="font-bold text-sm sm:text-base text-white">{f.title}</h4>
+                  <p className="text-xs text-purple-100/70">{f.desc}</p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* 4. Trending / Featured Products */}
+        {featuredProducts.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <Reveal><SectionHead label="Weekly Spotlight" title="Trending Products" href="/category/all?sort=latest" /></Reveal>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {featuredProducts.map((product, i) => (
+                <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                  <ProductCard product={product} />
+                </Reveal>
+              ))}
             </div>
-            <NextLink href="/category/all?sort=latest" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-              <span>View All</span>
-              <FiArrowRight size={14} />
-            </NextLink>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {featuredProducts.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </motion.section>
-      )}
-
-      {/* 5. New Arrivals */}
-      <motion.section 
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.7 }}
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
-      >
-        <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-          <div>
-            <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Just Added</span>
-            <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">New Arrivals</h2>
-          </div>
-          <NextLink href="/category/all?sort=latest" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-            <span>View All</span>
-            <FiArrowRight size={14} />
-          </NextLink>
-        </div>
-        {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map(n => (
-              <div key={n} className="bg-purple-100/50 rounded-2xl h-80 animate-pulse-slow" />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {newArrivals.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
+          </section>
         )}
-      </motion.section>
 
-      {/* 6. Women's Fashion Shelf */}
-      {womenItems.length > 0 && (
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="bg-purple-50/30 py-12 border-y border-purple-100"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-              <div>
-                <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Sarees & Ethnic Wear</span>
-                <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Women's Fashion</h2>
-              </div>
-              <NextLink href="/category/women-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-                <span>View All</span>
-                <FiArrowRight size={14} />
-              </NextLink>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {womenItems.map(product => (
-                <ProductCard key={product._id} product={product} />
+        {/* 5. New Arrivals */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <Reveal><SectionHead label="Just Added" title="New Arrivals" href="/category/all?sort=latest" /></Reveal>
+          {loading ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4].map(n => (
+                <div key={n} className="bg-white/10 rounded-2xl h-80 animate-pulse" />
               ))}
             </div>
-          </div>
-        </motion.section>
-      )}
-
-      {/* Parallax Clothes Showcase Section */}
-      <ParallaxShowcase />
-
-      {/* 7. Jewellery Collection Shelf */}
-      {jewelleryItems.length > 0 && (
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
-        >
-          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-            <div>
-              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Royal Necklaces & Earrings</span>
-              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Jewellery Collection</h2>
-            </div>
-            <NextLink href="/category/jewellery" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-              <span>View All</span>
-              <FiArrowRight size={14} />
-            </NextLink>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {jewelleryItems.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </motion.section>
-      )}
-
-      {/* 8. Men's Fashion Shelf */}
-      {menItems.length > 0 && (
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="bg-purple-50/30 py-12 border-y border-purple-100"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-              <div>
-                <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Kurtas, Blazers & Jackets</span>
-                <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Men's Fashion</h2>
-              </div>
-              <NextLink href="/category/men-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-                <span>View All</span>
-                <FiArrowRight size={14} />
-              </NextLink>
-            </div>
+          ) : (
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {menItems.map(product => (
-                <ProductCard key={product._id} product={product} />
+              {newArrivals.map((product, i) => (
+                <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                  <ProductCard product={product} />
+                </Reveal>
               ))}
             </div>
-          </div>
-        </motion.section>
-      )}
+          )}
+        </section>
 
-      {/* 9. Kids Fashion Shelf */}
-      {kidsItems.length > 0 && (
-        <motion.section 
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.7 }}
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4"
-        >
-          <div className="flex justify-between items-end mb-8 border-b border-purple-100 pb-4">
-            <div>
-              <span className="text-amber-600 font-extrabold text-xs tracking-widest uppercase block mb-1">Cute & Stylish Frocks</span>
-              <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-purple-950">Kids Fashion</h2>
+        {/* 6. Women's Fashion Shelf */}
+        {womenItems.length > 0 && (
+          <section className="bg-black/30 backdrop-blur-xl py-12 border-y border-white/10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <Reveal><SectionHead label="Sarees & Ethnic Wear" title="Women's Fashion" href="/category/women-wear" /></Reveal>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                {womenItems.map((product, i) => (
+                  <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                    <ProductCard product={product} />
+                  </Reveal>
+                ))}
+              </div>
             </div>
-            <NextLink href="/category/kids-wear" className="text-primary hover:text-amber-600 font-bold text-sm flex items-center gap-1.5 transition-colors">
-              <span>View All</span>
-              <FiArrowRight size={14} />
-            </NextLink>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {kidsItems.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </motion.section>
-      )}
+          </section>
+        )}
 
+        {/* Parallax Clothes Showcase Section */}
+        <ParallaxShowcase />
 
+        {/* 7. Jewellery Collection Shelf */}
+        {jewelleryItems.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <Reveal><SectionHead label="Royal Necklaces & Earrings" title="Jewellery Collection" href="/category/jewellery" /></Reveal>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {jewelleryItems.map((product, i) => (
+                <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                  <ProductCard product={product} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
 
+        {/* 8. Men's Fashion Shelf */}
+        {menItems.length > 0 && (
+          <section className="bg-black/30 backdrop-blur-xl py-12 border-y border-white/10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <Reveal><SectionHead label="Kurtas, Blazers & Jackets" title="Men's Fashion" href="/category/men-wear" /></Reveal>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                {menItems.map((product, i) => (
+                  <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                    <ProductCard product={product} />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* 9. Kids Fashion Shelf */}
+        {kidsItems.length > 0 && (
+          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <Reveal><SectionHead label="Cute & Stylish Frocks" title="Kids Fashion" href="/category/kids-wear" /></Reveal>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              {kidsItems.map((product, i) => (
+                <Reveal key={product._id} direction="up" delay={i * 0.06}>
+                  <ProductCard product={product} />
+                </Reveal>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
     </div>
   );
 }
