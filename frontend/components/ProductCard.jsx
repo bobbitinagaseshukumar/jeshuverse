@@ -29,15 +29,8 @@ export default function ProductCard({ product }) {
 
   return (
     <Tilt3D max={9} scale={1.03} className="h-full rounded-2xl animate-card-float card-reflection relative">
-      <div className="group relative bg-[#181127] rounded-2xl border border-white/10 overflow-hidden shadow-xl hover:shadow-[0_20px_40px_rgba(234,179,8,0.1)] transition-all duration-500 flex flex-col h-full relative" style={{ transformStyle: 'preserve-3d' }}>
+      <div className="group relative bg-[#181127] rounded-2xl border border-white/10 overflow-hidden shadow-xl hover:shadow-[0_20px_40px_rgba(234,179,8,0.12)] transition-all duration-500 flex flex-col h-full" style={{ transformStyle: 'preserve-3d' }}>
       
-        {/* Ticket Stub Side Punch Holes */}
-        <div className="absolute left-[-8px] top-[58%] -translate-y-1/2 w-4.5 h-4.5 rounded-full bg-[#0b0813] border-r border-white/15 z-20" />
-        <div className="absolute right-[-8px] top-[58%] -translate-y-1/2 w-4.5 h-4.5 rounded-full bg-[#0b0813] border-l border-white/15 z-20" />
-        
-        {/* Ticket Perforated Tear Line */}
-        <div className="absolute left-3 right-3 top-[58%] -translate-y-1/2 border-t border-dashed border-white/15 pointer-events-none z-10" />
-
         {/* Product Image Wrapper */}
         <NextLink href={`/product/${product._id}`} className="block relative aspect-[4/5] bg-purple-950/20 overflow-hidden">
           {/* Zoom scale hover class */}
@@ -67,7 +60,7 @@ export default function ProductCard({ product }) {
             </motion.div>
           </button>
 
-          {/* Discount Badge / Ticket Rating */}
+          {/* Discount Badge */}
           {hasDiscount && (
             <span className="absolute top-3 left-3 bg-gold text-primary-dark font-black text-[9px] tracking-wider uppercase px-2.5 py-0.5 rounded shadow-sm border border-gold/30">
               {discountPercent}% OFF
@@ -85,9 +78,9 @@ export default function ProductCard({ product }) {
         </NextLink>
 
         {/* Product Information */}
-        <div className="p-4 pt-6 flex flex-col flex-1 z-10">
+        <div className="p-4 flex flex-col flex-1 z-10">
           <span className="text-[9px] font-black text-gold uppercase tracking-widest mb-1.5 block">
-            {product.category || 'Release'}
+            {product.category || 'Collection'}
           </span>
           
           <NextLink href={`/product/${product._id}`} className="block flex-1 mb-2">
@@ -96,7 +89,7 @@ export default function ProductCard({ product }) {
             </h3>
           </NextLink>
 
-          {/* Pricing & Booking Row */}
+          {/* Pricing Row */}
           <div className="mt-1 flex items-baseline justify-between gap-2">
             <div className="flex items-baseline gap-2">
               <span className="font-display font-black text-base sm:text-lg text-white">
@@ -109,9 +102,8 @@ export default function ProductCard({ product }) {
               )}
             </div>
             
-            {/* Direct Ticket Link Icon */}
             <span className="text-[9px] font-black text-purple-400 uppercase tracking-wider hidden sm:block bg-white/5 border border-white/10 px-1.5 py-0.5 rounded">
-              U/A
+              New
             </span>
           </div>
 
@@ -121,7 +113,7 @@ export default function ProductCard({ product }) {
               href={`/product/${product._id}`}
               className="w-full text-center block bg-gold hover:bg-gold-light text-primary-dark border-0 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all duration-300 btn-premium btn-ripple shadow-md shadow-gold/20"
             >
-              Get Ticket
+              View Details
             </NextLink>
           </div>
         </div>
